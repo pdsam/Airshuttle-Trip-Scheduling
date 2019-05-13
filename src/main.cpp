@@ -4,9 +4,7 @@
 #include <iostream>
 #include <sstream>
 
-void exerciciotps();
-
-
+using namespace std;
 
 void exerciciotps()
 {
@@ -58,9 +56,46 @@ void exerciciotps()
 	gv->rearrange();
 }
 
+void mapa_porto() {
+
+	GraphViewer * gv = new GraphViewer(2000,2000, false);
+	gv->createWindow(2000,2000);
+	gv->defineVertexSize(1);
+
+	ifstream ifs1("maps/Porto/T06_nodes_X_Y_Porto.txt");
+	int n_nodes;
+	ifs1 >> n_nodes;
+
+	int id;
+	double x, y;
+	char c;
+	int x_offset = 527000;
+	int y_offset = 4555000;
+	for (int i = 0; i < n_nodes; i++) {
+		ifs1 >> c >> id >> c >> x >> c >> y >> c;
+		gv->addNode(id, x-x_offset, y-y_offset);
+	}
+
+	ifs1.close();
+
+	ifstream ifs2("maps/Porto/T06_edges_Porto.txt");
+	int n_edges;
+	ifs2 >> n_edges;
+
+	int id1, id2;
+	for (int i = 0; i < n_edges; i++) {
+		ifs2 >> c >> id1 >> c >> id2 >> c;
+		gv->addEdge(i, id1, id2, EdgeType::DIRECTED);
+	}
+
+	ifs2.close();
+
+	gv->rearrange();
+}
+
 
 int main() {
-	exerciciotps();
+	mapa_porto();
 	getchar();
 	return 0;
 }
