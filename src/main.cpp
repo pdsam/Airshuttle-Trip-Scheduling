@@ -6,6 +6,9 @@
 
 using namespace std;
 
+bool build_vertices(GraphViewer * gv, string location);
+bool build_edges(GraphViewer * gv, string location);
+
 void exerciciotps()
 {
 	GraphViewer * gv = new GraphViewer(600,600,false);
@@ -56,46 +59,70 @@ void exerciciotps()
 	gv->rearrange();
 }
 
-void mapa_porto() {
+GraphViewer* draw_map(string location) {
 
 	GraphViewer * gv = new GraphViewer(2000,2000, false);
 	gv->createWindow(2000,2000);
 	gv->defineVertexSize(1);
 
-	ifstream ifs1("maps/Porto/T06_nodes_X_Y_Porto.txt");
-	int n_nodes;
-	ifs1 >> n_nodes;
+	if (!build_vertices(gv, location) || !build_edges(gv, location)) {
+		gv->closeWindow();
+		delete gv;
+		return NULL;
+	}
 
-	int id;
+	gv->rearrange();
+
+	return gv;
+}
+
+bool build_vertices(GraphViewer * gv, string location) {
+	int n_nodes, id, x_offset = 0, y_offset = 0;
 	double x, y;
 	char c;
-	int x_offset = 527000;
-	int y_offset = 4555000;
+
+	ifstream ifs("maps/" + location + "/T06_nodes_X_Y_" + location + ".txt");
+	if (!ifs.is_open()) return false;
+
+	ifs >> n_nodes;
+
 	for (int i = 0; i < n_nodes; i++) {
-		ifs1 >> c >> id >> c >> x >> c >> y >> c;
+		ifs >> c >> id >> c >> x >> c >> y >> c;
+		if (i == 0) {
+			x_offset = x;
+			y_offset = y;
+		}
 		gv->addNode(id, x-x_offset, y-y_offset);
 	}
 
-	ifs1.close();
+	ifs.close();
 
-	ifstream ifs2("maps/Porto/T06_edges_Porto.txt");
-	int n_edges;
-	ifs2 >> n_edges;
+	return true;
+}
 
-	int id1, id2;
+bool build_edges(GraphViewer * gv, string location) {
+	int n_edges, id1, id2;
+	char c;
+
+	ifstream ifs("maps/" + location + "/T06_edges_" + location + ".txt");
+	if (!ifs.is_open()) return false;
+
+	ifs >> n_edges;
+
 	for (int i = 0; i < n_edges; i++) {
-		ifs2 >> c >> id1 >> c >> id2 >> c;
+		ifs >> c >> id1 >> c >> id2 >> c;
 		gv->addEdge(i, id1, id2, EdgeType::DIRECTED);
 	}
 
-	ifs2.close();
+	ifs.close();
 
-	gv->rearrange();
+	return true;
 }
 
 
 int main() {
-	mapa_porto();
+	GraphViewer * map = draw_map("Lisboa");
 	getchar();
+	if (map != NULL) delete map;
 	return 0;
 }
