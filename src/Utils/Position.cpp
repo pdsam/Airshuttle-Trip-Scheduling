@@ -2,20 +2,14 @@
 
 #include "Position.h"
 
-class Position {
-private:
-	double x, y;
-public:
-	Position(double x, double y);
-	double getX() const;
-	double getY() const;
-
-	double euclidianDistance(const Position & p2);
-};
-
 Position::Position(double x, double y) {
 	this->x = x;
 	this->y = y;
+}
+
+Position::Position(const Position & pos) {
+	this->x = pos.x;
+	this->y = pos.y;
 }
 
 double Position::getX() const {

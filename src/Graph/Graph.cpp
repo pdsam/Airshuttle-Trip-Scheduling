@@ -9,9 +9,9 @@ Vertex* Graph::findVertex(const int &id) const {
 	return nullptr;
 }
 
-bool Graph::addVertex(const int &id, const Position & pos) {
+bool Graph::addVertex(const int &id, int x, int y) {
 	if (findVertex(id) != nullptr) return false;
-	vertexSet.push_back(new Vertex(id, pos));
+	vertexSet.push_back(new Vertex(id, x, y));
 	return true;
 }
 
@@ -23,7 +23,21 @@ bool Graph::addEdge(const int &id1, const int &id2) {
 	return true;
 }
 
+int Graph::getNumVertex() const {
+	return vertexSet.size();
+}
+
 vector<Vertex*> Graph::getVertexSet() const {
 	return vertexSet;
 }
 
+void Graph::reset() {
+	for (size_t i = 0; i < vertexSet.size(); i++)
+			delete vertexSet[i];
+	vertexSet.clear();
+}
+
+Graph::~Graph() {
+	for (size_t i = 0; i < vertexSet.size(); i++)
+		delete vertexSet[i];
+}

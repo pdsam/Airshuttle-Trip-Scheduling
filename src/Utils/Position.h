@@ -5,7 +5,9 @@ class Position {
 private:
 	double x, y;
 public:
+	Position() { };
 	Position(double x, double y);
+	Position(const Position & pos);
 	double getX() const;
 	double getY() const;
 

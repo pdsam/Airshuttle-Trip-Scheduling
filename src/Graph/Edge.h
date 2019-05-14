@@ -3,6 +3,8 @@
 
 #include "Vertex.h"
 
+class Vertex;
+
 class Edge {
 private:
 	Vertex * dest;

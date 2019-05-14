@@ -1,8 +1,8 @@
 #include "Vertex.h"
 
-Vertex::Vertex(int id, Position pos) {
+Vertex::Vertex(int id, int x, int y) {
 	this->id = id;
-	this->pos = pos;
+	this->pos = Position(x,y);
 }
 
 int Vertex::getID() const {
