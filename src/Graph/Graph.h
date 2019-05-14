@@ -3,16 +3,16 @@
 
 #include <vector>
 
-#include "Graph.h"
 #include "Vertex.h"
 #include "Edge.h"
+#include "../Utils/Position.h"
 
 class Graph {
 private:
 	std::vector<Vertex *> vertexSet;
 public:
 	Vertex *findVertex(const int &id) const;
-	bool addVertex(const int &id, const int &x, const  int &y);
+	bool addVertex(const int &id, const Position & pos);
 	bool addEdge(const int &id1, const int &id2);
 	int getNumVertex() const;
 

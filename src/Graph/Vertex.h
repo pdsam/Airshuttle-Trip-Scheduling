@@ -3,19 +3,21 @@
 
 #include <vector>
 #include "Edge.h"
+#include "../Utils/Position.h"
 
 class Vertex {
 private:
 	int id;
-	double x, y;
+	Position pos;
 	std::vector<Edge> adj;
 
+	void addEdge(Vertex * dest, double weight)
+
 public:
-	Vertex(int id, double x, double y);
+	Vertex(int id, Position pos);
 
 	int getID() const;
-	double getX() const;
-	double getY() const;
+	Position getPosition() const;
 
 	friend class Graph;
 };

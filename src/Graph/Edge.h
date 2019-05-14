@@ -5,14 +5,12 @@
 
 class Edge {
 private:
-	int id;
 	Vertex * dest;
 	double weight;
 
 public:
-	Edge(Vertex * orig, Vertex * dest);
+	Edge(Vertex * dest, double weight);
 
-	int getID() const;
 	Vertex * getDest() const;
 	double getWeight() const;
 
