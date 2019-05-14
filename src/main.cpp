@@ -1,12 +1,12 @@
 #include <cstdio>
-#include "graphviewer.h"
+#include "GraphViewer/cpp/graphviewer.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
 
 using namespace std;
 
-bool build_vertices(GraphViewer * gv, string location);
+bool build_vertices(GraphViewer * gv, string location, int width, int height);
 bool build_edges(GraphViewer * gv, string location);
 
 void exerciciotps()
@@ -59,13 +59,13 @@ void exerciciotps()
 	gv->rearrange();
 }
 
-GraphViewer* draw_map(string location) {
+GraphViewer* draw_map(string location, int width, int height) {
 
-	GraphViewer * gv = new GraphViewer(2000,2000, false);
-	gv->createWindow(2000,2000);
+	GraphViewer * gv = new GraphViewer(width, height, false);
+	gv->createWindow(width, height);
 	gv->defineVertexSize(1);
 
-	if (!build_vertices(gv, location) || !build_edges(gv, location)) {
+	if (!build_vertices(gv, location, width, height) || !build_edges(gv, location)) {
 		gv->closeWindow();
 		delete gv;
 		return NULL;
@@ -76,7 +76,7 @@ GraphViewer* draw_map(string location) {
 	return gv;
 }
 
-bool build_vertices(GraphViewer * gv, string location) {
+bool build_vertices(GraphViewer * gv, string location, int width, int height) {
 	int n_nodes, id, x_offset = 0, y_offset = 0;
 	double x, y;
 	char c;
@@ -89,8 +89,8 @@ bool build_vertices(GraphViewer * gv, string location) {
 	for (int i = 0; i < n_nodes; i++) {
 		ifs >> c >> id >> c >> x >> c >> y >> c;
 		if (i == 0) {
-			x_offset = x;
-			y_offset = y;
+			x_offset = x + width/2;
+			y_offset = y + height/2;
 		}
 		gv->addNode(id, x-x_offset, y-y_offset);
 	}
@@ -121,7 +121,7 @@ bool build_edges(GraphViewer * gv, string location) {
 
 
 int main() {
-	GraphViewer * map = draw_map("Lisboa");
+	GraphViewer * map = draw_map("Lisboa", 2000, 2000);
 	getchar();
 	if (map != NULL) delete map;
 	return 0;
