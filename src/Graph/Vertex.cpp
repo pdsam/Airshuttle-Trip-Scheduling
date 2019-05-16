@@ -16,3 +16,8 @@ Position Vertex::getPosition() const {
 void Vertex::addEdge(Vertex * dest, double weight) {
 	adj.push_back(Edge(dest, weight));
 }
+
+void Vertex::addTag(std::string tag) {
+	this->tags.push_back(tag);
+}
+

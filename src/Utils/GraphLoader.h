@@ -12,6 +12,7 @@ public:
 	static bool loadGraph(std::string location, Graph * graph);
 	static bool loadVertices(std::string location, Graph * graph);
 	static bool loadEdges(std::string location, Graph * graph);
+	static bool loadTags(std::string location, Graph * graph);
 };
 
 

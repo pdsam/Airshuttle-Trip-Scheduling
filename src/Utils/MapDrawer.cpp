@@ -1,0 +1,84 @@
+#include <cstdio>
+#include <fstream>
+#include <iostream>
+
+#include "MapDrawer.h"
+
+using namespace std;
+
+bool build_vertices(GraphViewer * gv, string location, int width, int height);
+bool build_edges(GraphViewer * gv, string location);
+
+MapDrawer::MapDrawer(int width, int height) {
+	this->width = width;
+	this->height = height;
+	this->graphViewer = new GraphViewer(width, height, false);
+}
+
+MapDrawer::~MapDrawer() {
+	delete graphViewer;
+}
+
+bool MapDrawer::drawMapFromFile(string location) {
+	resetGraphViewer();
+	graphViewer->createWindow(width, height);
+	graphViewer->defineVertexSize(1);
+
+	if (!buildVerticesFromFile(location) || !buildEdgesFromFile(location)) {
+		graphViewer->closeWindow();
+		return false;
+	}
+
+	graphViewer->rearrange();
+
+	return true;
+}
+
+bool MapDrawer::buildVerticesFromFile(string location) {
+	int n_nodes, id, x_offset = 0, y_offset = 0;
+	double x, y;
+	char c;
+
+	ifstream ifs("maps/" + location + "/T06_nodes_X_Y_" + location + ".txt");
+	if (!ifs.is_open()) return false;
+
+	ifs >> n_nodes;
+
+	for (int i = 0; i < n_nodes; i++) {
+		ifs >> c >> id >> c >> x >> c >> y >> c;
+		if (i == 0) {
+			x_offset = x + width/2;
+			y_offset = y + height/2;
+		}
+		graphViewer->addNode(id, x-x_offset, y-y_offset);
+	}
+
+	ifs.close();
+
+	return true;
+}
+
+bool MapDrawer::buildEdgesFromFile(string location) {
+	int n_edges, id1, id2;
+	char c;
+
+	ifstream ifs("maps/" + location + "/T06_edges_" + location + ".txt");
+	if (!ifs.is_open()) return false;
+
+	ifs >> n_edges;
+
+	for (int i = 0; i < n_edges; i++) {
+		ifs >> c >> id1 >> c >> id2 >> c;
+		graphViewer->addEdge(i, id1, id2, EdgeType::DIRECTED);
+	}
+
+	ifs.close();
+
+	return true;
+}
+
+void MapDrawer::resetGraphViewer() {
+	graphViewer->closeWindow();
+	delete graphViewer;
+	graphViewer = new GraphViewer(width, height, false);
+}

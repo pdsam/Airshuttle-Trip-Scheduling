@@ -6,7 +6,7 @@ using namespace std;
 bool GraphLoader::loadGraph(string location, Graph * graph) {
 
 	//graph->reset();
-	return (loadVertices(location, graph) && loadEdges(location, graph));
+	return (loadVertices(location, graph) && loadEdges(location, graph) && loadTags(location, graph));
 }
 
 bool GraphLoader::loadVertices(string location, Graph * graph) {
@@ -46,3 +46,27 @@ bool GraphLoader::loadEdges(string location, Graph * graph) {
 
 	return true;
 }
+
+bool GraphLoader::loadTags(string location, Graph * graph) {
+	int n_tags, n_of_tag, id;
+	string tag;
+
+	ifstream ifs("maps/" + location + "/T06_tags_" + location + ".txt");
+	if (!ifs.is_open()) return false;
+
+	ifs >> n_tags;
+
+	for (int i = 0; i < n_tags; i++) {
+		ifs >> tag >> n_of_tag;
+		for (int j = 0; j < n_of_tag; j++) {
+			ifs >> id;
+			Vertex * v = graph->findVertex(id);
+			if (v != nullptr) v->addTag(tag);
+		}
+	}
+
+	ifs.close();
+
+	return true;
+}
+

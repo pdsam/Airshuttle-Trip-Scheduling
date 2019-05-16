@@ -2,6 +2,7 @@
 #define VERTEX_H_
 
 #include <vector>
+#include <string>
 #include "Edge.h"
 #include "../Utils/Position.h"
 
@@ -11,6 +12,7 @@ class Vertex {
 private:
 	int id;
 	Position pos;
+	std::vector<std::string> tags;
 	std::vector<Edge> adj;
 
 	void addEdge(Vertex * dest, double weight);
@@ -20,6 +22,8 @@ public:
 
 	int getID() const;
 	Position getPosition() const;
+
+	void addTag(std::string tag);
 
 	friend class Graph;
 };
