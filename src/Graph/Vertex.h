@@ -15,13 +15,14 @@ private:
 	std::vector<std::string> tags;
 	std::vector<Edge> adj;
 
-	void addEdge(Vertex * dest, double weight);
+	void addEdge(int id, Vertex * dest, double weight);
 
 public:
 	Vertex(int id, int x, int y);
 
 	int getID() const;
 	Position getPosition() const;
+	std::vector<Edge> getAdj() const;
 
 	void addTag(std::string tag);
 

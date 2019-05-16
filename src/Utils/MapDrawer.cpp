@@ -82,3 +82,30 @@ void MapDrawer::resetGraphViewer() {
 	delete graphViewer;
 	graphViewer = new GraphViewer(width, height, false);
 }
+
+
+bool MapDrawer::drawMapFromGraph(Graph * graph) {
+	resetGraphViewer();
+	graphViewer->createWindow(width, height);
+	graphViewer->defineVertexSize(1);
+
+	int x_offset = 0, y_offset = 0;
+	if(graph->getNumVertex() > 0) {
+		Position firstVPos = graph->getVertexSet().at(0)->getPosition();
+		x_offset = firstVPos.getX();
+		y_offset = firstVPos.getY();
+	}
+	for (Vertex * v : graph->getVertexSet()) {
+		graphViewer->addNode(v->getID(), v->getPosition().getX() - x_offset, v->getPosition().getY() - y_offset);
+	}
+
+	for (Vertex * v : graph->getVertexSet()) {
+		for (const Edge &e : v->getAdj()) {
+			graphViewer->addEdge(e.getID(), v->getID(), e.getDest()->getID(), EdgeType::DIRECTED);
+		}
+	}
+
+	graphViewer->rearrange();
+
+	return true;
+}

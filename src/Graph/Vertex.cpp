@@ -1,5 +1,7 @@
 #include "Vertex.h"
 
+using namespace std;
+
 Vertex::Vertex(int id, int x, int y) {
 	this->id = id;
 	this->pos = Position(x,y);
@@ -13,8 +15,12 @@ Position Vertex::getPosition() const {
 	return pos;
 }
 
-void Vertex::addEdge(Vertex * dest, double weight) {
-	adj.push_back(Edge(dest, weight));
+vector<Edge> Vertex::getAdj() const {
+	return adj;
+}
+
+void Vertex::addEdge(int id, Vertex * dest, double weight) {
+	adj.push_back(Edge(id, dest, weight));
 }
 
 void Vertex::addTag(std::string tag) {

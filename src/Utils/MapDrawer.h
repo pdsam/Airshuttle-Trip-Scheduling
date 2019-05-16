@@ -2,6 +2,7 @@
 #define MAP_DRAWER_H_
 
 #include "../GraphViewer/cpp/graphviewer.h"
+#include "../Graph/Graph.h"
 
 class MapDrawer {
 private:
@@ -16,6 +17,7 @@ public:
 	~MapDrawer();
 
 	bool drawMapFromFile(std::string location);
+	bool drawMapFromGraph(Graph * graph);
 };
 
 

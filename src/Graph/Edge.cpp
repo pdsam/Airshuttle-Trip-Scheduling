@@ -1,8 +1,13 @@
 #include "Edge.h"
 
-Edge::Edge(Vertex* dest, double weight) {
+Edge::Edge(int id, Vertex* dest, double weight) {
+	this->id = id;
 	this->dest = dest;
 	this->weight = weight;
+}
+
+int Edge::getID() const {
+	return id;
 }
 
 Vertex* Edge::getDest() const {

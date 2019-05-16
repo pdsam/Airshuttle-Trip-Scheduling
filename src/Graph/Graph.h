@@ -12,7 +12,7 @@ private:
 public:
 	Vertex *findVertex(const int &id) const;
 	bool addVertex(const int &id, int x, int y);
-	bool addEdge(const int &id1, const int &id2);
+	bool addEdge(int id, int v_id1, int v_id2);
 	int getNumVertex() const;
 
 	std::vector<Vertex *> getVertexSet() const;
