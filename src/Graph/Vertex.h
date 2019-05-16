@@ -25,6 +25,7 @@ public:
 	std::vector<Edge> getAdj() const;
 
 	void addTag(std::string tag);
+	std::vector<std::string> getTags() const;
 
 	friend class Graph;
 };

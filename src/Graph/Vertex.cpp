@@ -27,3 +27,7 @@ void Vertex::addTag(std::string tag) {
 	this->tags.push_back(tag);
 }
 
+vector<string> Vertex::getTags() const {
+	return tags;
+}
+

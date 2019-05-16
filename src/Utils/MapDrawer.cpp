@@ -1,3 +1,4 @@
+#include <iostream>
 #include <cstdio>
 #include <fstream>
 #include <iostream>
@@ -97,6 +98,10 @@ bool MapDrawer::drawMapFromGraph(Graph * graph) {
 	}
 	for (Vertex * v : graph->getVertexSet()) {
 		graphViewer->addNode(v->getID(), v->getPosition().getX() - x_offset, v->getPosition().getY() - y_offset);
+		if (v->getTags().size() > 0) {
+			if (v->getTags().size() > 1) cout << "more than 1 tag" << endl;
+			graphViewer->setVertexColor(v->getID(), getTagColor(v->getTags().at(0)));
+		}
 	}
 
 	for (Vertex * v : graph->getVertexSet()) {
@@ -108,4 +113,15 @@ bool MapDrawer::drawMapFromGraph(Graph * graph) {
 	graphViewer->rearrange();
 
 	return true;
+}
+
+string MapDrawer::getTagColor(string tag) {
+	if (tag == "aeroway=aerodrome") return BLUE;
+	else if (tag == "aeroway=gate") return RED;
+	else if (tag == "aeroway=terminal") return PINK;
+	else if (tag == "aerodrome:type=*") return BLACK;
+	else if (tag == "aeroway=heliport") return WHITE;
+	else if (tag == "iata=*") return ORANGE;
+	else if (tag == "landuse=military") return GREEN;
+	return "";
 }
