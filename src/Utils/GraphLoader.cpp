@@ -39,7 +39,7 @@ bool GraphLoader::loadEdges(string location, Graph * graph) {
 
 	for (int i = 0; i < n_edges; i++) {
 		ifs >> c >> id1 >> c >> id2 >> c;
-		graph->addEdge(i+1, id1, id2);
+		graph->addEdge(i*2+1, id1, id2);
 	}
 
 	ifs.close();
