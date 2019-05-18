@@ -14,6 +14,8 @@ private:
 	Position pos;
 	std::vector<std::string> tags;
 	std::vector<Edge> adj;
+	bool visited = false;
+	double distance = 0; //auxiliary
 
 	void addEdge(int id, Vertex * dest, double weight);
 

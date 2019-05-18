@@ -17,6 +17,9 @@ public:
 
 	std::vector<Vertex *> getVertexSet() const;
 
+
+
+
 	void reset();
 	~Graph();
 };
