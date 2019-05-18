@@ -9,7 +9,6 @@ protected:
 
 public:
 	GraphAlgorithm(Graph * graph);
-	virtual ~GraphAlgorithm();
 
 	virtual void execute(Vertex * start) = 0;
 

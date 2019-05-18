@@ -36,3 +36,9 @@
 .cproject
 .settings/*
 /bin/
+.vscode/
+CMakeCache.txt
+CMakeFiles/
+airshuttle
+cmake_install.cmake
+compile_commands.json
