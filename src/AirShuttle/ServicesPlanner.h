@@ -24,6 +24,7 @@ public:
 	void setTimeWindow(int timeWindow);
 	void setMaxDist(int maxDist);
 
+	void preProcessGraph();
 	void planSingleVanNotMixingPassengers();
 	void planSingleVanMixingPassengers();
 	void planVansFleetMixingPassengers();
