@@ -7,9 +7,6 @@
 
 using namespace std;
 
-bool build_vertices(GraphViewer * gv, string location, int width, int height);
-bool build_edges(GraphViewer * gv, string location);
-
 MapDrawer::MapDrawer(int width, int height) {
 	this->width = width;
 	this->height = height;

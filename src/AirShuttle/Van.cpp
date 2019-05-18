@@ -15,3 +15,7 @@ vector<Service> Van::getServices() const {
 void Van::addService(Service service) {
 	this->services.push_back(service);
 }
+
+void Van::clearServices() {
+	this->services.clear();
+}

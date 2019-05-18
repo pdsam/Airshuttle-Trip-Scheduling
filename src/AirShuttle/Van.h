@@ -16,6 +16,7 @@ public:
 	std::vector<Service> getServices() const;
 
 	void addService(Service serv);
+	void clearServices();
 };
 
 #endif

@@ -11,7 +11,7 @@ class Service {
 private:
 	int vacant;
 	Time start, end;
-	std::vector<Reservation> reservations;
+	std::vector<Reservation*> reservations;
 	std::list<Edge> path;
 
 public:
@@ -20,10 +20,10 @@ public:
 	int getVacant() const;
 	Time getStart() const;
 	Time getEnd() const;
-	std::vector<Reservation> getReservations() const;
+	std::vector<Reservation*> getReservations() const;
 	std::list<Edge> getPath() const;
 
-	void addReservation(Reservation res);
+	void addReservation(Reservation * res);
 	void addEdge(Edge edge);
 
 };

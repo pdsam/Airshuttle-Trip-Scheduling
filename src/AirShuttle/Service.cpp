@@ -2,10 +2,6 @@
 
 using namespace std;
 
-Service::Service() {
-
-}
-
 int Service::getVacant() const {
 	return vacant;
 }
@@ -18,7 +14,7 @@ Time Service::getEnd() const {
 	return end;
 }
 
-vector<Reservation> Service::getReservations() const {
+vector<Reservation*> Service::getReservations() const {
 	return reservations;
 }
 
@@ -26,7 +22,7 @@ list<Edge> Service::getPath() const {
 	return path;
 }
 
-void Service::addReservation(Reservation res) {
+void Service::addReservation(Reservation * res) {
 	this->reservations.push_back(res);
 }
 
