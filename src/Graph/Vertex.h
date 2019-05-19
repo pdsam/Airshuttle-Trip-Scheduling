@@ -16,6 +16,8 @@ private:
 	std::vector<Edge> adj;
 	bool visited = false;
 	double distance = 0; //auxiliary
+	Vertex *path = nullptr;
+	int queueIndex = 0;//for MutablePriorityQueue
 
 	void addEdge(int id, Vertex * dest, double weight);
 
@@ -30,6 +32,7 @@ public:
 	std::vector<std::string> getTags() const;
 
 	friend class Graph;
+	friend class MutablePriorityQueue<Vertex>;
 };
 
 struct VertexHash {

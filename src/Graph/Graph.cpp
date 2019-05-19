@@ -89,3 +89,54 @@ void Graph::removeUnvisitedVertices() {
 		}
 	}
 }
+
+/**********************SINGLE SOURCE ***********************/
+Vertex * Graph::initSingleSource(const int &origin) {
+	for(auto v : vertexSet) {
+		v->distance = INF;
+		v->path = nullptr;
+	}
+	auto s = findVertex(origin);
+	s->distance = 0;
+	return s;
+}
+
+inline bool Graph::relax(Vertex *v, Vertex *w, double weight) {
+	if (v->distance + weight < w->distance) {
+		w->distance = v->distance + weight;
+		w->path = v;
+		return true;
+	}
+	else
+		return false;
+}
+
+
+void Graph::dijkstraShortestPath(const int &source){
+	auto s = initSingleSource(source);
+	MutablePriorityQueue<Vertex> q;
+	q.insert(s);
+	while( ! q.empty() ) {
+		auto v = q.extractMin();
+		for(auto e : v->adj) {
+			auto oldDist = e.dest->distance;
+			if (relax(v, e.dest, e.weight)) {
+				if (oldDist == INF)
+					q.insert(e.dest);
+				else
+					q.decreaseKey(e.dest);
+			}
+		}
+	}
+}
+
+vector<int> Graph::getPath(const int source, const int dest ){
+	vector<int> res;
+	auto v = findVertex(dest);
+	if (v == nullptr || v->distance == INF) // missing or disconnected
+		return res;
+	for ( ; v != nullptr; v = v->path)
+		res.push_back(v->getID);
+	reverse(res.begin(), res.end());
+	return res;
+}
