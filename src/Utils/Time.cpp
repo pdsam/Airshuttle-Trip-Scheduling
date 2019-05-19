@@ -23,3 +23,19 @@ int Time::getMinute() const {
 int Time::getSecond() const {
 	return second;
 }
+
+bool Time::operator<(const Time &t2) {
+    if (hour == t2.hour) {
+    	if (minute == t2.minute) {
+    		if (second == r2.second) {
+    			return false;
+    		} else {
+    			return second < t2.second;
+    		}
+    	} else {
+    		return minute < t2.minute;
+    	}
+    } else {
+    	return hour < t2.hour;
+    }
+}

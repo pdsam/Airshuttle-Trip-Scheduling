@@ -16,7 +16,21 @@ void ServicesPlanner::addVan(Van van) {
 }
 
 void ServicesPlanner::addReservation(Reservation reservation) {
-	this->reservations.push_back(reservation);
+
+    Reservation current = move(reservation);
+
+    while (current.getNumPeople() > Van::getCapacity()) {
+    	Reservation newRes(current.getClientName(), current.getNIF(), Van::getCapacity(),
+    			current.getDest(), current.getArrival());
+
+		current = Reservation(current.getClientName(), current.getNIF(), current.getNumPeople()-Van::getCapacity(),
+				current.getDest(), current.getArrival());
+
+    	reservations.push_back(newRes);
+    }
+
+    reservations.push_back(current);
+
 }
 
 void ServicesPlanner::setActionRadius(int actionRadius) {
