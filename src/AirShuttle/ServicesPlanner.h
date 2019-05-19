@@ -2,6 +2,7 @@
 #define SERVICES_PLANNER_H_
 
 #include <vector>
+#include <set>
 #include "Van.h"
 #include "Reservation.h"
 #include "../Graph/Graph.h"
@@ -11,7 +12,7 @@ private:
 	Graph * graph;
 	Vertex * airport;
 	std::vector<Van> vans;
-	std::vector<Reservation> reservations;
+	std::multiset<Reservation> reservations;
 	int actionRadius, timeWindow, maxDist;
 
 public:

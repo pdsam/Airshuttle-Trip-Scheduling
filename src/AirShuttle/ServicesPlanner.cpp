@@ -26,10 +26,10 @@ void ServicesPlanner::addReservation(Reservation reservation) {
 		current = Reservation(current.getClientName(), current.getNIF(), current.getNumPeople()-Van::getCapacity(),
 				current.getDest(), current.getArrival());
 
-    	reservations.push_back(newRes);
+    	reservations.insert(newRes);
     }
 
-    reservations.push_back(current);
+    reservations.insert(current);
 
 }
 
