@@ -32,4 +32,14 @@ public:
 	friend class Graph;
 };
 
+struct VertexHash {
+	bool operator()(const Vertex * v1, const Vertex * v2) const {
+		return v1->getID() == v2->getID();
+	}
+
+	int operator()(const Vertex * v) const {
+		return v->getID();
+	}
+};
+
 #endif

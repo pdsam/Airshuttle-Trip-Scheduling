@@ -6,7 +6,7 @@ using namespace std;
 bool GraphLoader::loadGraph(string location, Graph * graph) {
 
 	//graph->reset();
-	return (loadVertices(location, graph) && loadEdges(location, graph) && loadTags(location, graph));
+	return (loadVertices(location, graph) && loadEdges(location, graph));// && loadTags(location, graph));
 }
 
 bool GraphLoader::loadVertices(string location, Graph * graph) {

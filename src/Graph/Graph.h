@@ -9,6 +9,8 @@
 class Graph {
 private:
 	std::vector<Vertex *> vertexSet;
+
+	void DFSVisit(Vertex * v);
 public:
 	Vertex *findVertex(const int &id) const;
 	bool addVertex(const int &id, int x, int y);
@@ -17,11 +19,11 @@ public:
 
 	std::vector<Vertex *> getVertexSet() const;
 
-
-
-
 	void reset();
 	~Graph();
+
+	void DFSConnectivity(Vertex * start);
+	void removeUnvisitedVertices();
 };
 
 #endif
