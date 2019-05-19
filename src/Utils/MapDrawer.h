@@ -11,7 +11,6 @@ private:
 
 	bool buildVerticesFromFile(std::string location);
 	bool buildEdgesFromFile(std::string location);
-	std::string getTagColor(std::string tag);
 	void resetGraphViewer();
 
 public:
@@ -20,6 +19,8 @@ public:
 
 	bool drawMapFromFile(std::string location);
 	bool drawMapFromGraph(Graph * graph);
+
+	static std::string getTagColor(std::string tag);
 };
 
 

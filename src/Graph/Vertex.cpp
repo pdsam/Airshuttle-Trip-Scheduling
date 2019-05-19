@@ -30,4 +30,3 @@ void Vertex::addTag(std::string tag) {
 vector<string> Vertex::getTags() const {
 	return tags;
 }
-

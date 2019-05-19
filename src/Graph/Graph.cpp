@@ -1,5 +1,8 @@
 #include "Graph.h"
 
+#include <iostream>
+#include <unordered_set>
+
 using namespace std;
 
 Vertex* Graph::findVertex(const int &id) const {
@@ -42,4 +45,47 @@ void Graph::reset() {
 Graph::~Graph() {
 	for (size_t i = 0; i < vertexSet.size(); i++)
 		delete vertexSet[i];
+}
+
+void Graph::DFSVisit(Vertex * v) {
+	v->visited = true;
+	// pre process
+	v->addTag("DFS");
+	for (const Edge & e : v->adj)
+		if (!e.dest->visited)
+			DFSVisit(e.dest);
+	// post process
+}
+
+void Graph::DFSConnectivity(Vertex * start) {
+	start->addTag("DFS start");
+	for (Vertex * v : vertexSet)
+		v->visited = false;
+	DFSVisit(start);
+}
+
+void Graph::removeUnvisitedVertices() {
+	unordered_set<Vertex*, VertexHash, VertexHash> removed;
+
+	/* Remove vertices */
+	vector<Vertex *>::iterator v_it;
+	for (v_it = vertexSet.begin(); v_it != vertexSet.end(); v_it++) {
+		if (!((*v_it)->visited)) {
+			removed.insert(*v_it);
+			v_it = vertexSet.erase(v_it);
+			v_it--;
+		}
+	}
+
+	/* Remove edges */
+	vector<Edge>::iterator e_it;
+	for (Vertex * v : vertexSet) {
+		e_it = v->adj.begin();
+		for (; e_it != v->adj.end(); e_it++) {
+			if (removed.find((*e_it).dest) != removed.end()) {
+				e_it = v->adj.erase(e_it);
+				e_it--;
+			}
+		}
+	}
 }
