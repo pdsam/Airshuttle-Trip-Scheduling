@@ -49,4 +49,15 @@ void ServicesPlanner::preProcessEntryData() {
 	/* Pre Process Graph */
 	graph->DFSConnectivity(airport);
 	graph->removeUnvisitedVertices();
+
+	/* Pre Process Reservations */
+	multiset<Reservation>::iterator it;
+	for (it = reservations.begin(); it != reservations.end(); it++) {
+		if (graph->findVertex((*it).getDest()->getID()) == NULL) {
+			it = reservations.erase(it);
+			it--;
+		}
+	}
+
+	/* Reservations were already divided to fit vans size and already sorted due to the use of multiset */
 }
