@@ -5,6 +5,7 @@
 #include <string>
 #include "Edge.h"
 #include "../Utils/Position.h"
+#include "../Utils/MutablePriorityQueue.h"
 
 class Edge;
 
@@ -30,7 +31,8 @@ public:
 
 	void addTag(std::string tag);
 	std::vector<std::string> getTags() const;
-
+	double getDistance();
+	bool operator<(Vertex & vertex) const;
 	friend class Graph;
 	friend class MutablePriorityQueue<Vertex>;
 };

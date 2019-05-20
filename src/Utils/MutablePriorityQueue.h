@@ -3,7 +3,7 @@
  * A simple implementation of mutable priority queues, required by Dijkstra algorithm.
  *
  * Created on: 17/03/2018
- *      Author: João Pascoal Faria
+ *      Author: Joï¿½o Pascoal Faria
  */
 
 #ifndef SRC_MUTABLEPRIORITYQUEUE_H_
