@@ -23,6 +23,7 @@ public:
 	Vertex* getDest() const;
 	Time getArrival() const;
 
+	bool operator<(const Reservation & reservation) const;
 };
 
 #endif

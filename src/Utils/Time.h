@@ -12,7 +12,7 @@ public:
 	int getMinute() const;
 	int getSecond() const;
 
-	bool operator<(const Time& t2);
+	bool operator<(const Time& t2) const;
 };
 
 #endif

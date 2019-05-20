@@ -24,10 +24,10 @@ int Time::getSecond() const {
 	return second;
 }
 
-bool Time::operator<(const Time &t2) {
+bool Time::operator<(const Time &t2) const {
     if (hour == t2.hour) {
     	if (minute == t2.minute) {
-    		if (second == r2.second) {
+    		if (second == t2.second) {
     			return false;
     		} else {
     			return second < t2.second;

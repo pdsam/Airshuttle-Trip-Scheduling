@@ -44,3 +44,9 @@ void ServicesPlanner::setTimeWindow(int timeWindow) {
 void ServicesPlanner::setMaxDist(int maxDist) {
 	this->maxDist = max(maxDist, 1);
 }
+
+void ServicesPlanner::preProcessEntryData() {
+	/* Pre Process Graph */
+	graph->DFSConnectivity(airport);
+	graph->removeUnvisitedVertices();
+}

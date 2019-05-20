@@ -29,3 +29,7 @@ Vertex* Reservation::getDest() const {
 Time Reservation::getArrival() const {
 	return arrival;
 }
+
+bool Reservation::operator<(const Reservation & reservation) const{
+	return this->arrival < reservation.arrival;
+}
