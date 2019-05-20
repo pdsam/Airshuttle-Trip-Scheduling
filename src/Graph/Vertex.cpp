@@ -30,3 +30,10 @@ void Vertex::addTag(std::string tag) {
 vector<string> Vertex::getTags() const {
 	return tags;
 }
+
+double Vertex::getDistance(){return distance;}
+
+bool Vertex::operator<(Vertex & vertex) const{
+return this->distance < vertex.getDistance();
+
+}

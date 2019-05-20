@@ -5,6 +5,10 @@
 
 #include "Vertex.h"
 #include "Edge.h"
+#include <algorithm>
+#include "../Utils/MutablePriorityQueue.h"
+
+#define INF std::numeric_limits<double>::max()
 
 class Graph {
 private:
@@ -18,6 +22,13 @@ public:
 	int getNumVertex() const;
 
 	std::vector<Vertex *> getVertexSet() const;
+
+	//single source algorithms
+	Vertex * initSingleSource(const int &origin);
+	bool relax(Vertex *v, Vertex *w, double weight);
+	void dijkstraShortestPath(const int &source);
+	vector<int> getPath(const int source, const int dest );
+
 
 	void reset();
 	~Graph();

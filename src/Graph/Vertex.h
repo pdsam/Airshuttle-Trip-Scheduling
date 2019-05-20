@@ -5,6 +5,7 @@
 #include <string>
 #include "Edge.h"
 #include "../Utils/Position.h"
+#include "../Utils/MutablePriorityQueue.h"
 
 class Edge;
 
@@ -16,6 +17,8 @@ private:
 	std::vector<Edge> adj;
 	bool visited = false;
 	double distance = 0; //auxiliary
+	Vertex *path = nullptr;
+	int queueIndex = 0;//for MutablePriorityQueue
 
 	void addEdge(int id, Vertex * dest, double weight);
 
@@ -28,8 +31,10 @@ public:
 
 	void addTag(std::string tag);
 	std::vector<std::string> getTags() const;
-
+	double getDistance();
+	bool operator<(Vertex & vertex) const;
 	friend class Graph;
+	friend class MutablePriorityQueue<Vertex>;
 };
 
 struct VertexHash {
