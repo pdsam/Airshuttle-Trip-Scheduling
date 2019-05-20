@@ -1,6 +1,9 @@
 #include "ServicesPlanner.h"
 #include "../Utils/utilities.c"
 
+#include <fstream>
+#include <iostream>
+
 using namespace std;
 
 ServicesPlanner::ServicesPlanner(Graph * graph, Vertex * airport, int actionRadius, int timeWindow, int maxDist) {
@@ -9,6 +12,18 @@ ServicesPlanner::ServicesPlanner(Graph * graph, Vertex * airport, int actionRadi
 	this->actionRadius = max(actionRadius, 1);
 	this->timeWindow = max(timeWindow, 1);
 	this->maxDist = max(maxDist, 1);
+}
+
+Vertex * ServicesPlanner::getAirport() const {
+	return airport;
+}
+
+std::vector<Van> ServicesPlanner::getVans() const {
+	return vans;
+}
+
+std::multiset<Reservation> ServicesPlanner::getReservations() const {
+	return reservations;
 }
 
 void ServicesPlanner::addVan(Van van) {
@@ -31,6 +46,24 @@ void ServicesPlanner::addReservation(Reservation reservation) {
 
     reservations.insert(current);
 
+}
+
+bool ServicesPlanner::addReservationsFromFile(string location, string filename) {
+	ifstream ifs("reservations/" + location + "/" + filename);
+	if(!ifs.is_open()) return false;
+
+	int N;
+	ifs >> N;
+
+	string name;
+	int nif, node, h, m, s, npersons;
+	for (int i = 0 ; i < N; i++) {
+		ifs >> name >> nif >> node >> h >> m >> s >> npersons;
+		Vertex * dest = graph->findVertex(node);
+		if (dest == NULL) continue;
+		addReservation(Reservation(name, nif, npersons, dest, Time(h,m,s)));
+	}
+	return true;
 }
 
 void ServicesPlanner::setActionRadius(int actionRadius) {

@@ -2,6 +2,7 @@
 #include "Utils/GraphLoader.h"
 #include "Graph/Graph.h"
 #include "Utils/MapDrawer.h"
+#include "AirShuttle/ServicesPlanner.h"
 
 using namespace std;
 
@@ -10,11 +11,16 @@ int main() {
 	Graph graph;
 	GraphLoader::loadGraph("Porto", &graph);
 
-	graph.DFSConnectivity(graph.getVertexSet().at(3));
-	graph.removeUnvisitedVertices();
+	ServicesPlanner planner(&graph, graph.getVertexSet().at(0));
+	planner.preProcessEntryData();
 
-	MapDrawer mapDrawer(2000, 2000);
-	mapDrawer.drawMapFromGraph(&graph);
+	planner.addReservationsFromFile("Porto", "reservations_1329449088.txt");
+	for (auto reservation : planner.getReservations())
+		cout << reservation.getClientName() << endl;
+
+
+	/*MapDrawer mapDrawer(2000, 2000);
+	mapDrawer.drawMapFromGraph(&graph);*/
 	getchar();
 
 	return 0;

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <set>
+#include <string>
 #include "Van.h"
 #include "Reservation.h"
 #include "../Graph/Graph.h"
@@ -16,10 +17,15 @@ private:
 	int actionRadius, timeWindow, maxDist;
 
 public:
-	ServicesPlanner(Graph * graph, Vertex * airport, int actionRadius, int timeWindow, int maxDist);
+	ServicesPlanner(Graph * graph, Vertex * airport, int actionRadius = 1, int timeWindow = 1, int maxDist = 1);
+
+	Vertex * getAirport() const;
+	std::vector<Van> getVans() const;
+	std::multiset<Reservation> getReservations() const;
 
 	void addVan(Van van);
 	void addReservation(Reservation reservation);
+	bool addReservationsFromFile(std::string location, std::string filename);
 
 	void setActionRadius(int actionRadius);
 	void setTimeWindow(int timeWindow);
