@@ -34,6 +34,5 @@ vector<MapTag> Vertex::getTags() const {
 double Vertex::getDistance(){return distance;}
 
 bool Vertex::operator<(Vertex & vertex) const{
-return this->distance < vertex.getDistance();
-
+	return this->distance < vertex.getDistance();
 }

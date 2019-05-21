@@ -3,6 +3,7 @@
 #include <iostream>
 #include <unordered_set>
 #include "../Utils/MapDrawer.h"
+#include "../AirShuttle/AirShuttle.h"
 
 using namespace std;
 
@@ -23,9 +24,10 @@ bool Graph::addEdge(int id, int v_id1, int v_id2) {
 	Vertex * v1 = findVertex(v_id1);
 	Vertex * v2 = findVertex(v_id2);
 	if(v1 == nullptr || v2 == nullptr) return false;
-	double dist = v1->pos.euclidianDistance(v2->pos);
-	v1->addEdge(id, v2, dist);
-	v2->addEdge(id+1, v1, dist);
+	double dist = v1->pos.euclidianDistance(v2->pos); //in meters
+	double time = dist * 60 / (VAN_SPEED * 1000);
+	v1->addEdge(id, v2, time);
+	v2->addEdge(id+1, v1, time);
 	return true;
 }
 

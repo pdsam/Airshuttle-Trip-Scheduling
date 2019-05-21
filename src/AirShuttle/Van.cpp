@@ -1,8 +1,9 @@
 #include "Van.h"
+#include "AirShuttle.h"
 
 using namespace std;
 
-int Van::capacity = 10;
+int Van::capacity = VAN_CAPACITY;
 
 int Van::getCapacity() {
 	return capacity;

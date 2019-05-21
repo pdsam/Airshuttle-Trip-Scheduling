@@ -3,6 +3,7 @@
 #include "Graph/Graph.h"
 #include "Utils/MapDrawer.h"
 #include "AirShuttle/ServicesPlanner.h"
+#include "AirShuttle/AirShuttle.h"
 
 using namespace std;
 
@@ -11,7 +12,7 @@ int main() {
 	Graph graph;
 	GraphLoader::loadGraph("Porto", &graph);
 
-	ServicesPlanner planner(&graph, graph.getVertexSet().at(0)->getID());
+	ServicesPlanner planner(&graph, PORTO_AIRPORT);
 	planner.preProcessEntryData();
 
 	/*
