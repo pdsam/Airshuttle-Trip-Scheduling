@@ -96,16 +96,20 @@ Vertex * Graph::initSingleSource(const int &origin) {
 	for(auto v : vertexSet) {
 		v->distance = INF;
 		v->path = nullptr;
+		v->pathEdge = Edge();
 	}
 	auto s = findVertex(origin);
 	s->distance = 0;
 	return s;
 }
 
-inline bool Graph::relax(Vertex *v, Vertex *w, double weight) {
+inline bool Graph::relax(Vertex *v, Edge edge) {//Vertex *w, double weight) {
+	double weight = edge.weight;
+	Vertex * w = edge.dest;
 	if (v->distance + weight < w->distance) {
 		w->distance = v->distance + weight;
 		w->path = v;
+		w->pathEdge = edge;
 		return true;
 	}
 	else
@@ -121,7 +125,7 @@ void Graph::dijkstraShortestPath(const int &source){
 		auto v = q.extractMin();
 		for(auto e : v->adj) {
 			auto oldDist = e.dest->distance;
-			if (relax(v, e.dest, e.weight)) {
+			if (relax(v, e)) {//e.dest, e.weight)) {
 				if (oldDist == INF)
 					q.insert(e.dest);
 				else
@@ -131,7 +135,7 @@ void Graph::dijkstraShortestPath(const int &source){
 	}
 }
 
-vector<int> Graph::getPath(const int source, const int dest ){
+vector<int> Graph::getPathVertices(const int source, const int dest){
 	vector<int> res;
 	auto v = findVertex(dest);
 	auto s = findVertex(source);
@@ -142,6 +146,19 @@ vector<int> Graph::getPath(const int source, const int dest ){
 	for ( ; v != nullptr; v = v->path) {
 		v->addTag(DIJKSTRA_PATH);
 		res.push_back(v->getID());
+	}
+	reverse(res.begin(), res.end());
+	return res;
+}
+
+vector<Edge> Graph::getPathEdges(const int source, const int dest){
+	vector<Edge> res;
+	auto v = findVertex(dest);
+	auto s = findVertex(source);
+	if (v == nullptr || s == nullptr || v->distance == INF) // missing or disconnected
+		return res;
+	for ( ; v->id != source; v = v->path) {
+		res.push_back(v->pathEdge);
 	}
 	reverse(res.begin(), res.end());
 	return res;

@@ -1,8 +1,6 @@
 #ifndef EDGE_H_
 #define EDGE_H_
 
-#include "Vertex.h"
-
 class Vertex;
 
 class Edge {
@@ -12,6 +10,7 @@ private:
 	double weight;
 
 public:
+	Edge();
 	Edge(int id, Vertex * dest, double weight);
 
 	int getID() const;

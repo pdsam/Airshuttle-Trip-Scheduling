@@ -11,16 +11,16 @@ private:
 	int NIF;
 	int numPeople;
 
-	Vertex * dest;
+	int dest;
 	Time arrival, deliver;
 
 public:
-	Reservation(std::string clientName, int NIF, int numPeople, Vertex * dest, Time arrival);
+	Reservation(std::string clientName, int NIF, int numPeople, int dest, Time arrival);
 
 	std::string getClientName() const;
 	int getNIF() const;
 	int getNumPeople() const;
-	Vertex* getDest() const;
+	int getDest() const;
 	Time getArrival() const;
 
 	bool operator<(const Reservation & reservation) const;

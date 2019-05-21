@@ -9,8 +9,6 @@
 #include "../Utils/MapDrawer.h"
 #include "../Utils/MapTag.h"
 
-class Edge;
-
 class Vertex {
 private:
 	int id;
@@ -18,8 +16,11 @@ private:
 	std::vector<MapTag> tags;
 	std::vector<Edge> adj;
 	bool visited = false;
+
 	double distance = 0; //auxiliary
 	Vertex *path = nullptr;
+	Edge pathEdge;
+
 	int queueIndex = 0;//for MutablePriorityQueue
 
 	void addEdge(int id, Vertex * dest, double weight);
@@ -35,6 +36,7 @@ public:
 	std::vector<MapTag> getTags() const;
 	double getDistance();
 	bool operator<(Vertex & vertex) const;
+
 	friend class Graph;
 	friend class MutablePriorityQueue<Vertex>;
 };

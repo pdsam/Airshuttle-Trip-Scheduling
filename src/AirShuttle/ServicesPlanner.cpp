@@ -59,9 +59,7 @@ bool ServicesPlanner::addReservationsFromFile(string location, string filename) 
 	int nif, node, h, m, s, npersons;
 	for (int i = 0 ; i < N; i++) {
 		ifs >> name >> nif >> node >> h >> m >> s >> npersons;
-		Vertex * dest = graph->findVertex(node);
-		if (dest == NULL) continue;
-		addReservation(Reservation(name, nif, npersons, dest, Time(h,m,s)));
+		addReservation(Reservation(name, nif, npersons, node, Time(h,m,s)));
 	}
 	return true;
 }
@@ -88,11 +86,20 @@ void ServicesPlanner::preProcessEntryData() {
 	/* Pre Process Reservations */
 	multiset<Reservation>::iterator it;
 	for (it = reservations.begin(); it != reservations.end(); it++) {
-		if (graph->findVertex((*it).getDest()->getID()) == NULL) {
+		if (graph->findVertex((*it).getDest()) == NULL) {
 			it = reservations.erase(it);
 			it--;
 		}
 	}
 
 	/* Reservations were already divided to fit vans size and already sorted due to the use of multiset */
+}
+
+void ServicesPlanner::planSingleVanNotMixingPassengers() {
+	preProcessEntryData();
+	graph->dijkstraShortestPath(airport);
+
+	for (auto reservation : reservations) {
+		vector<Edge> pathEdges = graph->getPathEdges(airport, reservation.getDest());
+	}
 }

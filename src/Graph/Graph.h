@@ -5,13 +5,9 @@
 #include <algorithm>
 
 #include "Vertex.h"
-#include "Edge.h"
 #include "../Utils/MutablePriorityQueue.h"
 
 #define INF std::numeric_limits<double>::max()
-
-class Vertex;
-class Edge;
 
 class Graph {
 private:
@@ -28,9 +24,10 @@ public:
 
 	//single source algorithms
 	Vertex * initSingleSource(const int &origin);
-	bool relax(Vertex *v, Vertex *w, double weight);
+	bool relax(Vertex *v, Edge edge); //Vertex *w, double weight);
 	void dijkstraShortestPath(const int &source);
-	vector<int> getPath(const int source, const int dest );
+	vector<int> getPathVertices(const int source, const int dest);
+	vector<Edge> getPathEdges(const int source, const int dest);
 
 
 	void reset();

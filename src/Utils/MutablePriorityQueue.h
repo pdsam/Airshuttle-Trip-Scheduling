@@ -12,15 +12,13 @@
 #include <vector>
 
 
-using namespace std;
-
 /**
  * class T must have: (i) accessible field int queueIndex; (ii) operator< defined.
  */
 
 template <class T>
 class MutablePriorityQueue {
-	vector<T *> H;
+	std::vector<T *> H;
 	void heapifyUp(unsigned i);
 	void heapifyDown(unsigned i);
 	inline void set(unsigned i, T * x);

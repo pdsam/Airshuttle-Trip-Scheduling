@@ -1,4 +1,11 @@
 #include "Edge.h"
+#include "Vertex.h"
+
+Edge::Edge() {
+	this->id = -1;
+	this->dest = nullptr;
+	this->weight = 0;
+}
 
 Edge::Edge(int id, Vertex* dest, double weight) {
 	this->id = id;

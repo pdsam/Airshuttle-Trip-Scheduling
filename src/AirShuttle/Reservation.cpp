@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Reservation::Reservation(string clientName, int NIF, int numPeople, Vertex * dest, Time arrival) {
+Reservation::Reservation(string clientName, int NIF, int numPeople, int dest, Time arrival) {
 	this->clientName = clientName;
 	this->NIF = NIF;
 	this->numPeople = numPeople;
@@ -22,7 +22,7 @@ int Reservation::getNumPeople() const {
 	return numPeople;
 }
 
-Vertex* Reservation::getDest() const {
+int Reservation::getDest() const {
 	return dest;
 }
 
