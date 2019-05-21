@@ -103,16 +103,17 @@ void ServicesPlanner::planSingleVanNotMixingPassengers() {
 	van.clearServices();
 
 	for (auto reservation : reservations) {
+		vector<Service> services = van.getServices();
+
 		/* Forward trip */
 		vector<Edge> pathEdges = graph->getPathEdges(airport, reservation.getDest());
-		van.addService(Service(&reservation, pathEdges));
+		van.addService(Service(&reservation, pathEdges, services.at(services.size()-1).getEnd()));
 
 		/* Backward trip */
 		reverse(pathEdges.begin(), pathEdges.end());
 		for (auto & edge : pathEdges) {
 			edge.invertEdge();
 		}
-		vector<Service> services = van.getServices();
-		services.at(services.size()).addPath(pathEdges);
+		services.at(services.size()-1).addPath(pathEdges);
 	}
 }

@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Service::Service(Reservation * reservation, vector<Edge> & edges) {
+Service::Service(Reservation * reservation, vector<Edge> & edges, Time lastEnd) {
 	addReservation(reservation);
 	this->vacant = VAN_CAPACITY - reservation->getNumPeople();
 	int travel_time = 0;
@@ -11,7 +11,7 @@ Service::Service(Reservation * reservation, vector<Edge> & edges) {
 		travel_time += edge.getWeight();
 		path.push_back(edge);
 	}
-	this->start = reservation->getArrival();
+	this->start = reservation->getArrival() < lastEnd ? lastEnd : reservation->getArrival();
 	this->end = (this->start).addMinutes(travel_time);
 }
 
@@ -44,6 +44,10 @@ void Service::addEdge(Edge edge) {
 }
 
 void Service::addPath(const vector<Edge> & edges) {
-	for (auto edge: edges)
+	int travel_time = 0;
+	for (auto edge: edges) {
+		travel_time += edge.getWeight();
 		path.push_back(edge);
+	}
+	this->end = (this->end).addMinutes(travel_time);
 }
