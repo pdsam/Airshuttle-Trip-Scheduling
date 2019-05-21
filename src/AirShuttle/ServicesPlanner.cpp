@@ -6,7 +6,7 @@
 
 using namespace std;
 
-ServicesPlanner::ServicesPlanner(Graph * graph, Vertex * airport, int actionRadius, int timeWindow, int maxDist) {
+ServicesPlanner::ServicesPlanner(Graph * graph, int airport, int actionRadius, int timeWindow, int maxDist) {
 	this->graph = graph;
 	this->airport = airport;
 	this->actionRadius = max(actionRadius, 1);
@@ -14,7 +14,7 @@ ServicesPlanner::ServicesPlanner(Graph * graph, Vertex * airport, int actionRadi
 	this->maxDist = max(maxDist, 1);
 }
 
-Vertex * ServicesPlanner::getAirport() const {
+int ServicesPlanner::getAirport() const {
 	return airport;
 }
 
@@ -80,7 +80,9 @@ void ServicesPlanner::setMaxDist(int maxDist) {
 
 void ServicesPlanner::preProcessEntryData() {
 	/* Pre Process Graph */
-	graph->DFSConnectivity(airport);
+	Vertex * start = graph->findVertex(airport);
+	if (start == NULL) return;
+	graph->DFSConnectivity(start);
 	graph->removeUnvisitedVertices();
 
 	/* Pre Process Reservations */

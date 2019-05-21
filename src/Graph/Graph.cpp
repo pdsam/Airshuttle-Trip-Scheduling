@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <unordered_set>
+#include "../Utils/MapDrawer.h"
 
 using namespace std;
 
@@ -49,16 +50,14 @@ Graph::~Graph() {
 
 void Graph::DFSVisit(Vertex * v) {
 	v->visited = true;
-	// pre process
-	v->addTag("DFS");
+	//v->addTag("DFS");
 	for (const Edge & e : v->adj)
 		if (!e.dest->visited)
 			DFSVisit(e.dest);
-	// post process
 }
 
 void Graph::DFSConnectivity(Vertex * start) {
-	start->addTag("DFS start");
+	//start->addTag("DFS start");
 	for (Vertex * v : vertexSet)
 		v->visited = false;
 	DFSVisit(start);
@@ -133,10 +132,15 @@ void Graph::dijkstraShortestPath(const int &source){
 vector<int> Graph::getPath(const int source, const int dest ){
 	vector<int> res;
 	auto v = findVertex(dest);
-	if (v == nullptr || v->distance == INF) // missing or disconnected
+	auto s = findVertex(source);
+	if (v == nullptr || s == nullptr || v->distance == INF) // missing or disconnected
 		return res;
-	for ( ; v != nullptr; v = v->path)
-		res.push_back(v->getID);
+	v->addTag(DIJKSTRA_END);
+	s->addTag(DIJKSTRA_START);
+	for ( ; v != nullptr; v = v->path) {
+		v->addTag(DIJKSTRA_PATH);
+		res.push_back(v->getID());
+	}
 	reverse(res.begin(), res.end());
 	return res;
 }

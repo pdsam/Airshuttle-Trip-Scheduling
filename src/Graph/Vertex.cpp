@@ -23,11 +23,11 @@ void Vertex::addEdge(int id, Vertex * dest, double weight) {
 	adj.push_back(Edge(id, dest, weight));
 }
 
-void Vertex::addTag(std::string tag) {
+void Vertex::addTag(MapTag tag) {
 	this->tags.push_back(tag);
 }
 
-vector<string> Vertex::getTags() const {
+vector<MapTag> Vertex::getTags() const {
 	return tags;
 }
 

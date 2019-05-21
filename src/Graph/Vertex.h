@@ -6,6 +6,8 @@
 #include "Edge.h"
 #include "../Utils/Position.h"
 #include "../Utils/MutablePriorityQueue.h"
+#include "../Utils/MapDrawer.h"
+#include "../Utils/MapTag.h"
 
 class Edge;
 
@@ -13,7 +15,7 @@ class Vertex {
 private:
 	int id;
 	Position pos;
-	std::vector<std::string> tags;
+	std::vector<MapTag> tags;
 	std::vector<Edge> adj;
 	bool visited = false;
 	double distance = 0; //auxiliary
@@ -29,8 +31,8 @@ public:
 	Position getPosition() const;
 	std::vector<Edge> getAdj() const;
 
-	void addTag(std::string tag);
-	std::vector<std::string> getTags() const;
+	void addTag(MapTag tag);
+	std::vector<MapTag> getTags() const;
 	double getDistance();
 	bool operator<(Vertex & vertex) const;
 	friend class Graph;

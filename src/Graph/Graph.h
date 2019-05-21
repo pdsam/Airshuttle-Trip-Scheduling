@@ -2,13 +2,16 @@
 #define GRAPH_H_
 
 #include <vector>
+#include <algorithm>
 
 #include "Vertex.h"
 #include "Edge.h"
-#include <algorithm>
 #include "../Utils/MutablePriorityQueue.h"
 
 #define INF std::numeric_limits<double>::max()
+
+class Vertex;
+class Edge;
 
 class Graph {
 private:

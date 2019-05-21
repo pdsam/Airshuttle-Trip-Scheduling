@@ -112,7 +112,11 @@ bool MapDrawer::drawMapFromGraph(Graph * graph) {
 	return true;
 }
 
-string MapDrawer::getTagColor(string tag) {
+MapTag MapDrawer::getStringTag(string tag) {
+	return OTHER;
+}
+
+string MapDrawer::getTagColor(MapTag tag) {
 	/*
 	if (tag == "aeroway=aerodrome") return BLUE;
 	else if (tag == "aeroway=gate") return RED;
@@ -122,7 +126,8 @@ string MapDrawer::getTagColor(string tag) {
 	else if (tag == "iata=*") return ORANGE;
 	else if (tag == "landuse=military") return GREEN;
 	*/
-	if (tag == "DFS") return RED;
-	else if (tag == "DFS start") return BLACK;
+	if (tag == DIJKSTRA_START) return GREEN;
+	else if (tag == DIJKSTRA_PATH) return RED;
+	else if (tag == DIJKSTRA_END) return BLACK;
 	return "";
 }

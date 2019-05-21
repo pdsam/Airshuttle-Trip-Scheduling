@@ -1,5 +1,6 @@
 #include <fstream>
 #include "GraphLoader.h"
+#include "MapDrawer.h"
 
 using namespace std;
 
@@ -61,7 +62,7 @@ bool GraphLoader::loadTags(string location, Graph * graph) {
 		for (int j = 0; j < n_of_tag; j++) {
 			ifs >> id;
 			Vertex * v = graph->findVertex(id);
-			if (v != nullptr) v->addTag(tag);
+			if (v != nullptr) v->addTag(MapDrawer::getStringTag(tag));
 		}
 	}
 
