@@ -6,16 +6,19 @@ class Vertex;
 class Edge {
 private:
 	int id;
-	Vertex * dest;
+	Vertex * orig, * dest;
 	double weight;
 
 public:
 	Edge();
-	Edge(int id, Vertex * dest, double weight);
+	Edge(int id, Vertex * orig, Vertex * dest, double weight);
 
 	int getID() const;
+	Vertex * getOrig() const;
 	Vertex * getDest() const;
 	double getWeight() const;
+
+	void invertEdge();
 
 	friend class Graph;
 	friend class Vertex;

@@ -13,6 +13,9 @@ public:
 	int getSecond() const;
 
 	bool operator<(const Time& t2) const;
+	Time operator+(const Time& t2) const;
+
+	Time addMinutes(int minutes) const;
 };
 
 #endif

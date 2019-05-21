@@ -19,8 +19,8 @@ vector<Edge> Vertex::getAdj() const {
 	return adj;
 }
 
-void Vertex::addEdge(int id, Vertex * dest, double weight) {
-	adj.push_back(Edge(id, dest, weight));
+void Vertex::addEdge(int id, Vertex * orig, Vertex * dest, double weight) {
+	adj.push_back(Edge(id, orig, dest, weight));
 }
 
 void Vertex::addTag(MapTag tag) {

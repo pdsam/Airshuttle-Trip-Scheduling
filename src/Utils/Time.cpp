@@ -39,3 +39,26 @@ bool Time::operator<(const Time &t2) const {
     	return hour < t2.hour;
     }
 }
+
+Time Time::operator+(const Time& t2) const {
+	Time new_time = *this;
+
+	new_time.second += t2.second;
+	new_time.minute += t2.minute + (new_time.second % 60);
+	new_time.hour += t2.hour + (new_time.minute % 60);
+	new_time.second %= 60;
+	new_time.minute %= 60;
+	new_time.hour %= 24;
+
+	return new_time;
+}
+
+Time Time::addMinutes(int minutes) const {
+	Time new_time = *this;
+	new_time.minute += minutes;
+	new_time.hour += (new_time.minute / 60);
+	new_time.minute %= 60;
+	new_time.hour %= 24;
+
+	return new_time;
+}

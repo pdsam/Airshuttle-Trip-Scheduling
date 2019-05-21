@@ -15,7 +15,7 @@ private:
 	std::list<Edge> path;
 
 public:
-	Service();
+	Service(Reservation * res, std::vector<Edge> & edges);
 
 	int getVacant() const;
 	Time getStart() const;
@@ -25,6 +25,7 @@ public:
 
 	void addReservation(Reservation * res);
 	void addEdge(Edge edge);
+	void addPath(const vector<Edge> & edges);
 
 };
 

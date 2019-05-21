@@ -23,7 +23,7 @@ private:
 
 	int queueIndex = 0;//for MutablePriorityQueue
 
-	void addEdge(int id, Vertex * dest, double weight);
+	void addEdge(int id, Vertex * orig, Vertex * dest, double weight);
 
 public:
 	Vertex(int id, int x, int y);

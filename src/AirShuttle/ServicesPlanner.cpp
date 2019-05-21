@@ -99,7 +99,20 @@ void ServicesPlanner::planSingleVanNotMixingPassengers() {
 	preProcessEntryData();
 	graph->dijkstraShortestPath(airport);
 
+	Van & van = vans.at(0);
+	van.clearServices();
+
 	for (auto reservation : reservations) {
+		/* Forward trip */
 		vector<Edge> pathEdges = graph->getPathEdges(airport, reservation.getDest());
+		van.addService(Service(&reservation, pathEdges));
+
+		/* Backward trip */
+		reverse(pathEdges.begin(), pathEdges.end());
+		for (auto & edge : pathEdges) {
+			edge.invertEdge();
+		}
+		vector<Service> services = van.getServices();
+		services.at(services.size()).addPath(pathEdges);
 	}
 }
