@@ -3,6 +3,8 @@
 #include "Graph/Graph.h"
 #include "Utils/MapDrawer.h"
 #include "AirShuttle/ServicesPlanner.h"
+#include "AirShuttle/AirShuttle.h"
+#include "Utils/MapTag.h"
 
 using namespace std;
 
@@ -11,16 +13,15 @@ int main() {
 	Graph graph;
 	GraphLoader::loadGraph("Porto", &graph);
 
-	ServicesPlanner planner(&graph, graph.getVertexSet().at(0));
-	planner.preProcessEntryData();
-
+	ServicesPlanner planner(&graph, PORTO_AIRPORT, 1);
 	planner.addReservationsFromFile("Porto", "reservations_1329449088.txt");
-	for (auto reservation : planner.getReservations())
-		cout << reservation.getClientName() << endl;
+
+	planner.planSingleVanNotMixingPassengers();
 
 
-	/*MapDrawer mapDrawer(2000, 2000);
-	mapDrawer.drawMapFromGraph(&graph);*/
+	MapDrawer mapDrawer(2000, 2000);
+	mapDrawer.drawMapFromPlannerSingleVan(&planner);
+
 	getchar();
 
 	return 0;

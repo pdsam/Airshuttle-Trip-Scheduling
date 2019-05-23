@@ -6,20 +6,22 @@
 #include <string>
 #include "Van.h"
 #include "Reservation.h"
+#include "AirShuttle.h"
 #include "../Graph/Graph.h"
 
 class ServicesPlanner {
 private:
 	Graph * graph;
-	Vertex * airport;
+	int airport;
 	std::vector<Van> vans;
 	std::multiset<Reservation> reservations;
 	int actionRadius, timeWindow, maxDist;
 
 public:
-	ServicesPlanner(Graph * graph, Vertex * airport, int actionRadius = 1, int timeWindow = 1, int maxDist = 1);
+	ServicesPlanner(Graph * graph, int airport, int vanCount, int actionRadius = ACTION_RADIUS, int timeWindow = TIME_WINDOW, int maxDist = MAX_DIST);
 
-	Vertex * getAirport() const;
+	Graph * getGraph() const;
+	int getAirport() const;
 	std::vector<Van> getVans() const;
 	std::multiset<Reservation> getReservations() const;
 
