@@ -18,7 +18,7 @@ private:
 	int actionRadius, timeWindow, maxDist;
 
 public:
-	ServicesPlanner(Graph * graph, int airport, int actionRadius = ACTION_RADIUS, int timeWindow = TIME_WINDOW, int maxDist = MAX_DIST);
+	ServicesPlanner(Graph * graph, int airport, int vanCount, int actionRadius = ACTION_RADIUS, int timeWindow = TIME_WINDOW, int maxDist = MAX_DIST);
 
 	int getAirport() const;
 	std::vector<Van> getVans() const;

@@ -1,14 +1,15 @@
 #include "ServicesPlanner.h"
-#include "../Utils/utilities.c"
-
 #include <fstream>
 #include <iostream>
 
+#include "../Utils/Utilities.h"
+
 using namespace std;
 
-ServicesPlanner::ServicesPlanner(Graph * graph, int airport, int actionRadius, int timeWindow, int maxDist) {
+ServicesPlanner::ServicesPlanner(Graph * graph, int airport, int vanCount, int actionRadius, int timeWindow, int maxDist) {
 	this->graph = graph;
 	this->airport = airport;
+	this->vans.resize(vanCount);
 	this->actionRadius = max(actionRadius, 1);
 	this->timeWindow = max(timeWindow, 1);
 	this->maxDist = max(maxDist, 1);
@@ -103,17 +104,21 @@ void ServicesPlanner::planSingleVanNotMixingPassengers() {
 	van.clearServices();
 
 	for (auto reservation : reservations) {
-		vector<Service> services = van.getServices();
+		int services_count = van.getServices().size();
 
 		/* Forward trip */
 		vector<Edge> pathEdges = graph->getPathEdges(airport, reservation.getDest());
-		van.addService(Service(&reservation, pathEdges, services.at(services.size()-1).getEnd()));
+
+		Time lastService = services_count > 0 ? van.getServices().at(services_count-1).getEnd() : Time(0,0,0);
+		Service newService(&reservation, pathEdges, lastService);
 
 		/* Backward trip */
 		reverse(pathEdges.begin(), pathEdges.end());
 		for (auto & edge : pathEdges) {
 			edge.invertEdge();
 		}
-		services.at(services.size()-1).addPath(pathEdges);
+		newService.addPath(pathEdges);
+
+		van.addService(newService);
 	}
 }
