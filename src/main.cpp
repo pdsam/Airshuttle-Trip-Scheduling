@@ -4,6 +4,7 @@
 #include "Utils/MapDrawer.h"
 #include "AirShuttle/ServicesPlanner.h"
 #include "AirShuttle/AirShuttle.h"
+#include "Utils/MapTag.h"
 
 using namespace std;
 
@@ -17,13 +18,11 @@ int main() {
 
 	planner.planSingleVanNotMixingPassengers();
 
-	for (auto service : planner.getVans().at(0).getServices()) {
-		cout << "service from " << service.getStart() << " to " << service.getEnd() << endl;
-	}
 
-	/*MapDrawer mapDrawer(2000, 2000);
-	mapDrawer.drawMapFromGraph(&graph);*/
-	//getchar();
+	MapDrawer mapDrawer(2000, 2000);
+	mapDrawer.drawMapFromPlannerSingleVan(&planner);
+
+	getchar();
 
 	return 0;
 }

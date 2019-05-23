@@ -26,8 +26,8 @@ public:
 	Vertex * initSingleSource(const int &origin);
 	bool relax(Vertex *v, Edge edge); //Vertex *w, double weight);
 	void dijkstraShortestPath(const int &source);
-	vector<int> getPathVertices(const int source, const int dest);
-	vector<Edge> getPathEdges(const int source, const int dest);
+	std::vector<int> getPathVertices(const int source, const int dest);
+	std::vector<Edge> getPathEdges(const int source, const int dest);
 
 
 	void reset();

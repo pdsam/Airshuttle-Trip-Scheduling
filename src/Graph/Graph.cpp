@@ -141,10 +141,7 @@ vector<int> Graph::getPathVertices(const int source, const int dest){
 	auto s = findVertex(source);
 	if (v == nullptr || s == nullptr || v->distance == INF) // missing or disconnected
 		return res;
-	v->addTag(DIJKSTRA_END);
-	s->addTag(DIJKSTRA_START);
 	for ( ; v != nullptr; v = v->path) {
-		v->addTag(DIJKSTRA_PATH);
 		res.push_back(v->getID());
 	}
 	reverse(res.begin(), res.end());

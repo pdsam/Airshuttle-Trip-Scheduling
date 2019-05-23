@@ -2,10 +2,10 @@
 #define MAP_DRAWER_H_
 
 #include "../GraphViewer/cpp/graphviewer.h"
-#include "../Graph/Graph.h"
 #include "MapTag.h"
 
 class Graph;
+class ServicesPlanner;
 
 class MapDrawer {
 private:
@@ -22,6 +22,7 @@ public:
 
 	bool drawMapFromFile(std::string location);
 	bool drawMapFromGraph(Graph * graph);
+	bool drawMapFromPlannerSingleVan(ServicesPlanner * planner);
 
 	static MapTag getStringTag(std::string tag);
 	static std::string getTagColor(MapTag);

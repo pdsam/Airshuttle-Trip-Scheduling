@@ -20,6 +20,7 @@ private:
 public:
 	ServicesPlanner(Graph * graph, int airport, int vanCount, int actionRadius = ACTION_RADIUS, int timeWindow = TIME_WINDOW, int maxDist = MAX_DIST);
 
+	Graph * getGraph() const;
 	int getAirport() const;
 	std::vector<Van> getVans() const;
 	std::multiset<Reservation> getReservations() const;

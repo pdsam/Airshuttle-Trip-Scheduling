@@ -15,6 +15,10 @@ ServicesPlanner::ServicesPlanner(Graph * graph, int airport, int vanCount, int a
 	this->maxDist = max(maxDist, 1);
 }
 
+Graph * ServicesPlanner::getGraph() const {
+	return graph;
+}
+
 int ServicesPlanner::getAirport() const {
 	return airport;
 }

@@ -3,7 +3,6 @@
 
 #include <string>
 #include "../Utils/Time.h"
-#include "../Graph/Vertex.h"
 
 class Reservation {
 private:
