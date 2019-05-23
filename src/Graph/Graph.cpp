@@ -8,15 +8,14 @@
 using namespace std;
 
 Vertex* Graph::findVertex(const int &id) const {
-	for (Vertex * v : vertexSet)
-		if(v->id == id)
-			return v;
-	return nullptr;
-}
+	unordered_map<int, Vertex*>::const_iterator it = vertexHashMap.find(id);
+	return it == vertexHashMap.end() ? nullptr : it->second;}
 
 bool Graph::addVertex(const int &id, int x, int y) {
 	if (findVertex(id) != nullptr) return false;
-	vertexSet.push_back(new Vertex(id, x, y));
+	Vertex * newVertex = new Vertex(id, x, y);
+	vertexSet.push_back(newVertex);
+	vertexHashMap.insert(pair<int,Vertex*>(id, newVertex));
 	return true;
 }
 
@@ -73,6 +72,7 @@ void Graph::removeUnvisitedVertices() {
 	for (v_it = vertexSet.begin(); v_it != vertexSet.end(); v_it++) {
 		if (!((*v_it)->visited)) {
 			removed.insert(*v_it);
+			vertexHashMap.erase((*v_it)->getID());
 			v_it = vertexSet.erase(v_it);
 			v_it--;
 		}

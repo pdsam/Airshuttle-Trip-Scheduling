@@ -18,10 +18,8 @@ int main() {
 
 	planner.planSingleVanNotMixingPassengers();
 
-
 	MapDrawer mapDrawer(2000, 2000);
 	mapDrawer.drawMapFromPlannerSingleVan(&planner);
-
 	getchar();
 
 	return 0;

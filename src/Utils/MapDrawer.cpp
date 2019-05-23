@@ -99,7 +99,6 @@ bool MapDrawer::drawMapFromGraph(Graph * graph) {
 	for (Vertex * v : graph->getVertexSet()) {
 		graphViewer->addNode(v->getID(), v->getPosition().getX() - x_offset, v->getPosition().getY() - y_offset);
 		if (v->getTags().size() > 0) {
-			//if (v->getTags().size() > 1) cout << "more than 1 tag" << endl;
 			graphViewer->setVertexColor(v->getID(), getTagColor(v->getTags().at(0)));
 		}
 	}

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
 
 #include "Vertex.h"
 #include "../Utils/MutablePriorityQueue.h"
@@ -11,6 +12,7 @@
 
 class Graph {
 private:
+	std::unordered_map<int, Vertex *> vertexHashMap;
 	std::vector<Vertex *> vertexSet;
 
 	void DFSVisit(Vertex * v);
