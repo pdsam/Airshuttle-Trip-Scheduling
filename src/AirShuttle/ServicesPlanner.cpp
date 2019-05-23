@@ -23,11 +23,11 @@ int ServicesPlanner::getAirport() const {
 	return airport;
 }
 
-std::vector<Van> ServicesPlanner::getVans() const {
+vector<Van> ServicesPlanner::getVans() const {
 	return vans;
 }
 
-std::multiset<Reservation> ServicesPlanner::getReservations() const {
+multiset<Reservation> ServicesPlanner::getReservations() const {
 	return reservations;
 }
 
