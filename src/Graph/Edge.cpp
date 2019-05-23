@@ -18,5 +18,7 @@ double Edge::getWeight() const {
 	return weight;
 }
 
-
+double Edge::getAverageSpeed() const{
+	return averageSpeed;
+}
 

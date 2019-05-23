@@ -111,6 +111,41 @@ inline bool Graph::relax(Vertex *v, Vertex *w, double weight) {
 		return false;
 }
 
+double Graph::heuristic(Vertex * current, Vertex * dest){
+	return dest->getPosition().euclidianDistance(current->getPosition());
+}
+
+inline bool Graph::relax(Vertex *v, Vertex *w, double weight, Vertex * Dest, double averageSpeed){
+	if (v->distance + weight < w->distance) {
+		w->distance = v->distance + weight + heuristic(w,Dest);
+		w->path = v;
+		return true;
+	}
+	else
+		return false;
+}
+
+
+void Graph::AStar(const int &source, const int &des){
+	auto s = initSingleSource(source);
+	auto dest = this->findVertex(des);
+	MutablePriorityQueue<Vertex> q;
+	q.insert(s);
+	while(!q.empty() ){
+		auto v = q.extractMin();
+		for(auto e : v->adj) {
+			auto oldDist = e.dest->distance;
+			if (relax(v, e.dest, e.weight,dest,e.getAverageSpeed())) {
+				if (oldDist == INF)
+					q.insert(e.dest);
+				else
+					q.decreaseKey(e.dest);
+			}
+		}
+
+	}
+
+}
 
 void Graph::dijkstraShortestPath(const int &source){
 	auto s = initSingleSource(source);
@@ -136,7 +171,7 @@ vector<int> Graph::getPath(const int source, const int dest ){
 	if (v == nullptr || v->distance == INF) // missing or disconnected
 		return res;
 	for ( ; v != nullptr; v = v->path)
-		res.push_back(v->getID);
+		res.push_back(v->getID());
 	reverse(res.begin(), res.end());
 	return res;
 }

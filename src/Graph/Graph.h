@@ -28,6 +28,10 @@ public:
 	bool relax(Vertex *v, Vertex *w, double weight);
 	void dijkstraShortestPath(const int &source);
 	vector<int> getPath(const int source, const int dest );
+	//A*
+	bool relax(Vertex *v, Vertex *w, double weight, Vertex * Dest, double averageSpeed);
+	void AStar(const int &source, const int &dest);
+	double heuristic(Vertex * current, Vertex * dest);
 
 
 	void reset();
