@@ -111,13 +111,15 @@ inline bool Graph::relax(Vertex *v, Vertex *w, double weight) {
 		return false;
 }
 
+
+//////////////A*//////////////////
 double Graph::heuristic(Vertex * current, Vertex * dest){
-	return dest->getPosition().euclidianDistance(current->getPosition());
+	return dest->getPosition().euclidianDistance(current->getPosition()) ;
 }
 
 inline bool Graph::relax(Vertex *v, Vertex *w, double weight, Vertex * Dest, double averageSpeed){
-	if (v->distance + weight < w->distance) {
-		w->distance = v->distance + weight + heuristic(w,Dest);
+	if (v->distance*averageSpeed + weight < w->distance) {
+		w->distance = v->distance*averageSpeed + weight + heuristic(w,Dest);
 		w->path = v;
 		return true;
 	}
@@ -125,27 +127,6 @@ inline bool Graph::relax(Vertex *v, Vertex *w, double weight, Vertex * Dest, dou
 		return false;
 }
 
-
-void Graph::AStar(const int &source, const int &des){
-	auto s = initSingleSource(source);
-	auto dest = this->findVertex(des);
-	MutablePriorityQueue<Vertex> q;
-	q.insert(s);
-	while(!q.empty() ){
-		auto v = q.extractMin();
-		for(auto e : v->adj) {
-			auto oldDist = e.dest->distance;
-			if (relax(v, e.dest, e.weight,dest,e.getAverageSpeed())) {
-				if (oldDist == INF)
-					q.insert(e.dest);
-				else
-					q.decreaseKey(e.dest);
-			}
-		}
-
-	}
-
-}
 
 void Graph::dijkstraShortestPath(const int &source){
 	auto s = initSingleSource(source);
@@ -164,6 +145,29 @@ void Graph::dijkstraShortestPath(const int &source){
 		}
 	}
 }
+void Graph::AStar(const int &source, const int &des){
+	auto s = initSingleSource(source);
+	auto dest = this->findVertex(des);
+	Vertex * previousVertex = nullptr;
+	MutablePriorityQueue<Vertex> q;
+	q.insert(s);
+	while(!q.empty() ){
+		auto v = q.extractMin();
+		v->path = previousVertex;
+		previousVertex = v;
+		if(dest->getID() == v->getID()){
+			q.clear();
+			continue;
+		}
+		for(auto e : v->adj) {
+			e.dest->distance = heuristic(v,e.dest) + e.getDistance();
+			q.insert(e.dest);
+		}
+
+	}
+
+}
+
 
 vector<int> Graph::getPath(const int source, const int dest ){
 	vector<int> res;

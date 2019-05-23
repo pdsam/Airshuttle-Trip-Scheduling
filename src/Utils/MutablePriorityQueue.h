@@ -30,6 +30,7 @@ public:
 	T * extractMin();
 	void decreaseKey(T * x);
 	bool empty();
+	void clear();
 };
 
 // Index calculations
@@ -100,6 +101,11 @@ template <class T>
 void MutablePriorityQueue<T>::set(unsigned i, T * x) {
 	H[i] = x;
 	x->queueIndex = i;
+}
+
+template <class T>
+void MutablePriorityQueue<T>::clear(){
+	this->H.clear();
 }
 
 #endif /* SRC_MUTABLEPRIORITYQUEUE_H_ */

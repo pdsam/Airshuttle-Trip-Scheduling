@@ -19,6 +19,7 @@ public:
 	Vertex * getDest() const;
 	double getWeight() const;
 	double getAverageSpeed() const;
+	double getDistance() const;
 
 	friend class Graph;
 	friend class Vertex;
