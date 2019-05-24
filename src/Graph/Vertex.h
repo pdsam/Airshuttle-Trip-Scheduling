@@ -24,6 +24,7 @@ private:
 	//A*
 	double Adistance = 0;
 	Vertex* Apath = nullptr;
+	Edge ApathEdge;
 
 
 	int queueIndex = 0;//for MutablePriorityQueue
