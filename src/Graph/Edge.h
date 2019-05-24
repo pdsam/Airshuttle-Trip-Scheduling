@@ -1,7 +1,8 @@
 #ifndef EDGE_H_
 #define EDGE_H_
 
-#include "AirShuttle.h"
+#include "../AirShuttle/AirShuttle.h"
+
 class Vertex;
 
 class Edge {
