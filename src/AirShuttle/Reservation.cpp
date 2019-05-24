@@ -33,3 +33,5 @@ Time Reservation::getArrival() const {
 bool Reservation::operator<(const Reservation & reservation) const{
 	return this->arrival < reservation.arrival;
 }
+
+bool Reservation::getAssigned() const {return this->assigned;}

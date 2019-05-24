@@ -9,6 +9,7 @@ private:
 	std::string clientName;
 	int NIF;
 	int numPeople;
+	bool assigned = false;
 
 	int dest;
 	Time arrival, deliver;
@@ -22,6 +23,7 @@ public:
 	int getDest() const;
 	Time getArrival() const;
 
+	bool getAssigned() const;
 	bool operator<(const Reservation & reservation) const;
 };
 

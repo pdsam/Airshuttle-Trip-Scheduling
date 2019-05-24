@@ -126,12 +126,26 @@ void ServicesPlanner::planSingleVanNotMixingPassengers() {
 		van.addService(newService);
 	}
 }
+/////////////////////nobody touch my spagetti/////////////////////////////
+
 
 void ServicesPlanner::planSingleVanMixingPassengers(){
 	preProcessEntryData();
 	graph->dijkstraShortestPath(airport);
 	Van & van = vans.at(0);
 	van.clearServices();
+	
+	auto temp = reservations;
+	while(!temp.empty()){
+		
+
+
+	}
+
+	
 
 
 }
+
+
+/////////////////////////////////////////////////7
