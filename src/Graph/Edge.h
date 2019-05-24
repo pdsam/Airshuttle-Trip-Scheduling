@@ -1,6 +1,7 @@
 #ifndef EDGE_H_
 #define EDGE_H_
 
+#include "AirShuttle.h"
 class Vertex;
 
 class Edge {
@@ -8,7 +9,7 @@ private:
 	int id;
 	Vertex * orig, * dest;
 	double weight;
-	double averageSpeed = 50;
+	double averageSpeed = VAN_SPEED;
 
 public:
 	Edge();

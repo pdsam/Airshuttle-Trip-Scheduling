@@ -180,14 +180,9 @@ vector<int> Graph::getPathVertices(const int source, const int dest){
 	auto s = findVertex(source);
 	if (v == nullptr || s == nullptr || v->distance == INF) // missing or disconnected
 		return res;
-<<<<<<< HEAD
 	for ( ; v != nullptr; v = v->path) {
 		res.push_back(v->getID());
 	}
-=======
-	for ( ; v != nullptr; v = v->path)
-		res.push_back(v->getID());
->>>>>>> a-star
 	reverse(res.begin(), res.end());
 	return res;
 }
