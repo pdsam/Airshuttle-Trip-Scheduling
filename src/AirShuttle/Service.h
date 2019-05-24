@@ -3,9 +3,10 @@
 
 #include <vector>
 #include <list>
-#include "Reservation.h"
 #include "../Utils/Time.h"
 #include "../Graph/Edge.h"
+
+class Reservation;
 
 class Service {
 private:
@@ -15,7 +16,7 @@ private:
 	std::list<Edge> path;
 
 public:
-	Service();
+	Service(Reservation * res, std::vector<Edge> & edges, Time lastEnd);
 
 	int getVacant() const;
 	Time getStart() const;
@@ -25,6 +26,7 @@ public:
 
 	void addReservation(Reservation * res);
 	void addEdge(Edge edge);
+	void addPath(const std::vector<Edge> & edges);
 
 };
 

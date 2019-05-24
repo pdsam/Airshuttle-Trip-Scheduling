@@ -3,29 +3,37 @@
 
 #include <vector>
 #include <set>
+#include <string>
 #include "Van.h"
 #include "Reservation.h"
+#include "AirShuttle.h"
 #include "../Graph/Graph.h"
 
 class ServicesPlanner {
 private:
 	Graph * graph;
-	Vertex * airport;
+	int airport;
 	std::vector<Van> vans;
 	std::multiset<Reservation> reservations;
 	int actionRadius, timeWindow, maxDist;
 
 public:
-	ServicesPlanner(Graph * graph, Vertex * airport, int actionRadius, int timeWindow, int maxDist);
+	ServicesPlanner(Graph * graph, int airport, int vanCount, int actionRadius = ACTION_RADIUS, int timeWindow = TIME_WINDOW, int maxDist = MAX_DIST);
+
+	Graph * getGraph() const;
+	int getAirport() const;
+	std::vector<Van> getVans() const;
+	std::multiset<Reservation> getReservations() const;
 
 	void addVan(Van van);
 	void addReservation(Reservation reservation);
+	bool addReservationsFromFile(std::string location, std::string filename);
 
 	void setActionRadius(int actionRadius);
 	void setTimeWindow(int timeWindow);
 	void setMaxDist(int maxDist);
 
-	void preProcessGraph();
+	void preProcessEntryData();
 	void planSingleVanNotMixingPassengers();
 	void planSingleVanMixingPassengers();
 	void planVansFleetMixingPassengers();

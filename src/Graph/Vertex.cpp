@@ -19,14 +19,20 @@ vector<Edge> Vertex::getAdj() const {
 	return adj;
 }
 
-void Vertex::addEdge(int id, Vertex * dest, double weight) {
-	adj.push_back(Edge(id, dest, weight));
+void Vertex::addEdge(int id, Vertex * orig, Vertex * dest, double weight) {
+	adj.push_back(Edge(id, orig, dest, weight));
 }
 
-void Vertex::addTag(std::string tag) {
+void Vertex::addTag(MapTag tag) {
 	this->tags.push_back(tag);
 }
 
-vector<string> Vertex::getTags() const {
+vector<MapTag> Vertex::getTags() const {
 	return tags;
+}
+
+double Vertex::getDistance(){return distance;}
+
+bool Vertex::operator<(Vertex & vertex) const{
+	return this->distance < vertex.getDistance();
 }

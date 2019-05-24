@@ -32,6 +32,8 @@
 *.app
 /Debug/
 
+build/
+.vscode/
 .project
 .cproject
 .settings/*
