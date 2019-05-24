@@ -117,21 +117,6 @@ inline bool Graph::relax(Vertex *v, Edge edge) {//Vertex *w, double weight) {
 }
 
 
-//////////////A*//////////////////
-double Graph::heuristic(Vertex * current, Vertex * dest){
-	return dest->getPosition().euclidianDistance(current->getPosition()) ;
-}
-
-inline bool Graph::relax(Vertex *v, Vertex *w, double weight, Vertex * Dest, double averageSpeed){
-	if (v->distance*averageSpeed + weight < w->distance) {
-		w->distance = v->distance*averageSpeed + weight + heuristic(w,Dest);
-		w->path = v;
-		return true;
-	}
-	else
-		return false;
-}
-
 
 void Graph::dijkstraShortestPath(const int &source){
 	auto s = initSingleSource(source);
@@ -150,6 +135,41 @@ void Graph::dijkstraShortestPath(const int &source){
 		}
 	}
 }
+//////////////A*//////////////////
+Vertex * Graph::AinitSingleSource(const int &origin) {
+	for(auto v : vertexSet) {
+		v->Adistance = INF;
+		v->Apath = nullptr;
+		v->ApathEdge = Edge();
+	}
+	auto s = findVertex(origin);
+	s->distance = 0;
+	return s;
+}
+double Graph::heuristic(Vertex * current, Vertex * dest){
+	return dest->getPosition().euclidianDistance(current->getPosition()) ;
+}
+/*
+inline bool Graph::relax(Vertex *v, Vertex *w, double weight, Vertex * Dest, double averageSpeed, Edge edge){
+	if (v->distance*averageSpeed + weight < w->distance) {
+		w->distance = v->distance*averageSpeed + weight + heuristic(w,Dest);
+		w->Apath = v;
+		w->ApathEdge = edge;
+		return true;
+	}
+	else
+		return false;
+}
+
+*/
+
+Edge findEdge(Vertex * source , Vertex * dest){
+	for(auto e : source->getAdj()){
+		if(e.getDest() == dest)
+			return e;
+	}
+}
+
 void Graph::AStar(const int &source, const int &des){
 	auto s = initSingleSource(source);
 	auto dest = this->findVertex(des);
@@ -158,7 +178,8 @@ void Graph::AStar(const int &source, const int &des){
 	q.insert(s);
 	while(!q.empty() ){
 		auto v = q.extractMin();
-		v->path = previousVertex;
+		v->Apath = previousVertex;
+		v->ApathEdge = findEdge(previousVertex, v);
 		previousVertex = v;
 		if(dest->getID() == v->getID()){
 			q.clear();
@@ -187,6 +208,21 @@ vector<int> Graph::getPathVertices(const int source, const int dest){
 	return res;
 }
 
+vector<int> Graph::AgetPathVertices(const int source, const int dest){
+	vector<int> res;
+	auto v = findVertex(dest);
+	auto s = findVertex(source);
+	if (v == nullptr || s == nullptr || v->distance == INF) // missing or disconnected
+		return res;
+	for ( ; v != nullptr; v = v->Apath) {
+		res.push_back(v->getID());
+	}
+	reverse(res.begin(), res.end());
+	return res;
+}
+
+
+
 vector<Edge> Graph::getPathEdges(const int source, const int dest){
 	vector<Edge> res;
 	auto v = findVertex(dest);
@@ -195,6 +231,20 @@ vector<Edge> Graph::getPathEdges(const int source, const int dest){
 		return res;
 	for ( ; v->id != source; v = v->path) {
 		res.push_back(v->pathEdge);
+	}
+	reverse(res.begin(), res.end());
+	return res;
+}
+
+
+vector<Edge> Graph::AgetPathEdges(const int source, const int dest){
+	vector<Edge> res;
+	auto v = findVertex(dest);
+	auto s = findVertex(source);
+	if (v == nullptr || s == nullptr || v->distance == INF) // missing or disconnected
+		return res;
+	for ( ; v->id != source; v = v->Apath) {
+		res.push_back(v->ApathEdge);
 	}
 	reverse(res.begin(), res.end());
 	return res;
