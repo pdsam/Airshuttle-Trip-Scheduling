@@ -17,7 +17,7 @@ private:
 	std::vector<Edge> adj;
 	bool visited = false;
 
-	double distance = 0; //auxiliary
+	double distance = 0; //Represents total cost in dijkstra algorithm and fScore in A*
 	Vertex *path = nullptr;
 	Edge pathEdge;
 

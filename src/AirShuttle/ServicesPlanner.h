@@ -33,9 +33,13 @@ public:
 	void setTimeWindow(int timeWindow);
 	void setMaxDist(int maxDist);
 
+
 	void preProcessEntryData();
 	void planSingleVanNotMixingPassengers();
 	void planSingleVanMixingPassengers();
+
+	
+	std::vector<Edge> calculatePath(const std::vector<Vertex*>& reservations);
 	void planVansFleetMixingPassengers();
 
 
