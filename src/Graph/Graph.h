@@ -28,8 +28,16 @@ public:
 	Vertex * initSingleSource(const int &origin);
 	bool relax(Vertex *v, Edge edge); //Vertex *w, double weight);
 	void dijkstraShortestPath(const int &source);
+<<<<<<< HEAD
 	std::vector<int> getPathVertices(const int source, const int dest);
 	std::vector<Edge> getPathEdges(const int source, const int dest);
+=======
+	vector<int> getPath(const int source, const int dest );
+	//A*
+	bool relax(Vertex *v, Vertex *w, double weight, Vertex * Dest, double averageSpeed);
+	void AStar(const int &source, const int &dest);
+	double heuristic(Vertex * current, Vertex * dest);
+>>>>>>> a-star
 
 
 	void reset();

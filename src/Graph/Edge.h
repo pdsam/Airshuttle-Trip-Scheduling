@@ -8,6 +8,7 @@ private:
 	int id;
 	Vertex * orig, * dest;
 	double weight;
+	double averageSpeed = 50;
 
 public:
 	Edge();
@@ -17,6 +18,8 @@ public:
 	Vertex * getOrig() const;
 	Vertex * getDest() const;
 	double getWeight() const;
+	double getAverageSpeed() const;
+	double getDistance() const;
 
 	void invertEdge();
 

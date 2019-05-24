@@ -117,6 +117,22 @@ inline bool Graph::relax(Vertex *v, Edge edge) {//Vertex *w, double weight) {
 }
 
 
+//////////////A*//////////////////
+double Graph::heuristic(Vertex * current, Vertex * dest){
+	return dest->getPosition().euclidianDistance(current->getPosition()) ;
+}
+
+inline bool Graph::relax(Vertex *v, Vertex *w, double weight, Vertex * Dest, double averageSpeed){
+	if (v->distance*averageSpeed + weight < w->distance) {
+		w->distance = v->distance*averageSpeed + weight + heuristic(w,Dest);
+		w->path = v;
+		return true;
+	}
+	else
+		return false;
+}
+
+
 void Graph::dijkstraShortestPath(const int &source){
 	auto s = initSingleSource(source);
 	MutablePriorityQueue<Vertex> q;
@@ -134,6 +150,29 @@ void Graph::dijkstraShortestPath(const int &source){
 		}
 	}
 }
+void Graph::AStar(const int &source, const int &des){
+	auto s = initSingleSource(source);
+	auto dest = this->findVertex(des);
+	Vertex * previousVertex = nullptr;
+	MutablePriorityQueue<Vertex> q;
+	q.insert(s);
+	while(!q.empty() ){
+		auto v = q.extractMin();
+		v->path = previousVertex;
+		previousVertex = v;
+		if(dest->getID() == v->getID()){
+			q.clear();
+			continue;
+		}
+		for(auto e : v->adj) {
+			e.dest->distance = heuristic(v,e.dest) + e.getDistance();
+			q.insert(e.dest);
+		}
+
+	}
+
+}
+
 
 vector<int> Graph::getPathVertices(const int source, const int dest){
 	vector<int> res;
@@ -141,9 +180,14 @@ vector<int> Graph::getPathVertices(const int source, const int dest){
 	auto s = findVertex(source);
 	if (v == nullptr || s == nullptr || v->distance == INF) // missing or disconnected
 		return res;
+<<<<<<< HEAD
 	for ( ; v != nullptr; v = v->path) {
 		res.push_back(v->getID());
 	}
+=======
+	for ( ; v != nullptr; v = v->path)
+		res.push_back(v->getID());
+>>>>>>> a-star
 	reverse(res.begin(), res.end());
 	return res;
 }

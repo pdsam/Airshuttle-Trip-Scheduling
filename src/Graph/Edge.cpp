@@ -31,11 +31,20 @@ double Edge::getWeight() const {
 	return weight;
 }
 
+<<<<<<< HEAD
 void Edge::invertEdge() {
 	Vertex * temp = dest;
 	dest = orig;
 	orig = temp;
 }
 
+=======
+double Edge::getAverageSpeed() const{
+	return averageSpeed;
+}
+>>>>>>> a-star
 
+double Edge::getDistance() const{
+	return weight * averageSpeed*1000/3600;
+}
 
