@@ -127,6 +127,77 @@ void ServicesPlanner::planSingleVanNotMixingPassengers() {
 	}
 }
 
+vector<Vertex*>::const_iterator getClosestVertexFromList(Vertex* pivot, const vector<Vertex*>& list) {
+	
+	vector<Vertex*>::const_iterator closest = list.begin();
+	double closestDistance = pivot->getPosition().euclidianDistance((*closest)->getPosition());
+
+	for (auto it = list.begin(); it != list.end(); it++) {
+		Vertex* v = *it;
+
+		if (v == pivot) {
+			continue;
+		}
+
+		double tempDist = pivot->getPosition().euclidianDistance(v->getPosition());
+
+		if (tempDist < closestDistance) {
+			closest = it;
+			closestDistance = tempDist;
+		}
+	}
+	
+	return closest;
+}
+
+vector<Edge> ServicesPlanner::calculatePath(const std::vector<Vertex*>& reservations) {
+	vector<Edge> path;
+	vector<Vertex*> tempReservations(reservations.begin(), reservations.end());
+	Vertex* airportVertex = graph->findVertex(airport);
+
+	//From airport to first
+	//Find closest to airport
+
+	cout << "Getting closest to airport" << endl;	
+	auto it = getClosestVertexFromList(airportVertex, tempReservations);
+	Vertex* closest = *it;
+	cout << "Got it" << endl;
+
+	tempReservations.erase(it);
+	
+	cout << "Getting path from airport to closest" << endl;
+	vector<Edge> fromAirport = graph->getPathEdges(airport, closest->getID());
+	path.insert(path.end(), fromAirport.begin(), fromAirport.end());
+
+
+	//Nearest neighbour approach	
+	cout << "Starting nearest neighbour" << endl;
+	Vertex* currentSource = closest;
+	while(!tempReservations.empty()){
+		cout << "Getting closest vertex" << endl;
+		auto it = getClosestVertexFromList(currentSource, tempReservations);
+		Vertex* closestToSource = *it;
+		cout << "Deleting it" << endl;
+		tempReservations.erase(it);
+
+		cout << "Getting path " << currentSource->getID() << " " << closestToSource->getID() << endl;
+		graph->AStar(currentSource->getID(), closestToSource->getID());
+		cout << "Ran algo, getting edges" << endl;
+		vector<Edge> tempPath = graph->AgetPathEdges(currentSource->getID(), closestToSource->getID());
+		path.insert(path.end(), tempPath.begin(), tempPath.end());
+
+		cout << "Done" << endl << endl;
+		currentSource = closestToSource;
+	}
+
+	//From final destination back to airport
+	graph->AStar(currentSource->getID(), airport);
+	vector<Edge> tempPath = graph->AgetPathEdges(currentSource->getID(), airport);
+	path.insert(path.end(), tempPath.begin(), tempPath.end());
+
+	return path;
+}
+
 void ServicesPlanner::planVansFleetMixingPassengers() {
 	while(!reservations.empty()){
 		//Get earliest reservation
@@ -157,6 +228,8 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 		}
 
 		//Calculate path
+
+
 		//Get path time
 		//Update van availability
 		//Create the new service
