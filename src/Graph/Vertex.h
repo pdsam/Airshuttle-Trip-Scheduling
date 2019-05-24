@@ -22,7 +22,7 @@ private:
 	Edge pathEdge;
 
 	//A*
-	double Adistance = 0;
+	double gScore = 0;
 	Vertex* Apath = nullptr;
 	Edge ApathEdge;
 
