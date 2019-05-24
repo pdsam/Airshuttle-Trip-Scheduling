@@ -126,3 +126,39 @@ void ServicesPlanner::planSingleVanNotMixingPassengers() {
 		van.addService(newService);
 	}
 }
+
+void ServicesPlanner::planVansFleetMixingPassengers() {
+	while(!reservations.empty()){
+		//Get earliest reservation
+		Reservation earliest = *reservations.begin();
+		reservations.erase(reservations.begin());
+
+		//Find reservation in the next x time
+		Time limit = earliest.getArrival() + Time(0,30,0); //In the next 30 minutes
+
+		int accCapacity = earliest.getNumPeople();
+		vector<Reservation> service;
+		service.push_back(earliest);
+
+		//Search reservations that arrive in the next 30 minutes with 
+		//destinations close to the earliest person
+		Position origin = graph->findVertex(earliest.getDest())->getPosition();
+
+		multiset<Reservation>::iterator it = reservations.begin();
+		while (it->getArrival() < limit && accCapacity <= Van::getCapacity() && it != reservations.end()) {
+			Position nodePos = graph->findVertex(it->getDest())->getPosition();
+			if (origin.euclidianDistance(nodePos) < 1000) {
+				service.push_back(*it);
+				accCapacity += it->getNumPeople();
+				it = reservations.erase(it);
+			} else {
+				it++;
+			}
+		}
+
+		//Calculate path
+		//Get path time
+		//Update van availability
+		//Create the new service
+	}
+}
