@@ -37,5 +37,11 @@ void Edge::invertEdge() {
 	orig = temp;
 }
 
+double Edge::getAverageSpeed() const{
+	return averageSpeed;
+}
 
+double Edge::getDistance() const{
+	return weight * averageSpeed*1000/3600;
+}
 

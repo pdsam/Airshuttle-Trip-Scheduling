@@ -129,7 +129,7 @@ void ServicesPlanner::planSingleVanNotMixingPassengers() {
 
 void ServicesPlanner::planVansFleetMixingPassengers() {
 	while(!reservations.empty()){
-		//Get earliest reservation
+		//Get earliest reservationconst Position &p2
 		Reservation earliest = *reservations.begin();
 		reservations.erase(reservations.begin());
 
@@ -161,4 +161,13 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 		//Update van availability
 		//Create the new service
 	}
+}
+
+void ServicesPlanner::planSingleVanMixingPassengers(){
+	preProcessEntryData();
+	graph->dijkstraShortestPath(airport);
+	Van & van = vans.at(0);
+	van.clearServices();
+
+
 }
