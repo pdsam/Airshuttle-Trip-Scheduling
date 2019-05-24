@@ -138,13 +138,16 @@ void Graph::dijkstraShortestPath(const int &source){
 }
 //////////////A*//////////////////
 Vertex * Graph::AinitSingleSource(const int &origin) {
-	for(auto v : vertexSet) {
-		v->Adistance = INF;
+	for(Vertex* v : vertexSet) {
+		v->visited = false;
+		v->distance = INF;
+		v->gScore = INF;
 		v->Apath = nullptr;
 		v->ApathEdge = Edge();
 	}
-	auto s = findVertex(origin);
+	Vertex* s = findVertex(origin);
 	s->distance = 0;
+	s->gScore = 0;
 	return s;
 }
 double Graph::heuristic(Vertex * current, Vertex * dest){
@@ -164,33 +167,40 @@ inline bool Graph::relax(Vertex *v, Vertex *w, double weight, Vertex * Dest, dou
 
 */
 
-Edge findEdge(Vertex * source , Vertex * dest){
-	for(auto e : source->getAdj()){
-		if(e.getDest() == dest)
-			return e;
-	}
-}
-
 void Graph::AStar(const int &source, const int &des){
-	auto s = initSingleSource(source);
-	auto dest = this->findVertex(des);
-	Vertex * previousVertex = nullptr;
+	Vertex* s = AinitSingleSource(source);
+	Vertex* dest = this->findVertex(des);
+
+	s->distance = heuristic(s, dest);
+
 	MutablePriorityQueue<Vertex> q;
 	q.insert(s);
 	while(!q.empty() ){
-		auto v = q.extractMin();
-		v->Apath = previousVertex;
-		v->ApathEdge = findEdge(previousVertex, v);
-		previousVertex = v;
-		if(dest->getID() == v->getID()){
-			q.clear();
-			continue;
+		Vertex * current = q.extractMin();
+		if (current == dest) {
+			break;
 		}
-		for(auto e : v->adj) {
-			e.dest->distance = heuristic(v,e.dest) + e.getDistance();
-			q.insert(e.dest);
-		}
+		current->visited = true;
 
+		for (const Edge& e: current->adj) {
+			Vertex* neighbour = e.dest;
+			if (neighbour->visited) {
+				continue;
+			}
+
+			double tempGScore = current->gScore + e.getDistance();
+			if (neighbour->distance == INF) {
+				q.insert(neighbour);
+			} else if (tempGScore >= neighbour->gScore) {
+				continue;
+			}
+
+			neighbour->Apath = current;
+			neighbour->ApathEdge = e;
+			neighbour->gScore = tempGScore;
+			neighbour->distance = neighbour->gScore + heuristic(neighbour, dest);
+			q.decreaseKey(neighbour);			
+		}
 	}
 
 }

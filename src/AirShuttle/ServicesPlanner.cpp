@@ -158,35 +158,26 @@ vector<Edge> ServicesPlanner::calculatePath(const std::vector<Vertex*>& reservat
 	//From airport to first
 	//Find closest to airport
 
-	cout << "Getting closest to airport" << endl;	
 	auto it = getClosestVertexFromList(airportVertex, tempReservations);
 	Vertex* closest = *it;
-	cout << "Got it" << endl;
 
 	tempReservations.erase(it);
 	
-	cout << "Getting path from airport to closest" << endl;
 	vector<Edge> fromAirport = graph->getPathEdges(airport, closest->getID());
 	path.insert(path.end(), fromAirport.begin(), fromAirport.end());
 
 
 	//Nearest neighbour approach	
-	cout << "Starting nearest neighbour" << endl;
 	Vertex* currentSource = closest;
 	while(!tempReservations.empty()){
-		cout << "Getting closest vertex" << endl;
 		auto it = getClosestVertexFromList(currentSource, tempReservations);
 		Vertex* closestToSource = *it;
-		cout << "Deleting it" << endl;
 		tempReservations.erase(it);
 
-		cout << "Getting path " << currentSource->getID() << " " << closestToSource->getID() << endl;
 		graph->AStar(currentSource->getID(), closestToSource->getID());
-		cout << "Ran algo, getting edges" << endl;
 		vector<Edge> tempPath = graph->AgetPathEdges(currentSource->getID(), closestToSource->getID());
 		path.insert(path.end(), tempPath.begin(), tempPath.end());
 
-		cout << "Done" << endl << endl;
 		currentSource = closestToSource;
 	}
 
