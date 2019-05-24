@@ -1,20 +1,25 @@
 #include "ServicesPlanner.h"
-#include "../Utils/utilities.c"
-
 #include <fstream>
 #include <iostream>
 
+#include "../Utils/Utilities.h"
+
 using namespace std;
 
-ServicesPlanner::ServicesPlanner(Graph * graph, Vertex * airport, int actionRadius, int timeWindow, int maxDist) {
+ServicesPlanner::ServicesPlanner(Graph * graph, int airport, int vanCount, int actionRadius, int timeWindow, int maxDist) {
 	this->graph = graph;
 	this->airport = airport;
+	this->vans.resize(vanCount);
 	this->actionRadius = max(actionRadius, 1);
 	this->timeWindow = max(timeWindow, 1);
 	this->maxDist = max(maxDist, 1);
 }
 
-Vertex * ServicesPlanner::getAirport() const {
+Graph * ServicesPlanner::getGraph() const {
+	return graph;
+}
+
+int ServicesPlanner::getAirport() const {
 	return airport;
 }
 
@@ -59,9 +64,7 @@ bool ServicesPlanner::addReservationsFromFile(string location, string filename) 
 	int nif, node, h, m, s, npersons;
 	for (int i = 0 ; i < N; i++) {
 		ifs >> name >> nif >> node >> h >> m >> s >> npersons;
-		Vertex * dest = graph->findVertex(node);
-		if (dest == NULL) continue;
-		addReservation(Reservation(name, nif, npersons, dest, Time(h,m,s)));
+		addReservation(Reservation(name, nif, npersons, node, Time(h,m,s)));
 	}
 	return true;
 }
@@ -80,17 +83,46 @@ void ServicesPlanner::setMaxDist(int maxDist) {
 
 void ServicesPlanner::preProcessEntryData() {
 	/* Pre Process Graph */
-	graph->DFSConnectivity(airport);
+	Vertex * start = graph->findVertex(airport);
+	if (start == NULL) return;
+	graph->DFSConnectivity(start);
 	graph->removeUnvisitedVertices();
 
 	/* Pre Process Reservations */
 	multiset<Reservation>::iterator it;
 	for (it = reservations.begin(); it != reservations.end(); it++) {
-		if (graph->findVertex((*it).getDest()->getID()) == NULL) {
+		if (graph->findVertex((*it).getDest()) == NULL) {
 			it = reservations.erase(it);
 			it--;
 		}
 	}
 
 	/* Reservations were already divided to fit vans size and already sorted due to the use of multiset */
+}
+
+void ServicesPlanner::planSingleVanNotMixingPassengers() {
+	preProcessEntryData();
+	graph->dijkstraShortestPath(airport);
+
+	Van & van = vans.at(0);
+	van.clearServices();
+
+	for (auto reservation : reservations) {
+		int services_count = van.getServices().size();
+
+		/* Forward trip */
+		vector<Edge> pathEdges = graph->getPathEdges(airport, reservation.getDest());
+
+		Time lastService = services_count > 0 ? van.getServices().at(services_count-1).getEnd() : Time(0,0,0);
+		Service newService(&reservation, pathEdges, lastService);
+
+		/* Backward trip */
+		reverse(pathEdges.begin(), pathEdges.end());
+		for (auto & edge : pathEdges) {
+			edge.invertEdge();
+		}
+		newService.addPath(pathEdges);
+
+		van.addService(newService);
+	}
 }

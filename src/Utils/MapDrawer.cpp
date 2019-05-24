@@ -2,8 +2,11 @@
 #include <cstdio>
 #include <fstream>
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 #include "MapDrawer.h"
+#include "../AirShuttle/ServicesPlanner.h"
 
 using namespace std;
 
@@ -96,7 +99,6 @@ bool MapDrawer::drawMapFromGraph(Graph * graph) {
 	for (Vertex * v : graph->getVertexSet()) {
 		graphViewer->addNode(v->getID(), v->getPosition().getX() - x_offset, v->getPosition().getY() - y_offset);
 		if (v->getTags().size() > 0) {
-			//if (v->getTags().size() > 1) cout << "more than 1 tag" << endl;
 			graphViewer->setVertexColor(v->getID(), getTagColor(v->getTags().at(0)));
 		}
 	}
@@ -112,7 +114,40 @@ bool MapDrawer::drawMapFromGraph(Graph * graph) {
 	return true;
 }
 
-string MapDrawer::getTagColor(string tag) {
+bool MapDrawer::drawMapFromPlannerSingleVan(ServicesPlanner * planner) {
+	if (!drawMapFromGraph(planner->getGraph())) return false;
+
+	if (planner->getVans().size() == 0) return false;
+
+	for (auto service : planner->getVans().at(0).getServices()) {
+		for (auto edge : service.getPath()) {
+			graphViewer->setEdgeThickness(edge.getID(), 20);
+			graphViewer->setEdgeColor(edge.getID(), getTagColor(EDGE_PATH));
+			graphViewer->setVertexColor(edge.getDest()->getID(), getTagColor(VERTEX_PATH));
+		}
+		graphViewer->setVertexColor(planner->getAirport(), getTagColor(AIRPORT));
+
+		graphViewer->rearrange();
+
+		getchar(); //std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+
+		for (auto edge : service.getPath()) {
+			graphViewer->setEdgeThickness(edge.getID(), 1);
+			graphViewer->setEdgeColor(edge.getID(), getTagColor(DEFAULT));
+			graphViewer->setVertexColor(edge.getDest()->getID(), getTagColor(DEFAULT));
+		}
+	}
+
+	graphViewer->setVertexColor(planner->getAirport(), getTagColor(DEFAULT));
+
+	return true;
+}
+
+MapTag MapDrawer::getStringTag(string tag) {
+	return OTHER;
+}
+
+string MapDrawer::getTagColor(MapTag tag) {
 	/*
 	if (tag == "aeroway=aerodrome") return BLUE;
 	else if (tag == "aeroway=gate") return RED;
@@ -122,7 +157,9 @@ string MapDrawer::getTagColor(string tag) {
 	else if (tag == "iata=*") return ORANGE;
 	else if (tag == "landuse=military") return GREEN;
 	*/
-	if (tag == "DFS") return RED;
-	else if (tag == "DFS start") return BLACK;
+	if (tag == AIRPORT) return GREEN;
+	else if (tag == EDGE_PATH) return BLUE;
+	else if (tag == VERTEX_PATH) return RED;
+	else if (tag == DEFAULT) return YELLOW;
 	return "";
 }

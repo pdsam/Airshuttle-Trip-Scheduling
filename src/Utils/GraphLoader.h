@@ -3,6 +3,7 @@
 
 #include <string>
 #include "../Graph/Graph.h"
+#include "MapTag.h"
 
 class GraphLoader {
 
