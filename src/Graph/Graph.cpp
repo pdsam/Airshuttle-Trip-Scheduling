@@ -9,7 +9,8 @@ using namespace std;
 
 Vertex* Graph::findVertex(const int &id) const {
 	unordered_map<int, Vertex*>::const_iterator it = vertexHashMap.find(id);
-	return it == vertexHashMap.end() ? nullptr : it->second;}
+	return it == vertexHashMap.end() ? nullptr : it->second;
+}
 
 bool Graph::addVertex(const int &id, int x, int y) {
 	if (findVertex(id) != nullptr) return false;
@@ -40,7 +41,7 @@ vector<Vertex*> Graph::getVertexSet() const {
 
 void Graph::reset() {
 	for (size_t i = 0; i < vertexSet.size(); i++)
-			delete vertexSet[i];
+		delete vertexSet[i];
 	vertexSet.clear();
 }
 
