@@ -125,14 +125,13 @@ void ServicesPlanner::planSingleVanNotMixingPassengers() {
 
 		van.addService(newService);
 	}
+}
+
+void ServicesPlanner::planSingleVanMixingPassengers(){
+	preProcessEntryData();
+	graph->dijkstraShortestPath(airport);
+	Van & van = vans.at(0);
+	van.clearServices();
 
 
-	void ServicesPlanner::planSingleVanMixingPassengers(){
-		preProcessEntryData();
-		graph->dijkstraShortesPath(airport);
-		Van & van = vans.at(0);
-		van.clearServices();
-		
-
-	}
 }
