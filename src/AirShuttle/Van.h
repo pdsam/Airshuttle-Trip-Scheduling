@@ -22,6 +22,16 @@ public:
 
 	void addService(Service serv);
 	void clearServices();
+
+	bool operator<(const Van& v2);
+public:
+
+	struct VanCompare {
+		bool operator()(const Van* v1, const Van* v2) {
+			return v1->nextTimeAvailable < v2->nextTimeAvailable;
+		}
+	};
 };
+
 
 #endif

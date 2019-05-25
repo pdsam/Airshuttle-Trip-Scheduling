@@ -28,3 +28,7 @@ Time Van::getNextTimeAvailable() const {
 void Van::setNextTimeAvailable(Time time) {
 	nextTimeAvailable = time;
 }
+
+bool Van::operator<(const Van &v2) {
+	return nextTimeAvailable < v2.nextTimeAvailable;
+}

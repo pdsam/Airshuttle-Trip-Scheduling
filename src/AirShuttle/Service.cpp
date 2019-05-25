@@ -4,16 +4,19 @@
 
 using namespace std;
 
-Service::Service(Reservation * reservation, vector<Edge> & edges, Time lastEnd) {
-	addReservation(reservation);
-	this->vacant = VAN_CAPACITY - reservation->getNumPeople();
-	double travel_time = 0;
-	for (auto edge : edges) {
-		travel_time += edge.getWeight();
-		path.push_back(edge);
+Service::Service(int vacant, Time start, std::vector<Reservation> reservations, std::vector<Edge> edges) {
+	this->vacant = vacant;
+	this->start = start;
+
+	double totalWeight = 0;
+	for (const Edge& e : edges) {
+		totalWeight += e.getWeight();
 	}
-	this->start = reservation->getArrival() < lastEnd ? lastEnd : reservation->getArrival();
-	this->end = (this->start).addSeconds(travel_time);
+	this->end = start;
+	this->end.addMinutes(totalWeight);
+
+	this->reservations = reservations;
+	this->path = edges;
 }
 
 int Service::getVacant() const {
@@ -28,27 +31,18 @@ Time Service::getEnd() const {
 	return end;
 }
 
-vector<Reservation*> Service::getReservations() const {
+const vector<Reservation>& Service::getReservations() const {
 	return reservations;
 }
 
-list<Edge> Service::getPath() const {
+const vector<Edge>& Service::getPath() const {
 	return path;
 }
 
-void Service::addReservation(Reservation * res) {
-	this->reservations.push_back(res);
+void Service::setReservations(const std::vector<Reservation> &reservations) {
+	this->reservations = reservations;
 }
 
-void Service::addEdge(Edge edge) {
-	this->path.push_back(edge);
-}
-
-void Service::addPath(const vector<Edge> & edges) {
-	double travel_time = 0;
-	for (auto edge: edges) {
-		travel_time += edge.getWeight();
-		path.push_back(edge);
-	}
-	this->end = (this->end).addSeconds(travel_time);
+void Service::setPath(const std::vector<Edge> &edges) {
+	this->path = edges;
 }
