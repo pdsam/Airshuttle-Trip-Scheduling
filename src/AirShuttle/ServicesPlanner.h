@@ -13,7 +13,7 @@ class ServicesPlanner {
 private:
 	Graph * graph;
 	int airport;
-	std::vector<Van> vans;
+	std::multiset<Van> vans;
 	std::multiset<Reservation> reservations;
 	int actionRadius, timeWindow, maxDist;
 
@@ -22,7 +22,7 @@ public:
 
 	Graph * getGraph() const;
 	int getAirport() const;
-	std::vector<Van> getVans() const;
+	std::multiset<Van> getVans() const;
 	std::multiset<Reservation> getReservations() const;
 
 	void addVan(Van van);
@@ -39,7 +39,7 @@ public:
 	void planSingleVanMixingPassengers();
 
 	
-	std::vector<Edge> calculatePath(const std::vector<Vertex*>& reservations);
+	std::vector<Edge> calculatePath(const std::set<Vertex*>& reservations);
 	void planVansFleetMixingPassengers();
 
 

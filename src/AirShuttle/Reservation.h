@@ -13,6 +13,8 @@ private:
 	int dest;
 	Time arrival, deliver;
 
+	bool assigned;
+
 public:
 	Reservation(std::string clientName, int NIF, int numPeople, int dest, Time arrival);
 
@@ -21,6 +23,11 @@ public:
 	int getNumPeople() const;
 	int getDest() const;
 	Time getArrival() const;
+	Time getDeliver() const;
+	void setDeliver(const Time value);
+
+	bool getAssigned() const;
+	void setAssigned(bool value);
 
 	bool operator<(const Reservation & reservation) const;
 };
