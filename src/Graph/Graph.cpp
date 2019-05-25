@@ -9,7 +9,8 @@ using namespace std;
 
 Vertex* Graph::findVertex(const int &id) const {
 	unordered_map<int, Vertex*>::const_iterator it = vertexHashMap.find(id);
-	return it == vertexHashMap.end() ? nullptr : it->second;}
+	return it == vertexHashMap.end() ? nullptr : it->second;
+}
 
 bool Graph::addVertex(const int &id, int x, int y) {
 	if (findVertex(id) != nullptr) return false;
@@ -40,7 +41,7 @@ vector<Vertex*> Graph::getVertexSet() const {
 
 void Graph::reset() {
 	for (size_t i = 0; i < vertexSet.size(); i++)
-			delete vertexSet[i];
+		delete vertexSet[i];
 	vertexSet.clear();
 }
 
@@ -137,6 +138,7 @@ void Graph::dijkstraShortestPath(const int &source){
 }
 //////////////A*//////////////////
 Vertex * Graph::AinitSingleSource(const int &origin) {
+<<<<<<< HEAD
 	for(auto v : vertexSet) {
 		v->Adistance = INF;
 		v->Apath = nullptr;
@@ -144,6 +146,18 @@ Vertex * Graph::AinitSingleSource(const int &origin) {
 	}
 	auto s = findVertex(origin);
 	s->distance = 0;
+=======
+	for(Vertex* v : vertexSet) {
+		v->visited = false;
+		v->distance = INF;
+		v->gScore = INF;
+		v->Apath = nullptr;
+		v->ApathEdge = Edge();
+	}
+	Vertex* s = findVertex(origin);
+	s->distance = 0;
+	s->gScore = 0;
+>>>>>>> dev
 	return s;
 }
 double Graph::heuristic(Vertex * current, Vertex * dest){
@@ -163,6 +177,7 @@ inline bool Graph::relax(Vertex *v, Vertex *w, double weight, Vertex * Dest, dou
 
 */
 
+<<<<<<< HEAD
 Edge findEdge(Vertex * source , Vertex * dest){
 	for(auto e : source->getAdj()){
 		if(e.getDest() == dest)
@@ -170,13 +185,18 @@ Edge findEdge(Vertex * source , Vertex * dest){
 	}
 }
 
+=======
+>>>>>>> dev
 void Graph::AStar(const int &source, const int &des){
-	auto s = initSingleSource(source);
-	auto dest = this->findVertex(des);
-	Vertex * previousVertex = nullptr;
+	Vertex* s = AinitSingleSource(source);
+	Vertex* dest = this->findVertex(des);
+
+	s->distance = heuristic(s, dest);
+
 	MutablePriorityQueue<Vertex> q;
 	q.insert(s);
 	while(!q.empty() ){
+<<<<<<< HEAD
 		auto v = q.extractMin();
 		v->Apath = previousVertex;
 		v->ApathEdge = findEdge(previousVertex, v);
@@ -188,8 +208,33 @@ void Graph::AStar(const int &source, const int &des){
 		for(auto e : v->adj) {
 			e.dest->distance = heuristic(v,e.dest) + e.getDistance();
 			q.insert(e.dest);
+=======
+		Vertex * current = q.extractMin();
+		if (current == dest) {
+			break;
+>>>>>>> dev
 		}
+		current->visited = true;
 
+		for (const Edge& e: current->adj) {
+			Vertex* neighbour = e.dest;
+			if (neighbour->visited) {
+				continue;
+			}
+
+			double tempGScore = current->gScore + e.getDistance();
+			if (neighbour->distance == INF) {
+				q.insert(neighbour);
+			} else if (tempGScore >= neighbour->gScore) {
+				continue;
+			}
+
+			neighbour->Apath = current;
+			neighbour->ApathEdge = e;
+			neighbour->gScore = tempGScore;
+			neighbour->distance = neighbour->gScore + heuristic(neighbour, dest);
+			q.decreaseKey(neighbour);			
+		}
 	}
 
 }

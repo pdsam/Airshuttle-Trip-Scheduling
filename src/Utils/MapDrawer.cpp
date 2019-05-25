@@ -163,3 +163,7 @@ string MapDrawer::getTagColor(MapTag tag) {
 	else if (tag == DEFAULT) return YELLOW;
 	return "";
 }
+
+GraphViewer* MapDrawer::getViewer() {
+	return graphViewer;
+}

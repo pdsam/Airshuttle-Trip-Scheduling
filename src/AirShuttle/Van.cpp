@@ -20,3 +20,15 @@ void Van::addService(Service service) {
 void Van::clearServices() {
 	this->services.clear();
 }
+
+Time Van::getNextTimeAvailable() const {
+	return nextTimeAvailable;
+}
+
+void Van::setNextTimeAvailable(Time time) {
+	nextTimeAvailable = time;
+}
+
+bool Van::operator<(const Van &v2) {
+	return nextTimeAvailable < v2.nextTimeAvailable;
+}

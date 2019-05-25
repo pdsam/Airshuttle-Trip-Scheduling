@@ -16,10 +16,13 @@ int main() {
 	ServicesPlanner planner(&graph, PORTO_AIRPORT, 1);
 	planner.addReservationsFromFile("Porto", "reservations_1329449088.txt");
 
+	graph.dijkstraShortestPath(PORTO_AIRPORT);
+
 	planner.planSingleVanNotMixingPassengers();
 
 	MapDrawer mapDrawer(2000, 2000);
 	mapDrawer.drawMapFromPlannerSingleVan(&planner);
+
 	getchar();
 
 	return 0;
