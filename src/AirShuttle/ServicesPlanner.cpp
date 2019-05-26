@@ -310,25 +310,17 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 
 
 void ServicesPlanner::planSingleVanMixingPassengers(){
-	preProcessEntryData();
-	graph->dijkstraShortestPath(airport);
-<<<<<<< HEAD
-	Van & van = vans.at(0);
-	van.clearServices();
-	
-	auto temp = reservations;
-	while(!temp.empty()){
-		
+	while(!reservations.empty()){
+		Reservation earliest = *reservations.begin();
+		reservations.erase(reservations.begin());
 
 
 	}
 
 	
-=======
 	multiset<Van>::iterator it = vans.begin();
 	Van van = *it;
 	vans.erase(it);
->>>>>>> dev
 
 	van.clearServices();
 

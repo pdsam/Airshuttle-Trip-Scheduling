@@ -14,7 +14,6 @@ private:
 	int dest;
 	Time arrival, deliver;
 
-	bool assigned;
 
 public:
 	Reservation(std::string clientName, int NIF, int numPeople, int dest, Time arrival);
@@ -30,7 +29,6 @@ public:
 	bool getAssigned() const;
 	void setAssigned(bool value);
 
-	bool getAssigned() const;
 	bool operator<(const Reservation & reservation) const;
 };
 

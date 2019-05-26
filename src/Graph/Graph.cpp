@@ -93,60 +93,7 @@ void Graph::removeUnvisitedVertices() {
 }
 
 /**********************SINGLE SOURCE ***********************/
-Vertex * Graph::initSingleSource(const int &origin) {
-	for(auto v : vertexSet) {
-		v->distance = INF;
-		v->path = nullptr;
-		v->pathEdge = Edge();
-	}
-	auto s = findVertex(origin);
-	s->distance = 0;
-	return s;
-}
-
-inline bool Graph::relax(Vertex *v, Edge edge) {//Vertex *w, double weight) {
-	double weight = edge.weight;
-	Vertex * w = edge.dest;
-	if (v->distance + weight < w->distance) {
-		w->distance = v->distance + weight;
-		w->path = v;
-		w->pathEdge = edge;
-		return true;
-	}
-	else
-		return false;
-}
-
-
-
-void Graph::dijkstraShortestPath(const int &source){
-	auto s = initSingleSource(source);
-	MutablePriorityQueue<Vertex> q;
-	q.insert(s);
-	while( ! q.empty() ) {
-		auto v = q.extractMin();
-		for(auto e : v->adj) {
-			auto oldDist = e.dest->distance;
-			if (relax(v, e)) {//e.dest, e.weight)) {
-				if (oldDist == INF)
-					q.insert(e.dest);
-				else
-					q.decreaseKey(e.dest);
-			}
-		}
-	}
-}
-//////////////A*//////////////////
 Vertex * Graph::AinitSingleSource(const int &origin) {
-<<<<<<< HEAD
-	for(auto v : vertexSet) {
-		v->Adistance = INF;
-		v->Apath = nullptr;
-		v->ApathEdge = Edge();
-	}
-	auto s = findVertex(origin);
-	s->distance = 0;
-=======
 	for(Vertex* v : vertexSet) {
 		v->visited = false;
 		v->distance = INF;
@@ -157,7 +104,6 @@ Vertex * Graph::AinitSingleSource(const int &origin) {
 	Vertex* s = findVertex(origin);
 	s->distance = 0;
 	s->gScore = 0;
->>>>>>> dev
 	return s;
 }
 double Graph::heuristic(Vertex * current, Vertex * dest){
@@ -174,19 +120,8 @@ inline bool Graph::relax(Vertex *v, Vertex *w, double weight, Vertex * Dest, dou
 	else
 		return false;
 }
-
 */
 
-<<<<<<< HEAD
-Edge findEdge(Vertex * source , Vertex * dest){
-	for(auto e : source->getAdj()){
-		if(e.getDest() == dest)
-			return e;
-	}
-}
-
-=======
->>>>>>> dev
 void Graph::AStar(const int &source, const int &des){
 	Vertex* s = AinitSingleSource(source);
 	Vertex* dest = this->findVertex(des);
@@ -196,23 +131,9 @@ void Graph::AStar(const int &source, const int &des){
 	MutablePriorityQueue<Vertex> q;
 	q.insert(s);
 	while(!q.empty() ){
-<<<<<<< HEAD
-		auto v = q.extractMin();
-		v->Apath = previousVertex;
-		v->ApathEdge = findEdge(previousVertex, v);
-		previousVertex = v;
-		if(dest->getID() == v->getID()){
-			q.clear();
-			continue;
-		}
-		for(auto e : v->adj) {
-			e.dest->distance = heuristic(v,e.dest) + e.getDistance();
-			q.insert(e.dest);
-=======
 		Vertex * current = q.extractMin();
 		if (current == dest) {
 			break;
->>>>>>> dev
 		}
 		current->visited = true;
 
@@ -238,7 +159,6 @@ void Graph::AStar(const int &source, const int &des){
 	}
 
 }
-
 
 vector<int> Graph::getPathVertices(const int source, const int dest){
 	vector<int> res;
