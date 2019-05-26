@@ -118,8 +118,9 @@ bool MapDrawer::drawMapFromPlannerSingleVan(ServicesPlanner * planner) {
 	if (!drawMapFromGraph(planner->getGraph())) return false;
 
 	if (planner->getVans().size() == 0) return false;
+
 	const Van & firstVan = *planner->getVans().begin();
-	for (auto service : firstVan.getServices()){
+	for (auto service : firstVan.getServices()) {
 		for (auto edge : service.getPath()) {
 			graphViewer->setEdgeThickness(edge.getID(), 20);
 			graphViewer->setEdgeColor(edge.getID(), getTagColor(EDGE_PATH));

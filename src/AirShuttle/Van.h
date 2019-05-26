@@ -23,7 +23,7 @@ public:
 	void addService(Service serv);
 	void clearServices();
 
-	bool operator<(const Van& v2);
+	bool operator<(const Van& v2) const;
 public:
 
 	struct VanCompare {
