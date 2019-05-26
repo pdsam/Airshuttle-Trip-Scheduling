@@ -314,35 +314,40 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 	Van van = *it;
 	vans.erase(it);
 	van.clearServices();
+	vector<Reservation> reservationsInService;
 	for(auto it = reservations.begin();it!=reservations.end();){
 		Reservation first = *it;
 		it = reservations.erase(it);
 		int services_count = van.getServices().size();
 		int numberPeople =0;
 		numberPeople += first.getNumPeople();
-		vector<Edge> = pathEdges = graph->getPathEdges(airport, first.getDest());
+		vector<Edge>  pathEdges = graph->getPathEdges(airport, first.getDest());
+
 		
-		vector<Reservation> inTime;
+	
+			
 		for(auto i = reservations.begin(); i!=reservations.end();){
-			if(i.getArrival() < first.getArrival()+ Time(0,TIME_WINDOW,0)){
-				inTime.push_back(*i);
-			else break;
-
+			if(numberPeople == van.getCapacity())
+				break;
+			if(i->getNumPeople() +numberPeople > van.getCapacity() ){
+				i++:
+				continue;
 			}
+			if(i->getArrival() > first.getArrival()+ Time(0,TIME_WINDOW,0)){
+				break;	
+			}
+			
+			//calculate path here
+
+			reservationsInService.push_back(*i);
+			reservations.erase(i);
+
+
+
 		}
 
-		
-		while(true){
-			
 
 
-
-			
-		}
-
-		Time lastService = services_count > 0 
-		? van.getServices().at(services_count-1).getEnd() 
-		: first.getArrival();
 
 	}
 
