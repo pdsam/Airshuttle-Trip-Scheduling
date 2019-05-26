@@ -137,8 +137,8 @@ void ServicesPlanner::planSingleVanNotMixingPassengers() {
 		Service newService(Van::getCapacity()-reservation.getNumPeople(), lastService, reservations, pathEdges);
 
 		van.addService(newService);
-		vans.insert(van);
 	}
+	vans.insert(van);
 }
 
 vector<Vertex*>::const_iterator getClosestVertexFromList(Vertex* pivot, const vector<Vertex*>& list) {
