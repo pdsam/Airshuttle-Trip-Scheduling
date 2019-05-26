@@ -3,7 +3,7 @@
 // v - van to be used
 // a - airport
 PLAN_SINGLE_VAN_NOT_MIXING_PASSENGERS(Gi, Ri, v):
-    PRE_PROCESS_DATA(Gi, Ri)
+    PRE_PROCESS_DATA(Gi, Ri, a)
     DIJKSTRA_SHORTEST_PATH(Gi)
 
     CLEAR_SERVICES(v)
