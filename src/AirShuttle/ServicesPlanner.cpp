@@ -132,7 +132,7 @@ void ServicesPlanner::planSingleVanNotMixingPassengers() {
 		for (auto & edge : returnPath) {
 			edge.invertEdge();
 		}
-		pathEdges.insert(pathEdges.begin(), returnPath.begin(), returnPath.end());
+		pathEdges.insert(pathEdges.end(), returnPath.begin(), returnPath.end());
 
 		Service newService(Van::getCapacity()-reservation.getNumPeople(), lastService, reservations, pathEdges);
 
