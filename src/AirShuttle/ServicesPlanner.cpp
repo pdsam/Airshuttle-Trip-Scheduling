@@ -132,7 +132,7 @@ void ServicesPlanner::planSingleVanNotMixingPassengers() {
 		for (auto & edge : returnPath) {
 			edge.invertEdge();
 		}
-		pathEdges.insert(pathEdges.begin(), returnPath.begin(), returnPath.end());
+		pathEdges.insert(pathEdges.end(), returnPath.begin(), returnPath.end());
 
 		Service newService(Van::getCapacity()-reservation.getNumPeople(), lastService, reservations, pathEdges);
 
@@ -313,8 +313,40 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 	multiset<Van>::iterator it = vans.begin();
 	Van van = *it;
 	vans.erase(it);
-
 	van.clearServices();
+	for(auto it = reservations.begin();it!=reservations.end();){
+		Reservation first = *it;
+		it = reservations.erase(it);
+		int services_count = van.getServices().size();
+		int numberPeople =0;
+		numberPeople += first.getNumPeople();
+		vector<Edge> = pathEdges = graph->getPathEdges(airport, first.getDest());
+		
+		vector<Reservation> inTime;
+		for(auto i = reservations.begin(); i!=reservations.end();){
+			if(i.getArrival() < first.getArrival()+ Time(0,TIME_WINDOW,0)){
+				inTime.push_back(*i);
+			else break;
+
+			}
+		}
+
+		
+		while(true){
+			
+
+
+
+			
+		}
+
+		Time lastService = services_count > 0 
+		? van.getServices().at(services_count-1).getEnd() 
+		: first.getArrival();
+
+	}
+
+
 
 	vans.insert(van);
 }
