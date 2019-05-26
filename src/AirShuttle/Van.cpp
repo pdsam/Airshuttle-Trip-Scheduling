@@ -29,6 +29,6 @@ void Van::setNextTimeAvailable(Time time) {
 	nextTimeAvailable = time;
 }
 
-bool Van::operator<(const Van &v2) {
+bool Van::operator<(const Van &v2) const{
 	return nextTimeAvailable < v2.nextTimeAvailable;
 }

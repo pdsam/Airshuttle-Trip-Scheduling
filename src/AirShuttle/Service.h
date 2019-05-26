@@ -5,6 +5,7 @@
 #include <list>
 #include "../Utils/Time.h"
 #include "../Graph/Edge.h"
+#include "Reservation.h"
 
 class Reservation;
 
