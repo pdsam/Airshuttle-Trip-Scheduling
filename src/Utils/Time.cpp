@@ -77,6 +77,10 @@ Time Time::addSeconds(int seconds) const {
 	return new_time;
 }
 
+int Time::toSeconds() const {
+	return second + minute*60 + hour*3600;
+}
+
 std::ostream& operator<<(std::ostream & ost, const Time & time) {
 	ost << std::setfill('0') << std::setw(2) << time.hour;
 	ost << ":";

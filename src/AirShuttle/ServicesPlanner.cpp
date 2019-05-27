@@ -425,3 +425,15 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 	vans.insert(van);	
 	}
 }
+
+int ServicesPlanner::objectiveFunction() {
+	int sum = 0;
+	for (auto van : vans) {
+		for (auto service : van.getServices()) {
+			for (auto reservation : service.getReservations()) {
+				sum += (reservation.getDeliver().toSeconds() - reservation.getArrival().toSeconds());
+			}
+		}
+	}
+	return sum;
+}
