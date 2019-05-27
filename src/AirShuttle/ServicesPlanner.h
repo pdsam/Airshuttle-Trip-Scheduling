@@ -46,7 +46,7 @@ public:
 	
 	std::vector<Edge> calculatePath(const std::set<Vertex*>& reservations);
 	void planVansFleetMixingPassengers();
-
+	int objectiveFunction();
 
 };
 
