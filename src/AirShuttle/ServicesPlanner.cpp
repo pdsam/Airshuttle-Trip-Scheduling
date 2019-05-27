@@ -272,7 +272,7 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 				currentReservationIt = reservations.erase(currentReservationIt);
 
 				if (accCapacity >= Van::getCapacity()) {
-					break;
+					break ;
 				}
 			} else {
 				currentReservationIt++;
@@ -349,14 +349,14 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 		
 		while(numSlots > 0){
 			if(aux->getArrival() < seed.getArrival() +Time(0,TIME_WINDOW,0)){
-				if(seedPosition.euclidianDistance((graph->findVertex(aux->getDest()))->getPosition )<3000){
-					toService.push_back(*aux);
-					reservations.erase(aux);
-					aux--;
+				//if(seedPosition.euclidianDistance((graph->findVertex(aux->getDest()))->getPosition )<3000){
+				//	toService.push_back(*aux);
+					//reservations.erase(aux);
+					//aux--;
 
 					
 
-				}
+//				}
 
 
 
