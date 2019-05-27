@@ -240,7 +240,7 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 		//If the earliest available van is not ready in the next 30 minutes,
 		//then we can continue looking for passengers until that time
 		cout << "Setting time window limit." << endl;
-		Time limit = earliest.getArrival() + Time(0,30,0); //In the next 30 minutes
+		Time limit = earliest.getArrival() + Time(0,this->timeWindow,0); //In the next 30 minutes
 		if (limit < van.getNextTimeAvailable()) {
 			limit = van.getNextTimeAvailable();
 		}
@@ -260,7 +260,7 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 
 			Position nodePos = graph->findVertex(currentReservationIt->getDest())->getPosition();
 
-			if (origin.euclidianDistance(nodePos) < 1000) {
+			if (origin.euclidianDistance(nodePos) < this->maxDist) {
 				if (accCapacity + currentReservationIt->getNumPeople() > Van::getCapacity()) {
 					currentReservationIt++;
 					continue;
@@ -307,6 +307,7 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 
 				if (r.getDest() == vID) {
 					r.setDeliver(timeOfArrivalAtDest);
+					r.setAssigned(true);
 				}
 			}
 		}
