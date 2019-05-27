@@ -214,20 +214,33 @@ Time getTardiestReservationTime(const vector<Reservation>& reservations) {
 }
 
 void ServicesPlanner::planVansFleetMixingPassengers() {
+	cout << "Preprocesing" << endl;
+	preProcessEntryData();
+
+	int temp = vans.size();
+	vans.clear();
+	for(int i = 0; i < temp; i++){
+		vans.insert(Van());
+	}
+
+	cout << "Starting service creation." << endl << endl;
 	while(!reservations.empty()){
 		//Get earliest reservation
+		cout << "Getting earliest reservation." << endl;
 		Reservation earliest = *reservations.begin();
 		reservations.erase(reservations.begin());
 
+		cout << "Getting earliest available van." << endl;
 		multiset<Van>::iterator earliestVanIt = vans.begin();
 		Van van = *earliestVanIt;
+		cout << "made copy" << endl;
 		vans.erase(earliestVanIt);
-		van.clearServices();
 
 		//Find reservation in the next x time
 		//If the earliest available van is not ready in the next 30 minutes,
 		//then we can continue looking for passengers until that time
-		Time limit = earliest.getArrival() + Time(0,30,0); //In the next 30 minutes
+		cout << "Setting time window limit." << endl;
+		Time limit = earliest.getArrival() + Time(0,this->timeWindow,0); //In the next 30 minutes
 		if (limit < van.getNextTimeAvailable()) {
 			limit = van.getNextTimeAvailable();
 		}
@@ -240,12 +253,14 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 		//destinations close to the earliest person
 		Position origin = graph->findVertex(earliest.getDest())->getPosition();
 
+		cout << "Finding close reservations." << endl;
+
 		multiset<Reservation>::iterator currentReservationIt = reservations.begin();
 		while (currentReservationIt->getArrival() < limit && currentReservationIt != reservations.end()) {
 
 			Position nodePos = graph->findVertex(currentReservationIt->getDest())->getPosition();
 
-			if (origin.euclidianDistance(nodePos) < 1000) {
+			if (origin.euclidianDistance(nodePos) < this->maxDist) {
 				if (accCapacity + currentReservationIt->getNumPeople() > Van::getCapacity()) {
 					currentReservationIt++;
 					continue;
@@ -265,6 +280,7 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 		}
 
 		//Calculate path
+		cout << "Calculating path." << endl;
 		set<Vertex*> vertexes;
 		for_each(service.begin(), service.end(), [&vertexes, this](Reservation res) {
 			vertexes.insert(graph->findVertex(res.getDest()));
@@ -274,6 +290,7 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 		Time timeOfDeparture = getTardiestReservationTime(service);
 
 		//Get path time
+		cout << "Getting path time" << endl;
 		double totalTime = 0;
 		for (const Edge& e: path) {
 			totalTime += e.getWeight();
@@ -290,11 +307,13 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 
 				if (r.getDest() == vID) {
 					r.setDeliver(timeOfArrivalAtDest);
+					r.setAssigned(true);
 				}
 			}
 		}
 
 		//Update van availability
+		cout << "Updating van information." << endl;
 		Time endOfTripTime = timeOfDeparture;
 		endOfTripTime.addMinutes(totalTime);
 		van.setNextTimeAvailable(endOfTripTime);
@@ -303,7 +322,9 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 		Service vanService(Van::getCapacity()-accCapacity, timeOfDeparture, service, path);
 		//Add service to van
 		van.addService(vanService);
+		vans.insert(van);
 
+		cout << "Next Reservation." << endl << endl;
 	}
 }
 
