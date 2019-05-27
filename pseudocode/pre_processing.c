@@ -8,4 +8,6 @@ PRE_PROCESS_DATA(Gi, Ri, a):
     for each r ∈ Ri do
         if FIND_VERTEX(Gi, dest(r)) == NULL then
             REMOVE_RESERVATION(Ri, r)
+    
+    DIJKSTRA_SHORTEST_PATH(Gi)
 
