@@ -328,12 +328,12 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 		
 		while(numSlots > 0){
 			if(aux->getArrival() < seed.getArrival() +Time(0,TIME_WINDOW,0)){
-				if(seedPosition.euclidianDistance(graph->findVertex(aux->getDest)->getPosition )<3000){
-					toService.push_back(aux*);
+				if(seedPosition.euclidianDistance((graph->findVertex(aux->getDest()))->getPosition )<3000){
+					toService.push_back(*aux);
 					reservations.erase(aux);
 					aux--;
 
-
+					
 
 				}
 
@@ -346,12 +346,36 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 
 
 		}
-
-		
-
 		//path calculation
+		set<Vertex*> vertexes;
+		for_each(toService.begin(), toService.end(), [&vertexes, this](Reservation res) {
+			vertexes.insert(graph->findVertex(res.getDest()));
+		});
+
+		vector<Edge> path = calculatePath(vertexes);
+
+		Time timeOfDeparture = getTardiestReservationTime(service);
 
 
+
+		double totalTime = 0;
+		for (const Edge& e: path) {
+			totalTime += e.getWeight();
+
+			Time timeOfArrivalAtDest = timeOfDeparture;
+			timeOfArrivalAtDest.addMinutes(totalTime);
+
+			int vID = e.getDest()->getID();
+;
+			for (Reservation& r: toService) {
+				if (r.getAssigned()) {
+					continue;
+				}
+
+				if (r.getDest() == vID) {
+					r.setDeliver(timeOfArrivalAtDest);
+				}
+			}
 
 		
 	}
