@@ -307,14 +307,59 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 	}
 }
 
+
+
 void ServicesPlanner::planSingleVanMixingPassengers(){
 	preProcessEntryData();
 	graph->dijkstraShortestPath(airport);
-	multiset<Van>::iterator it = vans.begin();
-	Van van = *it;
-	vans.erase(it);
-
+	multiset<Van>::iterator van_it = vans.begin();
+	Van van = *van_it;
+	vans.erase(van_it);
 	van.clearServices();
+	for (auto it = reservations.begin(); it != reservations.end();) {
+		Reservation seed = *it;
+		reservations.erase(it);
+		auto aux = reservations.begin();
+		Position seedPosition = graph->findVertex(seed.getDest())->getPosition();
+		vector<Reservation> toService;
+		toService.push_back(seed);
 
+		int numSlots = van.getCapacity()-seed.getNumPeople();
+		
+		while(numSlots > 0){
+			if(aux->getArrival() < seed.getArrival() +Time(0,TIME_WINDOW,0)){
+				if(seedPosition.euclidianDistance(graph->findVertex(aux->getDest)->getPosition )<3000){
+					toService.push_back(aux*);
+					reservations.erase(aux);
+					aux--;
+
+
+
+				}
+
+
+
+			aux++;
+			}
+			else break;
+
+
+
+		}
+
+		
+
+		//path calculation
+
+
+
+		
+	}
+	
+	
+	
+	
+	
+	
 	vans.insert(van);
 }
