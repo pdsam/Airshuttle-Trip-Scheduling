@@ -13,15 +13,16 @@ int main() {
 	Graph graph;
 	GraphLoader::loadGraph("Porto", &graph);
 
-	ServicesPlanner planner(&graph, PORTO_AIRPORT, 1);
+	ServicesPlanner planner(&graph, PORTO_AIRPORT, 5);
 	planner.addReservationsFromFile("Porto", "reservations_1329449088.txt");
 
 	graph.dijkstraShortestPath(PORTO_AIRPORT);
 
-	planner.planSingleVanNotMixingPassengers();
+	//planner.planSingleVanNotMixingPassengers();
+	planner.planVansFleetMixingPassengers();
 
-	MapDrawer mapDrawer(2000, 2000);
-	mapDrawer.drawMapFromPlannerSingleVan(&planner);
+	//MapDrawer mapDrawer(2000, 2000);
+	//mapDrawer.drawMapFromPlannerSingleVan(&planner);
 
 	getchar();
 
