@@ -19,7 +19,8 @@ int main() {
 	graph.dijkstraShortestPath(PORTO_AIRPORT);
 
 	//planner.planSingleVanNotMixingPassengers();
-	planner.planVansFleetMixingPassengers();
+	planner.planSingleVanMixingPassengers();
+	//planner.planVansFleetMixingPassengers();
 
 	//MapDrawer mapDrawer(2000, 2000);
 	//mapDrawer.drawMapFromPlannerSingleVan(&planner);

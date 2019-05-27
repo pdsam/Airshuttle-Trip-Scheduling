@@ -356,6 +356,7 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 	for (auto it = reservations.begin(); it != reservations.end();) {
 		Reservation seed = *it;
 		reservations.erase(it);
+		it = reservations.begin();
 		auto aux = reservations.begin();
 		Position seedPosition = graph->findVertex(seed.getDest())->getPosition();
 		vector<Reservation> toService;
@@ -394,11 +395,11 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 		Time timeOfDeparture = getTardiestReservationTime(toService);
 
 
-
+		int counter = 0;
 		double totalTime = 0;
 		for (const Edge& e: path) {
 			totalTime += e.getWeight();
-
+			counter++;
 			Time timeOfArrivalAtDest = timeOfDeparture;
 			timeOfArrivalAtDest.addMinutes(totalTime);
 
@@ -413,15 +414,15 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 					r.setDeliver(timeOfArrivalAtDest);
 				}
 			}
-		Service vanService(numSlots,timeOfDeparture,toService,path);
 		
 	}
+		Service vanService(numSlots,timeOfDeparture,toService,path);
+		van.addService(vanService);
 	
 	
 	
 	
 	
-	
-	vans.insert(van);	
 	}
+	vans.insert(van);	
 }
