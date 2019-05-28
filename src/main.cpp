@@ -23,18 +23,18 @@ int main() {
                                  "reservations_10000.txt"};
 
   for (unsigned i = 2; i < 3; i++){
-    for (unsigned j = 0; j < reservations.size()-reservations.size() +1; j++) {
+    for (unsigned j = 0; j < reservations.size(); j++) {
       Graph graph;
       GraphLoader::loadGraph(maps.at(i), &graph);
 
       ServicesPlanner planner(&graph, aeroports.at(i), 3);
       planner.addReservationsFromFile(maps.at(i), reservations.at(j));
       planner.preProcessEntryData();
-      graph.dijkstraShortestPath(aeroports.at(i));
+      //graph.dijkstraShortestPath(aeroports.at(i));
 
        auto start_time = chrono::high_resolution_clock::now();
 
-      //planner.planSingleVanNotMixingPassengers();
+      planner.planSingleVanNotMixingPassengers();
       // planner.planSingleVanMixingPassengers();
       // planner.planVansFleetMixingPassengers();
 
