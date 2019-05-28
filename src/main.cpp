@@ -11,12 +11,14 @@ using namespace std;
 int main() {
 
 	Graph graph;
-	GraphLoader::loadGraph("Porto", &graph);
+	GraphLoader::loadGraph("Coimbra", &graph);
 
-	ServicesPlanner planner(&graph, PORTO_AIRPORT, 3);
-	planner.addReservationsFromFile("Porto", "reservations_135819524.txt");
+	ServicesPlanner planner(&graph, 711049847, 3);
+	planner.addReservationsFromFile("tests", "reservations_100.txt");
 
-	graph.dijkstraShortestPath(PORTO_AIRPORT);
+	graph.dijkstraShortestPath(248187791);
+
+	//planner.preProcessEntryData();
 
 	//planner.planSingleVanNotMixingPassengers();
 	//planner.planSingleVanMixingPassengers();
@@ -43,10 +45,10 @@ int main() {
 	//graph.DFSConnectivity(graph.findVertex(PORTO_AIRPORT));
 	//graph.removeUnvisitedVertices();
 	MapDrawer mapDrawer(2000, 2000);
-	//mapDrawer.drawMapFromGraph(&graph);
+	mapDrawer.drawMapFromGraph(&graph);
 	//mapDrawer.getViewer()->setVertexColor(474695389 , RED);
 	//mapDrawer.getViewer()->setVertexSize(474695389, 5);
-	//mapDrawer.getViewer()->setVertexColor(PORTO_AIRPORT , RED);
+	mapDrawer.getViewer()->setVertexColor(711049847, RED);
 	//mapDrawer.getViewer()->rearrange();
 	//mapDrawer.drawMapFromPlannerSingleVan(&planner);
 
