@@ -1,7 +1,10 @@
 #include "ServicesPlanner.h"
 #include <fstream>
 #include <iostream>
-
+#include <iostream>
+#include <ctime>
+#include <ratio>
+#include <chrono>
 #include "../Utils/Utilities.h"
 
 using namespace std;
@@ -86,6 +89,7 @@ void ServicesPlanner::setMaxDist(int maxDist) {
 }
 
 void ServicesPlanner::preProcessEntryData() {
+	auto start_time = chrono::high_resolution_clock::now();
 	/* Pre Process Graph */
 	Vertex * start = graph->findVertex(airport);
 	if (start == NULL) return;
@@ -100,7 +104,9 @@ void ServicesPlanner::preProcessEntryData() {
 			it--;
 		}
 	}
-
+	auto finish = chrono::high_resolution_clock::now();
+	auto mili = chrono::duration_cast<chrono::milliseconds>(finish - start_time).count();
+	cout << mili << "\n";
 	/* Reservations were already divided to fit vans size and already sorted due to the use of multiset */
 }
 
