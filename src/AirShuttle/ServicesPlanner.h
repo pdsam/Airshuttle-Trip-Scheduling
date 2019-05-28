@@ -50,6 +50,8 @@ public:
 	void integrateClientWithNoReservation(const Reservation & res, Time waitingTime);
 	void sameDestIntegration(const Reservation & reservation, Service & service);
 	void newDestIntegration(const Reservation & reservation, Service & service);
+	void newDestIntegration(const Reservation & reservation, Service & service, const vector<Edge> & path, int total);
+
 };
 
 

@@ -469,7 +469,7 @@ void ServicesPlanner::integrateClientWithNoReservation(const Reservation & reser
 		// if inserting this reservation does not affect next service
 		if (service.first->getStart().toSeconds() + total <= service.second->getStart().toSeconds())
 		{
-			newDestIntegration(reservation, *service.first);
+			newDestIntegration(reservation, *service.first, path, total);
 			return;
 		}
 	}
@@ -514,6 +514,13 @@ void ServicesPlanner::newDestIntegration(const Reservation & reservation, Servic
 	int total = 0;
 	for (auto edge : path) total += edge.getWeight();
 
+	service.addReservation(reservation);
+	service.setVacant(service.getVacant() - reservation.getNumPeople());
+	service.setPath(path);
+	service.setEnd(service.getStart().addSeconds(total));
+}
+
+void ServicesPlanner::newDestIntegration(const Reservation & reservation, Service & service, const vector<Edge> & path, int total) {
 	service.addReservation(reservation);
 	service.setVacant(service.getVacant() - reservation.getNumPeople());
 	service.setPath(path);
