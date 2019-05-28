@@ -10,7 +10,8 @@ n_res = sys.argv[2]
 
 # Read available nodes for that location
 nodes_list = []
-nodes_filename = "../maps/" + location + "/" + "T06_nodes_X_Y_" + location + ".txt"
+#nodes_filename = "../maps/" + location + "/" + "T06_nodes_X_Y_" + location + ".txt"
+nodes_filename = "../maps/" + location + "/" + "valid_nodes_" + location +".txt"
 with open(nodes_filename, "r") as f:
 	f.readline()
 	nodes_list = [line.rstrip('\n')[1:].split(',')[0] for line in f]
