@@ -1,5 +1,6 @@
 #include "Service.h"
 #include "AirShuttle.h"
+#include <iostream>
 
 using namespace std;
 
@@ -11,8 +12,7 @@ Service::Service(int vacant, Time start, std::vector<Reservation> reservations, 
 	for (const Edge& e : edges) {
 		totalWeight += e.getWeight();
 	}
-	this->end = start;
-	this->end.addMinutes(totalWeight);
+	this->end = start.addSeconds(totalWeight);
 
 	this->reservations = reservations;
 	this->path = edges;

@@ -36,3 +36,7 @@ double Vertex::getDistance(){return distance;}
 bool Vertex::operator<(Vertex & vertex) const{
 	return this->distance < vertex.getDistance();
 }
+
+bool Vertex::getVisited() const {
+	return visited;
+}

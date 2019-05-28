@@ -95,6 +95,7 @@ void Graph::removeUnvisitedVertices() {
 /**********************SINGLE SOURCE ***********************/
 Vertex * Graph::initSingleSource(const int &origin) {
 	for(auto v : vertexSet) {
+		v->visited = false;
 		v->distance = INF;
 		v->path = nullptr;
 		v->pathEdge = Edge();
@@ -120,13 +121,14 @@ inline bool Graph::relax(Vertex *v, Edge edge) {//Vertex *w, double weight) {
 
 
 void Graph::dijkstraShortestPath(const int &source){
-	auto s = initSingleSource(source);
+	Vertex* s = initSingleSource(source);
 	MutablePriorityQueue<Vertex> q;
 	q.insert(s);
 	while( ! q.empty() ) {
-		auto v = q.extractMin();
-		for(auto e : v->adj) {
-			auto oldDist = e.dest->distance;
+		Vertex* v = q.extractMin();
+		v->visited = true;
+		for(const Edge& e : v->adj) {
+			double oldDist = e.dest->distance;
 			if (relax(v, e)) {//e.dest, e.weight)) {
 				if (oldDist == INF)
 					q.insert(e.dest);

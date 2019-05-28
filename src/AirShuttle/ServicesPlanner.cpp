@@ -174,12 +174,11 @@ vector<Edge> ServicesPlanner::calculatePath(const std::set<Vertex*>& reservation
 
 	auto it = getClosestVertexFromList(airportVertex, tempReservations);
 	Vertex* closest = *it;
-
 	tempReservations.erase(it);
 	
-	vector<Edge> fromAirport = graph->getPathEdges(airport, closest->getID());
+	graph->AStar(airport, closest->getID());
+	vector<Edge> fromAirport = graph->AgetPathEdges(airport, closest->getID());
 	path.insert(path.end(), fromAirport.begin(), fromAirport.end());
-
 
 	//Nearest neighbour approach	
 	Vertex* currentSource = closest;
@@ -306,17 +305,17 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 
 	resetVans();
 
-	cout << "Starting service creation." << endl << endl;
+	//cout << "Starting service creation." << endl << endl;
 	while(!reservations.empty()){
 		//Get earliest reservation
-		cout << "Getting earliest reservation." << endl;
+		//cout << "Getting earliest reservation." << endl;
 		Reservation earliest = *reservations.begin();
 		reservations.erase(reservations.begin());
 
-		cout << "Getting earliest available van." << endl;
+		//cout << "Getting earliest available van." << endl;
 		multiset<Van>::iterator earliestVanIt = vans.begin();
 		Van van = *earliestVanIt;
-		cout << "made copy" << endl;
+		//cout << "made copy" << endl;
 		vans.erase(earliestVanIt);
 
 		//Mix earliest client with remaining ones
@@ -326,14 +325,17 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 		//Calculate path
 		vector<Edge> path = calculatePathFromService(service);
 
+		for (Reservation& r: service) {
+			r.setAssigned(false);
+		}
+
 		//Get path time
 		Time timeOfDeparture = getTardiestReservationTime(service);
 		double totalTime = assignTimeOfArrivalToReservations(path, service, timeOfDeparture);
 
 		//Update van availability
-		cout << "Updating van information." << endl;
-		Time endOfTripTime = timeOfDeparture;
-		endOfTripTime.addMinutes(totalTime);
+		//cout << "Updating van information." << endl;
+		Time endOfTripTime = timeOfDeparture.addSeconds(totalTime);
 		van.setNextTimeAvailable(endOfTripTime);
 
 		//Create the new service
@@ -341,7 +343,7 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 		van.addService(vanService);
 		vans.insert(van);
 
-		cout << "Next Reservation." << endl << endl;
+		//cout << "Next Reservation." << endl << endl;
 	}
 }
 
