@@ -276,6 +276,10 @@ vector<Edge> ServicesPlanner::calculatePathFromService(const vector<Reservation>
 
 int ServicesPlanner::assignTimeOfArrivalToReservations(const vector<Edge> & path, vector<Reservation> & service, const Time & timeOfDeparture) {
 
+	for (Reservation& r: service) {
+		r.setAssigned(false);
+	}
+
 	cout << "Getting path time" << endl;
 	double totalTime = 0;
 	for (const Edge& e: path) {
@@ -325,10 +329,6 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 
 		//Calculate path
 		vector<Edge> path = calculatePathFromService(service);
-
-		for (Reservation& r: service) {
-			r.setAssigned(false);
-		}
 
 		//Get path time
 		Time timeOfDeparture = getTardiestReservationTime(service);
