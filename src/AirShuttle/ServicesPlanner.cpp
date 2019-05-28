@@ -214,7 +214,7 @@ Time getTardiestReservationTime(const vector<Reservation>& reservations) {
 
 vector<Reservation> ServicesPlanner::mixClientsWithEarliest(const Reservation & earliest, const Van & van, int & occupiedSeats) {
 
-	cout << "Setting time window limit." << endl;
+	//cout << "Setting time window limit." << endl;
 	Time limit = earliest.getArrival() + Time(0,this->timeWindow,0); //In the next 30 minutes
 	if (limit < van.getNextTimeAvailable()) {
 		limit = van.getNextTimeAvailable();
@@ -227,7 +227,7 @@ vector<Reservation> ServicesPlanner::mixClientsWithEarliest(const Reservation & 
 
 	occupiedSeats = earliest.getNumPeople();
 
-	cout << "Finding close reservations." << endl;
+	//cout << "Finding close reservations." << endl;
 	//Search reservations that arrive in the next 30 minutes with
 	//destinations close to the earliest person
 	multiset<Reservation>::iterator currentReservationIt = reservations.begin();
@@ -265,7 +265,7 @@ void ServicesPlanner::resetVans() {
 }
 
 vector<Edge> ServicesPlanner::calculatePathFromService(const vector<Reservation> & service) {
-	cout << "Calculating path." << endl;
+	//cout << "Calculating path." << endl;
 	set<Vertex*> vertexes;
 	for_each(service.begin(), service.end(), [&vertexes, this](Reservation res) {
 		vertexes.insert(graph->findVertex(res.getDest()));
@@ -275,7 +275,7 @@ vector<Edge> ServicesPlanner::calculatePathFromService(const vector<Reservation>
 
 int ServicesPlanner::assignTimeOfArrivalToReservations(const vector<Edge> & path, vector<Reservation> & service, const Time & timeOfDeparture) {
 
-	cout << "Getting path time" << endl;
+	//cout << "Getting path time" << endl;
 	double totalTime = 0;
 	for (const Edge& e: path) {
 		totalTime += e.getWeight();
@@ -300,7 +300,7 @@ int ServicesPlanner::assignTimeOfArrivalToReservations(const vector<Edge> & path
 }
 
 void ServicesPlanner::planVansFleetMixingPassengers() {
-	cout << "Preprocesing" << endl;
+	//cout << "Preprocesing" << endl;
 	preProcessEntryData();
 
 	resetVans();
