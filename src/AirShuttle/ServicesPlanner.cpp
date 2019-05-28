@@ -118,7 +118,7 @@ void ServicesPlanner::planSingleVanNotMixingPassengers() {
 	for (auto it = reservations.begin(); it != reservations.end();) {
 		Reservation reservation = *it;
 		it = reservations.erase(it);
-
+		//cout << "Reservations left:" << reservations.size() << "\n";
 		int services_count = van.getServices().size();
 
 		/* Forward trip */
