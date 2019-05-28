@@ -19,17 +19,18 @@ int main() {
 	
 	for(unsigned i = 2; i < maps.size();i++){
 	Graph graph;
-	GraphLoader::loadGraph("Porto", &graph);
+	GraphLoader::loadGraph(maps.at(i), &graph);
 
-	ServicesPlanner planner(&graph, PORTO_AIRPORT, 3);
-	planner.addReservationsFromFile("Porto", "reservations_135819524.txt");
+	ServicesPlanner planner(&graph, aeroports.at(i), 3);
+	planner.addReservationsFromFile("Coimbra", "reservations_100.txt");
+	planner.preProcessEntryData();
+	graph.dijkstraShortestPath(aeroports.at(i));
 
-	graph.dijkstraShortestPath(PORTO_AIRPORT);
-
-	//planner.planSingleVanNotMixingPassengers();
+	planner.planSingleVanNotMixingPassengers();
 	//planner.planSingleVanMixingPassengers();
-	planner.planVansFleetMixingPassengers();
+	//planner.planVansFleetMixingPassengers();
 
+/*
 	int counter = 1;
 	for (const Van& v: planner.getVans()) {
 		cout << "Van " << counter << ": \n";
@@ -47,10 +48,11 @@ int main() {
 		}
 		counter++;
 	}
+	*/
 
 	//graph.DFSConnectivity(graph.findVertex(PORTO_AIRPORT));
 	//graph.removeUnvisitedVertices();
-	MapDrawer mapDrawer(2000, 2000);
+	//MapDrawer mapDrawer(2000, 2000);
 	//mapDrawer.drawMapFromGraph(&graph);
 	//mapDrawer.getViewer()->setVertexColor(474695389 , RED);
 	//mapDrawer.getViewer()->setVertexSize(474695389, 5);
@@ -68,4 +70,5 @@ int main() {
 
 
 	return 0;
+}
 }
