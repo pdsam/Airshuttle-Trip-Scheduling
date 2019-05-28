@@ -118,8 +118,6 @@ inline bool Graph::relax(Vertex *v, Edge edge) {//Vertex *w, double weight) {
 		return false;
 }
 
-
-
 void Graph::dijkstraShortestPath(const int &source){
 	Vertex* s = initSingleSource(source);
 	MutablePriorityQueue<Vertex> q;

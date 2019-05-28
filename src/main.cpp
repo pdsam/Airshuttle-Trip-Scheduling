@@ -13,8 +13,8 @@ int main() {
 	Graph graph;
 	GraphLoader::loadGraph("Coimbra", &graph);
 
-	ServicesPlanner planner(&graph, 711049847, 3);
-	planner.addReservationsFromFile("tests", "reservations_100.txt");
+	ServicesPlanner planner(&graph, 711049847, 100);
+	planner.addReservationsFromFile("pi", "reservations_10000.txt");
 
 	graph.dijkstraShortestPath(248187791);
 
@@ -44,11 +44,11 @@ int main() {
 
 	//graph.DFSConnectivity(graph.findVertex(PORTO_AIRPORT));
 	//graph.removeUnvisitedVertices();
-	MapDrawer mapDrawer(2000, 2000);
-	mapDrawer.drawMapFromGraph(&graph);
+	//MapDrawer mapDrawer(2000, 2000);
+	//mapDrawer.drawMapFromGraph(&graph);
 	//mapDrawer.getViewer()->setVertexColor(474695389 , RED);
 	//mapDrawer.getViewer()->setVertexSize(474695389, 5);
-	mapDrawer.getViewer()->setVertexColor(711049847, RED);
+	//mapDrawer.getViewer()->setVertexColor(711049847, RED);
 	//mapDrawer.getViewer()->rearrange();
 	//mapDrawer.drawMapFromPlannerSingleVan(&planner);
 
