@@ -46,7 +46,7 @@ INTEGRATE_CLIENT_NO_RESERVATION(Gi, Vi, a, client, waiting_time):
         total = TRAVEL_TIME(path_edges)
 
         if start(service) + total <= start(next) then
-            NEW_DEST_INTEGRATION(Gi, a, client, s)
+            NEW_DEST_INTEGRATION(Gi, a, client, s, path, total)
             return
 
 
@@ -69,7 +69,22 @@ NEW_DEST_INTEGRATION(Gi, a, c, s):
     path(s) = path_edges
     end(s) = start(s) + total
     vacant(s) -= num_people(c)
+
     
+// Gi - graph
+// a - airport
+// c - client to integrate
+// s - service in which to integrate client
+// path - path going throught new vertex
+// total - time of new path
+NEW_DEST_INTEGRATION(Gi, a, c, s, path, total):
+
+    // update service info
+    PUSH_BACK(reservations(s), c)
+    path(s) = path_edges
+    end(s) = start(s) + total
+    vacant(s) -= num_people(c)
+
 
 // c - client to integrate
 // s - service in which to integrate client 
