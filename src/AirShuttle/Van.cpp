@@ -19,4 +19,17 @@ void Van::addService(Service service) {
 
 void Van::clearServices() {
 	this->services.clear();
+	nextTimeAvailable = Time();
+}
+
+Time Van::getNextTimeAvailable() const {
+	return nextTimeAvailable;
+}
+
+void Van::setNextTimeAvailable(Time time) {
+	nextTimeAvailable = time;
+}
+
+bool Van::operator<(const Van &v2) const{
+	return nextTimeAvailable < v2.nextTimeAvailable;
 }

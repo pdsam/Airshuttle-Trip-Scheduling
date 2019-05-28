@@ -9,7 +9,8 @@ using namespace std;
 
 Vertex* Graph::findVertex(const int &id) const {
 	unordered_map<int, Vertex*>::const_iterator it = vertexHashMap.find(id);
-	return it == vertexHashMap.end() ? nullptr : it->second;}
+	return it == vertexHashMap.end() ? nullptr : it->second;
+}
 
 bool Graph::addVertex(const int &id, int x, int y) {
 	if (findVertex(id) != nullptr) return false;
@@ -40,7 +41,7 @@ vector<Vertex*> Graph::getVertexSet() const {
 
 void Graph::reset() {
 	for (size_t i = 0; i < vertexSet.size(); i++)
-			delete vertexSet[i];
+		delete vertexSet[i];
 	vertexSet.clear();
 }
 
@@ -94,6 +95,7 @@ void Graph::removeUnvisitedVertices() {
 /**********************SINGLE SOURCE ***********************/
 Vertex * Graph::initSingleSource(const int &origin) {
 	for(auto v : vertexSet) {
+		v->visited = false;
 		v->distance = INF;
 		v->path = nullptr;
 		v->pathEdge = Edge();
@@ -116,31 +118,15 @@ inline bool Graph::relax(Vertex *v, Edge edge) {//Vertex *w, double weight) {
 		return false;
 }
 
-
-//////////////A*//////////////////
-double Graph::heuristic(Vertex * current, Vertex * dest){
-	return dest->getPosition().euclidianDistance(current->getPosition()) ;
-}
-
-inline bool Graph::relax(Vertex *v, Vertex *w, double weight, Vertex * Dest, double averageSpeed){
-	if (v->distance*averageSpeed + weight < w->distance) {
-		w->distance = v->distance*averageSpeed + weight + heuristic(w,Dest);
-		w->path = v;
-		return true;
-	}
-	else
-		return false;
-}
-
-
 void Graph::dijkstraShortestPath(const int &source){
-	auto s = initSingleSource(source);
+	Vertex* s = initSingleSource(source);
 	MutablePriorityQueue<Vertex> q;
 	q.insert(s);
 	while( ! q.empty() ) {
-		auto v = q.extractMin();
-		for(auto e : v->adj) {
-			auto oldDist = e.dest->distance;
+		Vertex* v = q.extractMin();
+		v->visited = true;
+		for(const Edge& e : v->adj) {
+			double oldDist = e.dest->distance;
 			if (relax(v, e)) {//e.dest, e.weight)) {
 				if (oldDist == INF)
 					q.insert(e.dest);
@@ -150,25 +136,83 @@ void Graph::dijkstraShortestPath(const int &source){
 		}
 	}
 }
+
+
+void Graph::dijkstraShortestPath(const int &source, const int &dest){
+	Vertex* s = initSingleSource(source);
+	Vertex* d = findVertex(dest);
+	MutablePriorityQueue<Vertex> q;
+	q.insert(s);
+	while( ! q.empty() ) {
+		Vertex* v = q.extractMin();
+		v->visited = true;
+
+		if (v == d) return;
+
+		for(const Edge& e : v->adj) {
+			double oldDist = e.dest->distance;
+			if (relax(v, e)) {//e.dest, e.weight)) {
+				if (oldDist == INF)
+					q.insert(e.dest);
+				else
+					q.decreaseKey(e.dest);
+			}
+		}
+	}
+}
+//////////////A*//////////////////
+Vertex * Graph::AinitSingleSource(const int &origin) {
+	for(Vertex* v : vertexSet) {
+		v->visited = false;
+		v->distance = INF;
+		v->gScore = INF;
+		v->Apath = nullptr;
+		v->ApathEdge = Edge();
+	}
+	Vertex* s = findVertex(origin);
+	s->distance = 0;
+	s->gScore = 0;
+	return s;
+}
+
+double Graph::heuristic(Vertex * current, Vertex * dest){
+	return dest->getPosition().euclidianDistance(current->getPosition()) ;
+}
+
 void Graph::AStar(const int &source, const int &des){
-	auto s = initSingleSource(source);
-	auto dest = this->findVertex(des);
-	Vertex * previousVertex = nullptr;
+	Vertex* s = AinitSingleSource(source);
+	Vertex* dest = this->findVertex(des);
+
+	s->distance = heuristic(s, dest);
+
 	MutablePriorityQueue<Vertex> q;
 	q.insert(s);
 	while(!q.empty() ){
-		auto v = q.extractMin();
-		v->path = previousVertex;
-		previousVertex = v;
-		if(dest->getID() == v->getID()){
-			q.clear();
-			continue;
+		Vertex * current = q.extractMin();
+		if (current == dest) {
+			break;
 		}
-		for(auto e : v->adj) {
-			e.dest->distance = heuristic(v,e.dest) + e.getDistance();
-			q.insert(e.dest);
-		}
+		current->visited = true;
 
+		for (const Edge& e: current->adj) {
+			Vertex* neighbour = e.dest;
+			if (neighbour->visited) {
+				continue;
+			}
+
+			double tempGScore = current->gScore + e.getDistance();
+			if (neighbour->distance == INF) {
+				q.insert(neighbour);
+			} else if (tempGScore >= neighbour->gScore) {
+				continue;
+			}
+
+			neighbour->Apath = current;
+			neighbour->ApathEdge = e;
+			neighbour->gScore = tempGScore;
+			neighbour->distance = neighbour->gScore + heuristic(neighbour, dest);
+			q.decreaseKey(neighbour);			
+		}
 	}
 
 }
@@ -187,6 +231,21 @@ vector<int> Graph::getPathVertices(const int source, const int dest){
 	return res;
 }
 
+vector<int> Graph::AgetPathVertices(const int source, const int dest){
+	vector<int> res;
+	auto v = findVertex(dest);
+	auto s = findVertex(source);
+	if (v == nullptr || s == nullptr || v->distance == INF) // missing or disconnected
+		return res;
+	for ( ; v != nullptr; v = v->Apath) {
+		res.push_back(v->getID());
+	}
+	reverse(res.begin(), res.end());
+	return res;
+}
+
+
+
 vector<Edge> Graph::getPathEdges(const int source, const int dest){
 	vector<Edge> res;
 	auto v = findVertex(dest);
@@ -195,6 +254,20 @@ vector<Edge> Graph::getPathEdges(const int source, const int dest){
 		return res;
 	for ( ; v->id != source; v = v->path) {
 		res.push_back(v->pathEdge);
+	}
+	reverse(res.begin(), res.end());
+	return res;
+}
+
+
+vector<Edge> Graph::AgetPathEdges(const int source, const int dest){
+	vector<Edge> res;
+	auto v = findVertex(dest);
+	auto s = findVertex(source);
+	if (v == nullptr || s == nullptr || v->distance == INF) // missing or disconnected
+		return res;
+	for ( ; v->id != source; v = v->Apath) {
+		res.push_back(v->ApathEdge);
 	}
 	reverse(res.begin(), res.end());
 	return res;

@@ -5,6 +5,7 @@
 #include <list>
 #include "../Utils/Time.h"
 #include "../Graph/Edge.h"
+#include "Reservation.h"
 
 class Reservation;
 
@@ -12,21 +13,23 @@ class Service {
 private:
 	int vacant;
 	Time start, end;
-	std::vector<Reservation*> reservations;
-	std::list<Edge> path;
+	std::vector<Reservation> reservations;
+	std::vector<Edge> path;
 
 public:
-	Service(Reservation * res, std::vector<Edge> & edges, Time lastEnd);
+	Service(int vacant, Time start, std::vector<Reservation> reservations, std::vector<Edge> edges);
 
 	int getVacant() const;
 	Time getStart() const;
 	Time getEnd() const;
-	std::vector<Reservation*> getReservations() const;
-	std::list<Edge> getPath() const;
+	const std::vector<Reservation>& getReservations() const;
+	const std::vector<Edge>& getPath() const;
 
-	void addReservation(Reservation * res);
-	void addEdge(Edge edge);
-	void addPath(const std::vector<Edge> & edges);
+	void setVacant(int vacant);
+	void setReservations(const std::vector<Reservation>& reservations);
+	void setPath(const std::vector<Edge>& edges);
+	void setEnd(const Time & end);
+	void addReservation(const Reservation & reservation);
 
 };
 

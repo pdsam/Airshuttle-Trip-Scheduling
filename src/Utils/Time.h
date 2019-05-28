@@ -16,9 +16,12 @@ public:
 
 	bool operator<(const Time& t2) const;
 	Time operator+(const Time& t2) const;
+	Time operator-(const Time& t2) const;
 
 	Time addMinutes(int minutes) const;
 	Time addSeconds(int seconds) const;
+
+	int toSeconds() const;
 
 	friend std::ostream& operator<<(std::ostream & ostream, const Time & time);
 };

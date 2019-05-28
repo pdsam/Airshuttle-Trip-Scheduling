@@ -17,13 +17,14 @@ private:
 	std::vector<Edge> adj;
 	bool visited = false;
 
-	double distance = 0; //auxiliary
+	double distance = 0; //Represents total cost in dijkstra algorithm and fScore in A*
 	Vertex *path = nullptr;
 	Edge pathEdge;
 
 	//A*
-	double Adistance = 0;
+	double gScore = 0;
 	Vertex* Apath = nullptr;
+	Edge ApathEdge;
 
 
 	int queueIndex = 0;//for MutablePriorityQueue
@@ -36,6 +37,7 @@ public:
 	int getID() const;
 	Position getPosition() const;
 	std::vector<Edge> getAdj() const;
+	bool getVisited() const;
 
 	void addTag(MapTag tag);
 	std::vector<MapTag> getTags() const;

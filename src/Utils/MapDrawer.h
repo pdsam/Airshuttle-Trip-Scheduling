@@ -20,6 +20,8 @@ public:
 	MapDrawer(int width, int height);
 	~MapDrawer();
 
+	GraphViewer * getViewer();
+
 	bool drawMapFromFile(std::string location);
 	bool drawMapFromGraph(Graph * graph);
 	bool drawMapFromPlannerSingleVan(ServicesPlanner * planner);

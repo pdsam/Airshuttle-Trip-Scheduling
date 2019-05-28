@@ -28,15 +28,17 @@ public:
 	Vertex * initSingleSource(const int &origin);
 	bool relax(Vertex *v, Edge edge); //Vertex *w, double weight);
 	void dijkstraShortestPath(const int &source);
+	void dijkstraShortestPath(const int &source, const int &dest);
 	std::vector<int> getPathVertices(const int source, const int dest);
 	std::vector<Edge> getPathEdges(const int source, const int dest);
 	vector<int> getPath(const int source, const int dest );
 	//A*
-	bool relax(Vertex *v, Vertex *w, double weight, Vertex * Dest, double averageSpeed);
+	//bool relax(Vertex *v, Vertex *w, double weight, Vertex * Dest, double averageSpeed);
 	void AStar(const int &source, const int &dest);
 	double heuristic(Vertex * current, Vertex * dest);
-
-
+	Vertex* AinitSingleSource(const int &origin);
+	vector<int> AgetPathVertices(const int source, const int dest);
+	vector<Edge> AgetPathEdges(const int source, const int dest);
 	void reset();
 	~Graph();
 
