@@ -46,7 +46,11 @@ public:
 	
 	std::vector<Edge> calculatePath(const std::set<Vertex*>& reservations);
 	void planVansFleetMixingPassengers();
-
+	int objectiveFunction();
+	void integrateClientWithNoReservation(const Reservation & res, Time waitingTime);
+	void sameDestIntegration(const Reservation & reservation, Service & service);
+	void newDestIntegration(const Reservation & reservation, Service & service);
+	void newDestIntegration(const Reservation & reservation, Service & service, const vector<Edge> & path, int total);
 
 };
 

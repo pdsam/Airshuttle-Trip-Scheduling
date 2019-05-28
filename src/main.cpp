@@ -19,25 +19,43 @@ int main() {
 	
 	for(unsigned i = 2; i < maps.size();i++){
 	Graph graph;
-	GraphLoader::loadGraph(maps.at(i), &graph);
+	GraphLoader::loadGraph("Porto", &graph);
 
-	ServicesPlanner planner(&graph, aeroports.at(i), 5);
-	//ServicesPlanner planner(&graph, PORTO_AIRPORT, 5);
-	planner.addReservationsFromFile(maps.at(i), "reservations_100.txt");
-	cout << maps.at(i) <<": ";
-	planner.preProcessEntryData();
-	graph.dijkstraShortestPath(aeroports.at(i));
-	auto start_time = chrono::high_resolution_clock::now();
+	ServicesPlanner planner(&graph, PORTO_AIRPORT, 3);
+	planner.addReservationsFromFile("Porto", "reservations_135819524.txt");
+
+	graph.dijkstraShortestPath(PORTO_AIRPORT);
+
 	//planner.planSingleVanNotMixingPassengers();
-	planner.planSingleVanMixingPassengers();
-	//planner.planVansFleetMixingPassengers();
-	auto finish = chrono::high_resolution_clock::now();
-	auto mili = chrono::duration_cast<chrono::milliseconds>(finish - start_time).count();
-	cout << mili << "\n";
-	break;
+	//planner.planSingleVanMixingPassengers();
+	planner.planVansFleetMixingPassengers();
+
+	int counter = 1;
+	for (const Van& v: planner.getVans()) {
+		cout << "Van " << counter << ": \n";
+		int sCounter = 1;
+		for (Service& s: v.getServices()) {
+			cout << "\tService " << sCounter << endl;
+			cout << "\t\t" << s.getStart() << " -> " << s.getEnd() << "\n";
+			cout << "\t\t" << s.getVacant() << "\n\n";
+
+			for (const Reservation& r: s.getReservations()) {
+				cout << "\t\t" << r.getClientName() << " - " << r.getArrival() << " -> " << r.getDeliver() << "\n";
+			}
+			sCounter++;
+			cout << endl << endl;
+		}
+		counter++;
 	}
 
-	//MapDrawer mapDrawer(2000, 2000);
+	//graph.DFSConnectivity(graph.findVertex(PORTO_AIRPORT));
+	//graph.removeUnvisitedVertices();
+	MapDrawer mapDrawer(2000, 2000);
+	//mapDrawer.drawMapFromGraph(&graph);
+	//mapDrawer.getViewer()->setVertexColor(474695389 , RED);
+	//mapDrawer.getViewer()->setVertexSize(474695389, 5);
+	//mapDrawer.getViewer()->setVertexColor(PORTO_AIRPORT , RED);
+	//mapDrawer.getViewer()->rearrange();
 	//mapDrawer.drawMapFromPlannerSingleVan(&planner);
 	cout << "\n";
 	//getchar();

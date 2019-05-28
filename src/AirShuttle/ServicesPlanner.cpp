@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <iostream>
+#include <list>
 
 #include "../Utils/Utilities.h"
 
@@ -176,12 +177,11 @@ vector<Edge> ServicesPlanner::calculatePath(const std::set<Vertex*>& reservation
 
 	auto it = getClosestVertexFromList(airportVertex, tempReservations);
 	Vertex* closest = *it;
-
 	tempReservations.erase(it);
 	
-	vector<Edge> fromAirport = graph->getPathEdges(airport, closest->getID());
+	graph->AStar(airport, closest->getID());
+	vector<Edge> fromAirport = graph->AgetPathEdges(airport, closest->getID());
 	path.insert(path.end(), fromAirport.begin(), fromAirport.end());
-
 
 	//Nearest neighbour approach	
 	Vertex* currentSource = closest;
@@ -278,6 +278,10 @@ vector<Edge> ServicesPlanner::calculatePathFromService(const vector<Reservation>
 
 int ServicesPlanner::assignTimeOfArrivalToReservations(const vector<Edge> & path, vector<Reservation> & service, const Time & timeOfDeparture) {
 
+	for (Reservation& r: service) {
+		r.setAssigned(false);
+	}
+
 	cout << "Getting path time" << endl;
 	double totalTime = 0;
 	for (const Edge& e: path) {
@@ -311,14 +315,14 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 	//cout << "Starting service creation." << endl << endl;
 	while(!reservations.empty()){
 		//Get earliest reservation
-	//	cout << "Getting earliest reservation." << endl;
+		//cout << "Getting earliest reservation." << endl;
 		Reservation earliest = *reservations.begin();
 		reservations.erase(reservations.begin());
 
-	//	cout << "Getting earliest available van." << endl;
+		//cout << "Getting earliest available van." << endl;
 		multiset<Van>::iterator earliestVanIt = vans.begin();
 		Van van = *earliestVanIt;
-	//	cout << "made copy" << endl;
+		//cout << "made copy" << endl;
 		vans.erase(earliestVanIt);
 
 		//Mix earliest client with remaining ones
@@ -333,9 +337,8 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 		double totalTime = assignTimeOfArrivalToReservations(path, service, timeOfDeparture);
 
 		//Update van availability
-	//	cout << "Updating van information." << endl;
-		Time endOfTripTime = timeOfDeparture;
-		endOfTripTime.addMinutes(totalTime);
+		//cout << "Updating van information." << endl;
+		Time endOfTripTime = timeOfDeparture.addSeconds(totalTime);
 		van.setNextTimeAvailable(endOfTripTime);
 
 		//Create the new service
@@ -343,7 +346,7 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 		van.addService(vanService);
 		vans.insert(van);
 
-	//	cout << "Next Reservation." << endl << endl;
+		//cout << "Next Reservation." << endl << endl;
 	}
 }
 
@@ -372,18 +375,10 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 					toService.push_back(*aux);
 					reservations.erase(aux);
 					aux--;
-
-					
-
 				}
-
-
-
 			aux++;
 			}
 			else break;
-
-
 
 		}
 		//path calculation
@@ -396,17 +391,14 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 
 		Time timeOfDeparture = getTardiestReservationTime(toService);
 
-
 		int counter = 0;
 		double totalTime = 0;
 		for (const Edge& e: path) {
 			totalTime += e.getWeight();
 			counter++;
-			Time timeOfArrivalAtDest = timeOfDeparture;
-			timeOfArrivalAtDest.addMinutes(totalTime);
+			Time timeOfArrivalAtDest = timeOfDeparture.addMinutes(totalTime);
 
 			int vID = e.getDest()->getID();
-;
 			for (Reservation& r: toService) {
 				if (r.getAssigned()) {
 					continue;
@@ -417,14 +409,124 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 				}
 			}
 		
-	}
+		}
 		Service vanService(numSlots,timeOfDeparture,toService,path);
 		van.addService(vanService);
 	
-	
-	
-	
-	
 	}
 	vans.insert(van);	
+}
+
+int ServicesPlanner::objectiveFunction() {
+	int sum = 0;
+	for (auto van : vans) {
+		for (auto service : van.getServices()) {
+			for (auto reservation : service.getReservations()) {
+				sum += (reservation.getDeliver().toSeconds() - reservation.getArrival().toSeconds());
+			}
+		}
+	}
+	return sum;
+}
+
+void ServicesPlanner::integrateClientWithNoReservation(const Reservation & reservation, Time waitingTime) {
+
+	// vans with services with vacant spots inside waitingTime window
+	list<pair<Service*, Service*>> close;
+	for (auto & van : vans)
+		for (size_t s = 0 ; s < van.getServices().size(); s++) {
+			Service & curr = van.getServices().at(s);
+			int time_diff = curr.getStart().toSeconds() - reservation.getArrival().toSeconds();
+			if (time_diff <= waitingTime.toSeconds() && time_diff >= 0 && curr.getVacant() >= reservation.getNumPeople()) {
+
+				Service * next = (s == van.getServices().size()-1) ? nullptr : &van.getServices().at(s+1);
+				if (next == nullptr) {
+					newDestIntegration(reservation, curr);
+					return;
+				}
+
+				close.push_back(pair<Service*, Service*>(&curr, next));
+			}
+		}
+
+	// services that visit the reservation destination
+	for (auto & service : close)
+		for (auto & client : service.first->getReservations())
+			if (reservation.getDest() == client.getDest()) {
+				sameDestIntegration(reservation, *service.first);
+				return;
+			}
+
+	// services which are not affected by new client addition
+	for (auto & service : close) {
+
+		// calculate time required to traverse path including new vertex
+		set<Vertex *> vertices;
+		for (auto reservation : service.first->getReservations())
+			vertices.insert(graph->findVertex(reservation.getDest()));
+		vertices.insert(graph->findVertex(reservation.getDest()));
+
+		vector<Edge> path = calculatePath(vertices);
+		int total = 0;
+		for (auto edge : path) total += edge.getWeight();
+
+		// if inserting this reservation does not affect next service
+		if (service.first->getStart().toSeconds() + total <= service.second->getStart().toSeconds())
+		{
+			newDestIntegration(reservation, *service.first, path, total);
+			return;
+		}
+	}
+}
+
+// must remove and re add services
+// must remove and re add services
+// must remove and re add services
+// must remove and re add services
+// must remove and re add services
+// must remove and re add services
+// must remove and re add services
+
+void ServicesPlanner::sameDestIntegration(const Reservation & reservation, Service & service) {
+	vector<Reservation> newReservations;
+	bool added = false;
+	int numPeople = 0;
+	for (auto client : service.getReservations()) {
+		newReservations.push_back(client);
+		numPeople += client.getNumPeople();
+		if (!added && reservation.getDest() == client.getDest()) {
+			newReservations.push_back(reservation);
+			added = true;
+			numPeople += reservation.getNumPeople();
+		}
+	}
+
+	if (added)  {
+		service.setVacant(service.getVacant() - reservation.getNumPeople());
+		service.setReservations(newReservations);
+	}
+}
+
+void ServicesPlanner::newDestIntegration(const Reservation & reservation, Service & service) {
+
+	set<Vertex *> vertices;
+	for (auto reservation : service.getReservations())
+		vertices.insert(graph->findVertex(reservation.getDest()));
+	vertices.insert(graph->findVertex(reservation.getDest()));
+
+	vector<Edge> path = calculatePath(vertices);
+	int total = 0;
+	for (auto edge : path) total += edge.getWeight();
+
+	service.addReservation(reservation);
+	service.setVacant(service.getVacant() - reservation.getNumPeople());
+	service.setPath(path);
+	service.setEnd(service.getStart().addSeconds(total));
+}
+
+void ServicesPlanner::newDestIntegration(const Reservation & reservation, Service & service, const vector<Edge> & path, int total) {
+	service.addReservation(reservation);
+	service.setVacant(service.getVacant() - reservation.getNumPeople());
+	service.setPath(path);
+	service.setEnd(service.getStart().addSeconds(total));
 }

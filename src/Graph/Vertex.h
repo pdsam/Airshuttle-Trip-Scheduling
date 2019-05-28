@@ -37,6 +37,7 @@ public:
 	int getID() const;
 	Position getPosition() const;
 	std::vector<Edge> getAdj() const;
+	bool getVisited() const;
 
 	void addTag(MapTag tag);
 	std::vector<MapTag> getTags() const;
