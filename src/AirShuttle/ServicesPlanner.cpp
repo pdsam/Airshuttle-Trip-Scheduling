@@ -2,9 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <iostream>
-#include <ctime>
-#include <ratio>
-#include <chrono>
+
 #include "../Utils/Utilities.h"
 
 using namespace std;
@@ -89,7 +87,6 @@ void ServicesPlanner::setMaxDist(int maxDist) {
 }
 
 void ServicesPlanner::preProcessEntryData() {
-	auto start_time = chrono::high_resolution_clock::now();
 	/* Pre Process Graph */
 	Vertex * start = graph->findVertex(airport);
 	if (start == NULL) return;
@@ -104,15 +101,14 @@ void ServicesPlanner::preProcessEntryData() {
 			it--;
 		}
 	}
-	auto finish = chrono::high_resolution_clock::now();
-	auto mili = chrono::duration_cast<chrono::milliseconds>(finish - start_time).count();
-	cout << mili << "\n";
+	
+	
 	/* Reservations were already divided to fit vans size and already sorted due to the use of multiset */
 }
 
 void ServicesPlanner::planSingleVanNotMixingPassengers() {
-	preProcessEntryData();
-	graph->dijkstraShortestPath(airport);
+	//preProcessEntryData();
+	//graph->dijkstraShortestPath(airport);
 
 	multiset<Van>::iterator it = vans.begin();
 	Van van = *it;
@@ -307,22 +303,22 @@ int ServicesPlanner::assignTimeOfArrivalToReservations(const vector<Edge> & path
 }
 
 void ServicesPlanner::planVansFleetMixingPassengers() {
-	cout << "Preprocesing" << endl;
-	preProcessEntryData();
+	//cout << "Preprocesing" << endl;
+	//preProcessEntryData();
 
 	resetVans();
 
-	cout << "Starting service creation." << endl << endl;
+	//cout << "Starting service creation." << endl << endl;
 	while(!reservations.empty()){
 		//Get earliest reservation
-		cout << "Getting earliest reservation." << endl;
+	//	cout << "Getting earliest reservation." << endl;
 		Reservation earliest = *reservations.begin();
 		reservations.erase(reservations.begin());
 
-		cout << "Getting earliest available van." << endl;
+	//	cout << "Getting earliest available van." << endl;
 		multiset<Van>::iterator earliestVanIt = vans.begin();
 		Van van = *earliestVanIt;
-		cout << "made copy" << endl;
+	//	cout << "made copy" << endl;
 		vans.erase(earliestVanIt);
 
 		//Mix earliest client with remaining ones
@@ -337,7 +333,7 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 		double totalTime = assignTimeOfArrivalToReservations(path, service, timeOfDeparture);
 
 		//Update van availability
-		cout << "Updating van information." << endl;
+	//	cout << "Updating van information." << endl;
 		Time endOfTripTime = timeOfDeparture;
 		endOfTripTime.addMinutes(totalTime);
 		van.setNextTimeAvailable(endOfTripTime);
@@ -347,14 +343,14 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 		van.addService(vanService);
 		vans.insert(van);
 
-		cout << "Next Reservation." << endl << endl;
+	//	cout << "Next Reservation." << endl << endl;
 	}
 }
 
 
 void ServicesPlanner::planSingleVanMixingPassengers(){
-	preProcessEntryData();
-	graph->dijkstraShortestPath(airport);
+	//preProcessEntryData();
+	//graph->dijkstraShortestPath(airport);
 	multiset<Van>::iterator van_it = vans.begin();
 	Van van = *van_it;
 	vans.erase(van_it);

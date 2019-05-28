@@ -5,6 +5,10 @@
 #include "AirShuttle/ServicesPlanner.h"
 #include "AirShuttle/AirShuttle.h"
 #include "Utils/MapTag.h"
+#include <ctime>
+#include <ratio>
+#include <chrono>
+#include<iostream>
 #define MAP "Portugal"
 
 using namespace std;
@@ -12,6 +16,8 @@ using namespace std;
 int main() {
 	vector<string> maps = {"Aveiro","Braga","Coimbra","Ermesinde","Fafe","Gondomar","Lisboa","Maia","Porto","Viseu"};
 	vector<int> aeroports = {1074045106,914277436,248187791,25452377,26130602,112624378,582518618,26058112,PORTO_AIRPORT,26023654};
+	
+	
 	for(unsigned i = 0; i < maps.size();i++){
 	Graph graph;
 	GraphLoader::loadGraph(maps.at(i), &graph);
@@ -21,18 +27,27 @@ int main() {
 	//planner.addReservationsFromFile(MAP, "reservations_1329449088.txt");
 	cout << maps.at(i) <<": ";
 	planner.preProcessEntryData();
-	//cout <<"\n";
-	}
-	//graph.dijkstraShortestPath(158862182);
-
+	graph.dijkstraShortestPath(aeroports.at(i));
+	auto start_time = chrono::high_resolution_clock::now();
 	//planner.planSingleVanNotMixingPassengers();
 	//planner.planSingleVanMixingPassengers();
-	//planner.planVansFleetMixingPassengers();
+	planner.planVansFleetMixingPassengers();
+	auto finish = chrono::high_resolution_clock::now();
+	auto mili = chrono::duration_cast<chrono::microseconds>(finish - start_time).count();
+	cout << mili << "\n";
+	}
 
 	//MapDrawer mapDrawer(2000, 2000);
 	//mapDrawer.drawMapFromPlannerSingleVan(&planner);
 	cout << "\n";
 	//getchar();
+
+
+//auto start_time = chrono::high_resolution_clock::now();
+//auto finish = chrono::high_resolution_clock::now();
+//auto mili = chrono::duration_cast<chrono::milliseconds>(finish - start_time).count();
+
+
 
 	return 0;
 }
