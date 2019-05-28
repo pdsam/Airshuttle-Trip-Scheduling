@@ -38,10 +38,23 @@ const vector<Edge>& Service::getPath() const {
 	return path;
 }
 
+void Service::setVacant(int vacant) {
+	this->vacant = vacant;
+}
+
 void Service::setReservations(const std::vector<Reservation> &reservations) {
 	this->reservations = reservations;
 }
 
 void Service::setPath(const std::vector<Edge> &edges) {
 	this->path = edges;
+}
+
+void Service::setEnd(const Time & end) {
+	this->end = end;
+}
+
+
+void Service::addReservation(const Reservation & reservation) {
+	this->reservations.push_back(reservation);
 }
