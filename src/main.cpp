@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include "Utils/GraphLoader.h"
 #include "Graph/Graph.h"
 #include "Utils/MapDrawer.h"
@@ -65,6 +66,18 @@ int main() {
 		}
 
 		Service service = vanServices.at(serviceIndex-1);
+
+		cout << endl << "Leaves at: " << service.getStart() << endl;
+		cout << "Returns at: " << service.getEnd() << endl;
+		cout << "Vacant seats: " << service.getVacant() << endl;
+
+		cout << "Serves reservations: " << endl;
+		for (const Reservation& r: service.getReservations()) {
+			cout << setfill(' ') << setw(10) << r.getClientName() << " - " << setw(10) << r.getNIF() 
+			<< setw(8) << ". Arrives at: " << r.getArrival()
+			<< setw(8) << ". Delivered at: " << r.getDeliver() << endl;
+		}
+
 
 		for (const Edge& e: service.getPath()) {
 			mapDrawer.getViewer()->setEdgeThickness(e.getID(), 10);
