@@ -425,7 +425,7 @@ int ServicesPlanner::objectiveFunction() {
 	return sum;
 }
 
-void ServicesPlanner::servicesForNewReservation(const Reservation & reservation, Time waitingTime) {
+void ServicesPlanner::integrateClientWithNoReservation(const Reservation & reservation, Time waitingTime) {
 
 	// vans with services with vacant spots inside waitingTime window
 	list<pair<Service*, Service*>> close;
@@ -437,7 +437,7 @@ void ServicesPlanner::servicesForNewReservation(const Reservation & reservation,
 
 				Service * next = (s == van.getServices().size()-1) ? nullptr : &van.getServices().at(s+1);
 				if (next == nullptr) {
-					addClientToService(reservation, curr);
+					newDestIntegration(reservation, curr);
 					return;
 				}
 
@@ -449,7 +449,7 @@ void ServicesPlanner::servicesForNewReservation(const Reservation & reservation,
 	for (auto & service : close)
 		for (auto & client : service.first->getReservations())
 			if (reservation.getDest() == client.getDest()) {
-				addClientToService(reservation, *service.first); //TODO different kind of addition, do not need to recalculate
+				sameDestIntegration(reservation, *service.first);
 				return;
 			}
 
@@ -469,13 +469,26 @@ void ServicesPlanner::servicesForNewReservation(const Reservation & reservation,
 		// if inserting this reservation does not affect next service
 		if (service.first->getStart().toSeconds() + total <= service.second->getStart().toSeconds())
 		{
-			addClientToService(reservation, *service.first);
+			newDestIntegration(reservation, *service.first);
 			return;
 		}
 	}
 }
 
-void ServicesPlanner::addClientToService(const Reservation & reservation, Service & service) {
+void ServicesPlanner::sameDestIntegration(const Reservation & reservation, Service & service) {
+	vector<Reservation> newReservations;
+	bool added = false;
+	for (auto client : service.getReservations()) {
+		newReservations.push_back(client);
+		if (!added && reservation.getDest() == client.getDest()) {
+			newReservations.push_back(reservation);
+			added = true;
+		}
+	}
+	service.setReservations(newReservations);
+}
+
+void ServicesPlanner::newDestIntegration(const Reservation & reservation, Service & service) {
 
 	set<Vertex *> vertices;
 	for (auto reservation : service.getReservations())
