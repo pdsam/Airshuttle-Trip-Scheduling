@@ -342,8 +342,7 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 
 		//Update van availability
 		//cout << "Updating van information." << endl;
-		Time endOfTripTime = timeOfDeparture.addSeconds(totalTime);
-		van.setNextTimeAvailable(endOfTripTime);
+		van.setNextTimeAvailable(timeOfDeparture.addSeconds(totalTime));
 
 		//Create the new service
 		Service vanService(Van::getCapacity()-occupiedSeats, timeOfDeparture, service, path);
@@ -401,7 +400,10 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 
 		// assign times of deliver
 		Time timeOfDeparture = getTardiestReservationTime(toService);
-		assignTimeOfDeliverToReservations(path, toService, timeOfDeparture);
+		double totalTime = assignTimeOfDeliverToReservations(path, toService, timeOfDeparture);
+
+		//Update van availability
+		van.setNextTimeAvailable(timeOfDeparture.addSeconds(totalTime));
 
 		// create new service
 		Service vanService(numSlots,timeOfDeparture,toService,path);
