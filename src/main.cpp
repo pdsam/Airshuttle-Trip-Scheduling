@@ -21,24 +21,6 @@ int main() {
 
 	planner.planVansFleetMixingPassengers();
 
-	int counter = 1;
-	for (const Van& v: planner.getVans()) {
-		cout << "Van " << counter << ": \n";
-		int sCounter = 1;
-		for (Service& s: v.getServices()) {
-			cout << "\tService " << sCounter << endl;
-			cout << "\t\t" << s.getStart() << " -> " << s.getEnd() << "\n";
-			cout << "\t\t" << s.getVacant() << "\n\n";
-
-			for (const Reservation& r: s.getReservations()) {
-				cout << "\t\t" << r.getClientName() << " - " << r.getArrival() << " -> " << r.getDeliver() << "\n";
-			}
-			sCounter++;
-			cout << endl << endl;
-		}
-		counter++;
-	}
-
 	MapDrawer mapDrawer(2000, 2000);
 	mapDrawer.drawMapFromGraph(&graph);
 
