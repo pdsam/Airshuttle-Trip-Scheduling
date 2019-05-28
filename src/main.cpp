@@ -23,7 +23,7 @@ int main() {
                                  "reservations_10000.txt"};
 
   for (unsigned i = 2; i < 3; i++){
-    for (unsigned j = 0; j < reservations.size(); j++) {
+    for (unsigned j = 0; j < reservations.size()-reservations.size() +1; j++) {
       Graph graph;
       GraphLoader::loadGraph(maps.at(i), &graph);
 
@@ -34,7 +34,7 @@ int main() {
 
        auto start_time = chrono::high_resolution_clock::now();
 
-      planner.planSingleVanNotMixingPassengers();
+      //planner.planSingleVanNotMixingPassengers();
       // planner.planSingleVanMixingPassengers();
       // planner.planVansFleetMixingPassengers();
 
