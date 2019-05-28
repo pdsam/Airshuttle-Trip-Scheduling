@@ -38,6 +38,10 @@ const vector<Edge>& Service::getPath() const {
 	return path;
 }
 
+void Service::setVacant(int vacant) {
+	this->vacant = vacant;
+}
+
 void Service::setReservations(const std::vector<Reservation> &reservations) {
 	this->reservations = reservations;
 }
@@ -53,6 +57,4 @@ void Service::setEnd(const Time & end) {
 
 void Service::addReservation(const Reservation & reservation) {
 	this->reservations.push_back(reservation);
-	vacant -= reservation.getNumPeople();
-	if (vacant < 0) vacant = 0;
 }

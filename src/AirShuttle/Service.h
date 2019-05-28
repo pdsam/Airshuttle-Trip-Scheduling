@@ -25,6 +25,7 @@ public:
 	const std::vector<Reservation>& getReservations() const;
 	const std::vector<Edge>& getPath() const;
 
+	void setVacant(int vacant);
 	void setReservations(const std::vector<Reservation>& reservations);
 	void setPath(const std::vector<Edge>& edges);
 	void setEnd(const Time & end);

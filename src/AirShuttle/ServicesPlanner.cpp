@@ -433,7 +433,7 @@ void ServicesPlanner::integrateClientWithNoReservation(const Reservation & reser
 		for (size_t s = 0 ; s < van.getServices().size(); s++) {
 			Service & curr = van.getServices().at(s);
 			int time_diff = curr.getStart().toSeconds() - reservation.getArrival().toSeconds();
-			if (time_diff <= waitingTime.toSeconds() && time_diff >= 0 && curr.getVacant() > 0) {
+			if (time_diff <= waitingTime.toSeconds() && time_diff >= 0 && curr.getVacant() >= reservation.getNumPeople()) {
 
 				Service * next = (s == van.getServices().size()-1) ? nullptr : &van.getServices().at(s+1);
 				if (next == nullptr) {
@@ -475,17 +475,32 @@ void ServicesPlanner::integrateClientWithNoReservation(const Reservation & reser
 	}
 }
 
+// must remove and re add services
+// must remove and re add services
+// must remove and re add services
+// must remove and re add services
+// must remove and re add services
+// must remove and re add services
+// must remove and re add services
+
 void ServicesPlanner::sameDestIntegration(const Reservation & reservation, Service & service) {
 	vector<Reservation> newReservations;
 	bool added = false;
+	int numPeople = 0;
 	for (auto client : service.getReservations()) {
 		newReservations.push_back(client);
+		numPeople += client.getNumPeople();
 		if (!added && reservation.getDest() == client.getDest()) {
 			newReservations.push_back(reservation);
 			added = true;
+			numPeople += reservation.getNumPeople();
 		}
 	}
-	service.setReservations(newReservations);
+
+	if (added)  {
+		service.setVacant(service.getVacant() - reservation.getNumPeople());
+		service.setReservations(newReservations);
+	}
 }
 
 void ServicesPlanner::newDestIntegration(const Reservation & reservation, Service & service) {
@@ -500,6 +515,7 @@ void ServicesPlanner::newDestIntegration(const Reservation & reservation, Servic
 	for (auto edge : path) total += edge.getWeight();
 
 	service.addReservation(reservation);
+	service.setVacant(service.getVacant() - reservation.getNumPeople());
 	service.setPath(path);
 	service.setEnd(service.getStart().addSeconds(total));
 }
