@@ -1,6 +1,7 @@
 #include "ServicesPlanner.h"
 #include <fstream>
 #include <iostream>
+#include <list>
 
 #include "../Utils/Utilities.h"
 
@@ -370,18 +371,10 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 					toService.push_back(*aux);
 					reservations.erase(aux);
 					aux--;
-
-					
-
 				}
-
-
-
 			aux++;
 			}
 			else break;
-
-
 
 		}
 		//path calculation
@@ -394,17 +387,14 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 
 		Time timeOfDeparture = getTardiestReservationTime(toService);
 
-
 		int counter = 0;
 		double totalTime = 0;
 		for (const Edge& e: path) {
 			totalTime += e.getWeight();
 			counter++;
-			Time timeOfArrivalAtDest = timeOfDeparture;
-			timeOfArrivalAtDest.addMinutes(totalTime);
+			Time timeOfArrivalAtDest = timeOfDeparture.addMinutes(totalTime);
 
 			int vID = e.getDest()->getID();
-;
 			for (Reservation& r: toService) {
 				if (r.getAssigned()) {
 					continue;
@@ -415,13 +405,9 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 				}
 			}
 		
-	}
+		}
 		Service vanService(numSlots,timeOfDeparture,toService,path);
 		van.addService(vanService);
-	
-	
-	
-	
 	
 	}
 	vans.insert(van);	
@@ -439,44 +425,40 @@ int ServicesPlanner::objectiveFunction() {
 	return sum;
 }
 
-list<Service> ServicesPlanner::servicesForNewReservation(const Reservation & reservation, Time waitingTime) {
+void ServicesPlanner::servicesForNewReservation(const Reservation & reservation, Time waitingTime) {
 
 	// vans with services with vacant spots inside waitingTime window
-	list<pair<Service, Service*>> close;
-	for (auto van : vans)
+	list<pair<Service*, Service*>> close;
+	for (auto & van : vans)
 		for (size_t s = 0 ; s < van.getServices().size(); s++) {
 			Service & curr = van.getServices().at(s);
 			int time_diff = curr.getStart().toSeconds() - reservation.getArrival().toSeconds();
 			if (time_diff <= waitingTime.toSeconds() && time_diff >= 0 && curr.getVacant() > 0) {
 
-				Service * next = (s == van.getServices().size()-2) ? nullptr : &van.getServices().at(s+1);
-				close.push_back(pair<Service, Service*>(curr, next));
+				Service * next = (s == van.getServices().size()-1) ? nullptr : &van.getServices().at(s+1);
+				if (next == nullptr) {
+					addClientToService(reservation, curr);
+					return;
+				}
+
+				close.push_back(pair<Service*, Service*>(&curr, next));
 			}
 		}
 
 	// services that visit the reservation destination
-	list<Service> coincide;
-	for (auto service : close)
-		for (auto client : service.first.getReservations())
-			if (reservation.getDest() == client.getDest())
-				coincide.push_back(service.first);
-
-	if (coincide.size() > 0) return coincide;
+	for (auto & service : close)
+		for (auto & client : service.first->getReservations())
+			if (reservation.getDest() == client.getDest()) {
+				addClientToService(reservation, *service.first); //TODO different kind of addition, do not need to recalculate
+				return;
+			}
 
 	// services which are not affected by new client addition
-	list<Service> res;
-	for (auto service : close) {
-		Service * next = service.second;
-
-		// if there is no next service
-		if (next == nullptr) {
-			res.push_back(service.first);
-			continue;
-		}
+	for (auto & service : close) {
 
 		// calculate time required to traverse path including new vertex
-		set<Vertex * > vertices;
-		for (auto reservation : service.first.getReservations())
+		set<Vertex *> vertices;
+		for (auto reservation : service.first->getReservations())
 			vertices.insert(graph->findVertex(reservation.getDest()));
 		vertices.insert(graph->findVertex(reservation.getDest()));
 
@@ -485,9 +467,26 @@ list<Service> ServicesPlanner::servicesForNewReservation(const Reservation & res
 		for (auto edge : path) total += edge.getWeight();
 
 		// if inserting this reservation does not affect next service
-		if (service.first.getStart().toSeconds() + total <= service.second->getStart().toSeconds())
-			res.push_back(service.first);
+		if (service.first->getStart().toSeconds() + total <= service.second->getStart().toSeconds())
+		{
+			addClientToService(reservation, *service.first);
+			return;
+		}
 	}
+}
 
-	return res;
+void ServicesPlanner::addClientToService(const Reservation & reservation, Service & service) {
+
+	set<Vertex *> vertices;
+	for (auto reservation : service.getReservations())
+		vertices.insert(graph->findVertex(reservation.getDest()));
+	vertices.insert(graph->findVertex(reservation.getDest()));
+
+	vector<Edge> path = calculatePath(vertices);
+	int total = 0;
+	for (auto edge : path) total += edge.getWeight();
+
+	service.addReservation(reservation);
+	service.setPath(path);
+	service.setEnd(service.getStart().addSeconds(total));
 }
