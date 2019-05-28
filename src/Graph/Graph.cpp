@@ -138,6 +138,30 @@ void Graph::dijkstraShortestPath(const int &source){
 		}
 	}
 }
+
+
+void Graph::dijkstraShortestPath(const int &source, const int &dest){
+	Vertex* s = initSingleSource(source);
+	Vertex* d = findVertex(dest);
+	MutablePriorityQueue<Vertex> q;
+	q.insert(s);
+	while( ! q.empty() ) {
+		Vertex* v = q.extractMin();
+		v->visited = true;
+
+		if (v == d) return;
+
+		for(const Edge& e : v->adj) {
+			double oldDist = e.dest->distance;
+			if (relax(v, e)) {//e.dest, e.weight)) {
+				if (oldDist == INF)
+					q.insert(e.dest);
+				else
+					q.decreaseKey(e.dest);
+			}
+		}
+	}
+}
 //////////////A*//////////////////
 Vertex * Graph::AinitSingleSource(const int &origin) {
 	for(Vertex* v : vertexSet) {
