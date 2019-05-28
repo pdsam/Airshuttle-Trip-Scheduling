@@ -100,6 +100,7 @@ void ServicesPlanner::preProcessEntryData() {
 	int counter = 0;
 	for (it = toUpdate.begin(); it != toUpdate.end(); it++) {
 		if (graph->findVertex((*it).getDest()) == nullptr) {
+			cout << "removed: " << counter << "\n";
 			it = toUpdate.erase(it);
 			counter++;
 			it--;
@@ -340,7 +341,7 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 		//Mix earliest client with remaining ones
 		int occupiedSeats;
 		//cout << "Getting sharing clients." << endl;
-		vector<Reservation> service = mixClientsWithEarliest(earliest, van, true, true, occupiedSeats);
+		vector<Reservation> service = mixClientsWithEarliest(earliest, van, true, false, occupiedSeats);
 
 		//Calculate path
 		//cout << "Calculating path." << endl;
@@ -428,8 +429,8 @@ void ServicesPlanner::planSingleVanMixingPassengers(){
 	vans.insert(van);	
 }
 
-int ServicesPlanner::objectiveFunction() {
-	int sum = 0;
+long int ServicesPlanner::objectiveFunction() {
+	long int sum = 0;
 	for (auto van : vans) {
 		for (auto service : van.getServices()) {
 			for (auto reservation : service.getReservations()) {

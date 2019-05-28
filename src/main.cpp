@@ -35,14 +35,14 @@ int main() {
 
 
       planner.planSingleVanNotMixingPassengers();
-      // planner.planSingleVanMixingPassengers();
-      // planner.planVansFleetMixingPassengers();
+       //planner.planSingleVanMixingPassengers();
+       // planner.planVansFleetMixingPassengers();
 
       auto finish = chrono::high_resolution_clock::now();
       auto mili =chrono::duration_cast<chrono::milliseconds>(finish - start_time).count();
               
           
-      
+      //cout  <<reservations.at(j)<< "\n";
        cout  <<reservations.at(j)<<": " << mili <<"\n";
                  /*
                          int counter = 1;
@@ -82,8 +82,8 @@ int main() {
       // auto finish = chrono::high_resolution_clock::now();
       // auto mili = chrono::duration_cast<chrono::milliseconds>(finish -
       // start_time).count();
+//cout << "Objective function: " << planner.objectiveFunction() << "\n";
     }
 }
-
 return 0;
 }
