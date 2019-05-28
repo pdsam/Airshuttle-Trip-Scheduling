@@ -103,11 +103,11 @@ void ServicesPlanner::preProcessEntryData() {
 	}
 
 	/* Reservations were already divided to fit vans size and already sorted due to the use of multiset */
+	graph->dijkstraShortestPath(airport);
 }
 
 void ServicesPlanner::planSingleVanNotMixingPassengers() {
 	preProcessEntryData();
-	graph->dijkstraShortestPath(airport);
 
 	multiset<Van>::iterator it = vans.begin();
 	Van van = *it;
@@ -357,7 +357,7 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 
 void ServicesPlanner::planSingleVanMixingPassengers(){
 	preProcessEntryData();
-	graph->dijkstraShortestPath(airport);
+
 	multiset<Van>::iterator van_it = vans.begin();
 	Van van = *van_it;
 	vans.erase(van_it);
