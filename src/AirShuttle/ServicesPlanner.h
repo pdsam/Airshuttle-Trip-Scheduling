@@ -19,7 +19,7 @@ private:
 
 	void resetVans();
 	std::vector<Edge> calculatePathFromService(const std::vector<Reservation> & service);
-	int assignTimeOfArrivalToReservations(const std::vector<Edge> & path, std::vector<Reservation> & service, const Time & timeOfDeparture);
+	int assignTimeOfDeliverToReservations(const std::vector<Edge> & path, std::vector<Reservation> & service, const Time & timeOfDeparture);
 	std::vector<Reservation> mixClientsWithEarliest(const Reservation & earliest, const Van & van, bool compTimeWindow, bool compMaxDist, int & occupiedSeats);
 public:
 	ServicesPlanner(Graph * graph, int airport, int vanCount, int actionRadius = ACTION_RADIUS, int timeWindow = TIME_WINDOW, int maxDist = MAX_DIST);

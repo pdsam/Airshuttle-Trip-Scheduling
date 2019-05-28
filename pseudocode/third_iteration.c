@@ -4,7 +4,7 @@
 // a - airport
 // tm - time window to wait for passengers
 // md - max distance to be considered when grouping passengers
-PLAN_VANS_FLEET_MIXING_PASSENGERS(Gi, Ri, Vi, a):
+PLAN_VANS_FLEET_MIXING_PASSENGERS(Gi, Ri, Vi, a, tm, md):
     
     CLEAR_SERVICES(Vi)
 
@@ -24,17 +24,17 @@ PLAN_VANS_FLEET_MIXING_PASSENGERS(Gi, Ri, Vi, a):
         service = MIX_CLIENTS_WITH_EARLIEST(Gi, Ri, early_res, early_van, tm, md, &occ_capacity)
 
         // calculate best path through all the destinations
-        path = CALCULATE_PATH_FROM_SERVICE(Gi, service)
+        path = CALCULATE_PATH_FROM_SERVICE(Gi, a, service)
 
         // assign deliver time to each reservation
         departure_time = TARDIEST_RESERVATION_TIME(service)
-        total_time = ASSIGN_TIME_OF_ARRIVAL_TO_RESERVATIONS(path, service, departure_time)
+        total_time = ASSIGN_TIME_OF_DELIVER_TO_RESERVATIONS(path, service, departure_time)
 
         // update next time available of used van
         next_time_available(early_van) = departure_time + total_time
 
         // add service to van
-        ADD_SERVICE(early_van, SERVICE(capacity(early_van) - occ_capacity, departure_time, service, path)
+        ADD_SERVICE(early_van, SERVICE(capacity(early_van) - occ_capacity, departure_time, service, path))
 
         // re-insert van in the multiset
         INSERT(Vi, early_van)
@@ -85,14 +85,14 @@ MIX_CLIENTS_WITH_EARLIEST(Gi, Ri, res, van, tm, md, occ):
 
 // Gi - graph
 // service - list of reservations to attend
-CALCULATE_PATH_FROM_SERVICE(Gi, service):
+CALCULATE_PATH_FROM_SERVICE(Gi, a, service):
 
     // vector of vertices to traverse
     vertices = GET_VERTICES_FROM_SERVICE(Gi, service)
 
     // calculate best path through all the vertices
     // vector of edges
-    path = CALCULATE_PATH(vertices)
+    path = CALCULATE_PATH(Gi, a, vertices)
 
     return path
 
@@ -101,7 +101,7 @@ CALCULATE_PATH_FROM_SERVICE(Gi, service):
 // path - list of edges that will be traversed
 // service - list of reservations to attend
 // departure_time - time at which the van leaves
-ASSIGN_TIME_OF_ARRIVAL_TO_RESERVATIONS(path, service, departure_time):
+ASSIGN_TIME_OF_DELIVER_TO_RESERVATIONS(path, service, departure_time):
 
     total_time = 0
     for e ∈ path do
