@@ -213,7 +213,7 @@ Time getTardiestReservationTime(const vector<Reservation>& reservations) {
 	return tardiest;
 }
 
-vector<Reservation> ServicesPlanner::mixClientsWithEarliest(const Reservation & earliest, const Van & van, int & occupiedSeats) {
+vector<Reservation> ServicesPlanner::mixClientsWithEarliest(const Reservation & earliest, const Van & van, bool compTimeWindow, bool compMaxDist, int & occupiedSeats) {
 
 	cout << "Setting time window limit." << endl;
 	Time limit = earliest.getArrival() + Time(0,this->timeWindow,0); //In the next 30 minutes
@@ -232,11 +232,17 @@ vector<Reservation> ServicesPlanner::mixClientsWithEarliest(const Reservation & 
 	//Search reservations that arrive in the next 30 minutes with
 	//destinations close to the earliest person
 	multiset<Reservation>::iterator currentReservationIt = reservations.begin();
-	while (currentReservationIt->getArrival() < limit && currentReservationIt != reservations.end()) {
+	while (currentReservationIt != reservations.end()) {
 
 		Position nodePos = graph->findVertex(currentReservationIt->getDest())->getPosition();
 
-		if (origin.euclidianDistance(nodePos) < this->maxDist) {
+		// compare time limit if flag is set
+		if (compTimeWindow && limit < currentReservationIt->getArrival()) {
+			break;
+		}
+
+		// compare distance between nodes only if flag is set
+		if (!compMaxDist || origin.euclidianDistance(nodePos) < this->maxDist) {
 			if (occupiedSeats + currentReservationIt->getNumPeople() > Van::getCapacity()) {
 				currentReservationIt++;
 				continue;
@@ -325,7 +331,7 @@ void ServicesPlanner::planVansFleetMixingPassengers() {
 
 		//Mix earliest client with remaining ones
 		int occupiedSeats;
-		vector<Reservation> service = mixClientsWithEarliest(earliest, van, occupiedSeats);
+		vector<Reservation> service = mixClientsWithEarliest(earliest, van, true, true, occupiedSeats);
 
 		//Calculate path
 		vector<Edge> path = calculatePathFromService(service);
