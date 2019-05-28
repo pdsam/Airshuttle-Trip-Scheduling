@@ -174,22 +174,10 @@ Vertex * Graph::AinitSingleSource(const int &origin) {
 	s->gScore = 0;
 	return s;
 }
+
 double Graph::heuristic(Vertex * current, Vertex * dest){
 	return dest->getPosition().euclidianDistance(current->getPosition()) ;
 }
-/*
-inline bool Graph::relax(Vertex *v, Vertex *w, double weight, Vertex * Dest, double averageSpeed, Edge edge){
-	if (v->distance*averageSpeed + weight < w->distance) {
-		w->distance = v->distance*averageSpeed + weight + heuristic(w,Dest);
-		w->Apath = v;
-		w->ApathEdge = edge;
-		return true;
-	}
-	else
-		return false;
-}
-
-*/
 
 void Graph::AStar(const int &source, const int &des){
 	Vertex* s = AinitSingleSource(source);

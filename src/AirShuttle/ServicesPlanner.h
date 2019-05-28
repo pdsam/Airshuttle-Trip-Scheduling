@@ -41,10 +41,9 @@ public:
 	void preProcessEntryData();
 	void planSingleVanNotMixingPassengers();
 	void planSingleVanMixingPassengers();
-
+	void planVansFleetMixingPassengers();
 	
 	std::vector<Edge> calculatePath(const std::set<Vertex*>& reservations);
-	void planVansFleetMixingPassengers();
 	int objectiveFunction();
 	void integrateClientWithNoReservation(const Reservation & res, Time waitingTime);
 	void sameDestIntegration(const Reservation & reservation, Service & service);
