@@ -4,6 +4,7 @@
 #include <vector>
 #include <set>
 #include <string>
+#include <list>
 #include "Van.h"
 #include "Reservation.h"
 #include "AirShuttle.h"
@@ -47,7 +48,7 @@ public:
 	std::vector<Edge> calculatePath(const std::set<Vertex*>& reservations);
 	void planVansFleetMixingPassengers();
 	int objectiveFunction();
-
+	std::list<Service> servicesForNewReservation(const Reservation & res, Time waitingTime);
 };
 
 

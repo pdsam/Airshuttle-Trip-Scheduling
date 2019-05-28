@@ -438,3 +438,56 @@ int ServicesPlanner::objectiveFunction() {
 	}
 	return sum;
 }
+
+list<Service> ServicesPlanner::servicesForNewReservation(const Reservation & reservation, Time waitingTime) {
+
+	// vans with services with vacant spots inside waitingTime window
+	list<pair<Service, Service*>> close;
+	for (auto van : vans)
+		for (size_t s = 0 ; s < van.getServices().size(); s++) {
+			Service & curr = van.getServices().at(s);
+			int time_diff = curr.getStart().toSeconds() - reservation.getArrival().toSeconds();
+			if (time_diff <= waitingTime.toSeconds() && time_diff >= 0 && curr.getVacant() > 0) {
+
+				Service * next = (s == van.getServices().size()-2) ? nullptr : &van.getServices().at(s+1);
+				close.push_back(pair<Service, Service*>(curr, next));
+			}
+		}
+
+	// services that visit the reservation destination
+	list<Service> coincide;
+	for (auto service : close)
+		for (auto client : service.first.getReservations())
+			if (reservation.getDest() == client.getDest())
+				coincide.push_back(service.first);
+
+	if (coincide.size() > 0) return coincide;
+
+	// services which are not affected by new client addition
+	list<Service> res;
+	for (auto service : close) {
+		Service * next = service.second;
+
+		// if there is no next service
+		if (next == nullptr) {
+			res.push_back(service.first);
+			continue;
+		}
+
+		// calculate time required to traverse path including new vertex
+		set<Vertex * > vertices;
+		for (auto reservation : service.first.getReservations())
+			vertices.insert(graph->findVertex(reservation.getDest()));
+		vertices.insert(graph->findVertex(reservation.getDest()));
+
+		vector<Edge> path = calculatePath(vertices);
+		int total = 0;
+		for (auto edge : path) total += edge.getWeight();
+
+		// if inserting this reservation does not affect next service
+		if (service.first.getStart().toSeconds() + total <= service.second->getStart().toSeconds())
+			res.push_back(service.first);
+	}
+
+	return res;
+}
