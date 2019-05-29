@@ -88,6 +88,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
+* Fedora tip to anyone whose code was used
+* Inspiration - The one and only José Silva, the greatest
 * etc
