@@ -9,14 +9,18 @@
 
 using namespace std;
 
+void printUsage() {
+	cout << "Usage:" << endl;
+	cout << "./airshuttle view <zone>" << endl;
+	cout << "./airshuttle preprocess <zone> <node_id>" << endl;
+	cout << "./airshuttle astar <zone> <node_id> <node_id2>" << endl;
+	cout << "./airshuttle reservations <zone> <reservations_folder> <reservations_file> <airport>" << endl;
+}
+
 int main(int argc, char* argv[]) {
 
 	if (argc < 2) {
-		cout << "Usage:" << endl;
-		cout << "./airshuttle view <zone>" << endl;
-		cout << "./airshuttle preprocess <zone> <node_id>" << endl;
-		cout << "./airshuttle astar <zone> <node_id> <node_id2>" << endl;
-		cout << "./airshuttle reservations <zone> <reservations_folder> <reservations_file> <airport>" << endl;
+		printUsage();
 		return 0;
 	}
 
@@ -60,17 +64,22 @@ int main(int argc, char* argv[]) {
 		}
 
 		GraphLoader::loadGraph(argv[2], &graph);
-
 		Vertex* source = graph.findVertex(atoi(argv[3]));
-		Vertex* dest = graph.findVertex(atoi(argv[4]));
 
-		if (source == nullptr || dest == nullptr) {
-			cout << "Vertex not found." << endl;
-			exit(1);
+		if (source == nullptr) {
+			cout << "Source vertex id does not exist." << endl;
 		}
 
 		graph.DFSConnectivity(source);
 		graph.removeUnvisitedVertices();
+
+		Vertex* dest = graph.findVertex(atoi(argv[4]));
+
+		if (dest == nullptr) {
+			cout << "Dource and dest are not in the same strongly connected component." << endl;
+			exit(1);
+		}
+
 
 		graph.AStar(atoi(argv[3]), atoi(argv[4]));
 		vector<Edge> path = graph.AgetPathEdges(atoi(argv[3]), atoi(argv[4]));
@@ -152,9 +161,9 @@ int main(int argc, char* argv[]) {
 
 			mapDrawer.getViewer()->rearrange();
 		}
+	} else {
+		printUsage();
 	}
-
-	getchar();
 
 	return 0;
 }

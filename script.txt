@@ -1,0 +1,20 @@
+Mostrar o mapa completo de coimbra
+./airshuttle view Coimbra
+
+Os dois seguintes comandos preprocesam o grafo a partir de dois pontos diferentes 
+que se encontram em CFC's diferentes
+./airshuttle preprocess Coimbra 711049847
+./airshuttle preprocess Coimbra 206155877
+
+Astar entre vertices inalcasaveis
+./airshuttle astar 711049847 206155877
+
+Astar entre vertices do memso CFC
+./airshuttle astar 206242954 709070592
+
+Processamento de reservas
+./aurshuttle reservations Coimbra tests reservations_100.txt 711049847
+./aurshuttle reservations Coimbra tests reservations_500.txt 711049847
+./aurshuttle reservations Coimbra tests reservations_1000.txt 711049847
+./aurshuttle reservations Coimbra tests reservations_5000.txt 711049847
+./aurshuttle reservations Coimbra tests reservations_10000.txt 711049847
