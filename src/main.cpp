@@ -98,7 +98,9 @@ int main(int argc, char* argv[]) {
 
 		GraphLoader::loadGraph(argv[2], &graph);
 
-		ServicesPlanner planner(&graph, atoi(argv[5]), 10);
+		int airportID = atoi(argv[5]);
+
+		ServicesPlanner planner(&graph, airportID, 10);
 		planner.addReservationsFromFile(argv[3], argv[4]);
 
 		graph.dijkstraShortestPath(atoi(argv[5]));
@@ -106,6 +108,8 @@ int main(int argc, char* argv[]) {
 		planner.planVansFleetMixingPassengers();
 
 		mapDrawer.drawMapFromGraph(&graph);
+		mapDrawer.getViewer()->setVertexColor(airportID, PINK);
+		mapDrawer.getViewer()->rearrange();
 
 		multiset<Van> vansSet = planner.getVans();
 		vector<Van> vans(vansSet.begin(), vansSet.end());
@@ -144,10 +148,15 @@ int main(int argc, char* argv[]) {
 			}
 
 
+
 			for (const Edge& e: service.getPath()) {
 				mapDrawer.getViewer()->setEdgeThickness(e.getID(), 10);
 				mapDrawer.getViewer()->setEdgeColor(e.getID(), RED);
 			}
+			for (const Reservation& r: service.getReservations()) {
+				mapDrawer.getViewer()->setVertexColor(r.getDest(), GREEN);
+			}
+			mapDrawer.getViewer()->setVertexColor(airportID, PINK);
 
 			mapDrawer.getViewer()->rearrange();
 
@@ -158,6 +167,10 @@ int main(int argc, char* argv[]) {
 				mapDrawer.getViewer()->setEdgeThickness(e.getID(), 1);
 				mapDrawer.getViewer()->setEdgeColor(e.getID(), BLACK);
 			}
+			for (const Reservation& r: service.getReservations()) {
+				mapDrawer.getViewer()->setVertexColor(r.getDest(), YELLOW);
+			}
+			mapDrawer.getViewer()->setVertexColor(airportID, PINK);
 
 			mapDrawer.getViewer()->rearrange();
 		}
