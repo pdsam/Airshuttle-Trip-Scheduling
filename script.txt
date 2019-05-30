@@ -7,10 +7,10 @@ que se encontram em CFC's diferentes
 ./airshuttle preprocess Coimbra 206155877
 
 Astar entre vertices inalcasaveis
-./airshuttle astar 711049847 206155877
+./airshuttle astar Coimbra 711049847 206155877
 
 Astar entre vertices do memso CFC
-./airshuttle astar 206242954 709070592
+./airshuttle astar Coimbra 206242954 709070592
 
 Processamento de reservas
 ./aurshuttle reservations Coimbra tests reservations_100.txt 711049847

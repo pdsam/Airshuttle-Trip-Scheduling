@@ -36,6 +36,7 @@ int main(int argc, char* argv[]) {
 
 		GraphLoader::loadGraph(argv[2], &graph);
 		mapDrawer.drawMapFromGraph(&graph);
+		getchar();
 
 	} else if (operation == "preprocess") {
 		if (argc < 4) {
@@ -56,6 +57,7 @@ int main(int argc, char* argv[]) {
 		graph.removeUnvisitedVertices();
 
 		mapDrawer.drawMapFromGraph(&graph);
+		getchar();
 
 	} else if (operation == "astar") {
 		if (argc < 5) {
@@ -76,7 +78,7 @@ int main(int argc, char* argv[]) {
 		Vertex* dest = graph.findVertex(atoi(argv[4]));
 
 		if (dest == nullptr) {
-			cout << "Dource and dest are not in the same strongly connected component." << endl;
+			cout << "Source and dest are not in the same strongly connected component." << endl;
 			exit(1);
 		}
 
@@ -89,6 +91,7 @@ int main(int argc, char* argv[]) {
 			mapDrawer.getViewer()->setEdgeThickness(e.getID(), 10);
 			mapDrawer.getViewer()->setEdgeColor(e.getID(), RED);
 		}
+		getchar();
 
 	} else if (operation == "reservations") {
 		if (argc < 6) {
@@ -142,7 +145,8 @@ int main(int argc, char* argv[]) {
 
 			cout << "Serves reservations: " << endl;
 			for (const Reservation& r: service.getReservations()) {
-				cout << setfill(' ') << setw(10) << r.getClientName() << " - " << setw(10) << r.getNIF() 
+				cout << setfill(' ') << setw(10) << r.getClientName() << " - " << setw(10) << r.getNIF()
+				<< setw(8) << ". Num people: " << r.getNumPeople()
 				<< setw(8) << ". Arrives at: " << r.getArrival()
 				<< setw(8) << ". Delivered at: " << r.getDeliver() << endl;
 			}
@@ -173,6 +177,7 @@ int main(int argc, char* argv[]) {
 			mapDrawer.getViewer()->setVertexColor(airportID, PINK);
 
 			mapDrawer.getViewer()->rearrange();
+			getchar();
 		}
 	} else {
 		printUsage();
