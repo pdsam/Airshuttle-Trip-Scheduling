@@ -13,8 +13,8 @@ Astar entre vertices do memso CFC
 ./airshuttle astar Coimbra 206242954 709070592
 
 Processamento de reservas
-./aurshuttle reservations Coimbra tests reservations_100.txt 711049847
-./aurshuttle reservations Coimbra tests reservations_500.txt 711049847
-./aurshuttle reservations Coimbra tests reservations_1000.txt 711049847
-./aurshuttle reservations Coimbra tests reservations_5000.txt 711049847
-./aurshuttle reservations Coimbra tests reservations_10000.txt 711049847
+./airshuttle reservations Coimbra tests reservations_100.txt 711049847
+./airshuttle reservations Coimbra tests reservations_500.txt 711049847
+./airshuttle reservations Coimbra tests reservations_1000.txt 711049847
+./airshuttle reservations Coimbra tests reservations_5000.txt 711049847
+./airshuttle reservations Coimbra tests reservations_10000.txt 711049847
