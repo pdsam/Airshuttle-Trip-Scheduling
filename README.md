@@ -1,93 +1,37 @@
-# CAL_NotPlanes
+# AirShuttle Trip Scheduling :minibus::airplane:
+Airport transfer service trip scheduling application.
 
-ola eu sou um readme
 
-Agora sou um readme em esteróides
+#### Final grade: ??
 
-# Project Title
 
-One Paragraph of project description goes here
+### Description
+The aim of this project was to plan the trips of a fleet of vans owned by a transfer service company for a determined day, taking in consideration a given set of client reservations. Each one of these specifies a number of passengers and a destination.
 
-## Getting Started
+Our objective was to find the best possible combinations of passengers in each van, as to optimize the vans' trips and minimize the clients' waiting time.
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+We represented the maps using **Graphs**, having to deal with related problems, such as **shortest path** or **connectivity**, among others.
 
-### Prerequisites
+We divided our problem into 3 iterations, of increasing complexity. We found ourselves dealing with a problem both similar to the **Travelling Salesman Problem** (2nd iteration) and the **Vehicle Routing Problem** (3rd iteration).
 
-What things you need to install the software and how to install them
+Different strategies of mixing passengers were considered, in an attempt to find the most optimal one.
 
-```
-Give examples
-```
+We analized the **complexity** of all the algorithms we developed, both theoretical and empirical.
 
-### Installing
+**More details can be found in 'report2.pdf'**
 
-A step by step series of examples that tell you how to get a development env running
+### Technologies Used
+* C++
+* [GraphViewer](https://github.com/STEMS-group/GraphViewer)
 
-Say what the step will be
+### Group Members
+* [Mário Gil](https://github.com/GambuzX "GambuzX")
+* [Moisés Rocha](https://github.com/MPDR200011 "MPDR200011")
+* [Paulo Marques](https://github.com/pdsam "pdsam")
 
-```
-Give the example
-```
+### Curricular Unit Info
+* **Date:** 2nd Year, 2nd Semester, 2018/2019
+* **Course:** [Concepção e Análise de Algoritmos | Algorithm Design and Analysis](https://sigarra.up.pt/feup/en/UCURR_GERAL.FICHA_UC_VIEW?pv_ocorrencia_id=419999 "CAL") (CAL)
 
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+### Disclaimer 
+This repository was used for educational purposes and we do not take any responsibility for anything related to its content. You are free to use any code or algorithm you find, but do so at your own risk.
