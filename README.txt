@@ -1,7 +1,8 @@
 Para compilar:
-Criar um projeto de eclipse com a pasta code como raiz e compilar.
+Criar um projeto de eclipse C++ com a pasta code como raiz e compilar.
+Temos o GraphViewer como dependência, pelo que em Windows é necessário adicionar a biblioteca wsock32.
 
-Intruções de utilização:
+Instruções de utilização:
 Correr sem argumentos para obter a explicação de como usar.
 Correr o executável do projeto com os possiveis seguintes argumentos:
     - view : vizualizar o mapa de uma regiao(Aveiro, Braga, Coimbra, Ermesinde, Fafe, Gondomar, Lisboa, Maia, Porto, Portugal, Viseu)
